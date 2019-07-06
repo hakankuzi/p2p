@@ -1,0 +1,35 @@
+{
+  "name": "p2p",
+  "version": "1.0.0",
+  "description": "",
+  "main": "config.js",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "firebase-admin": "^7.0.0",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "node-cron": "^2.0.3",
+    "newsapi": "^2.4.0",
+    "nodemon": "^1.18.10",
+    "morgan": "^1.9.1",
+    "simple-peer": "^9.4.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coreteameng/p2p.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/coreteameng/p2p/issues"
+  },
+  "homepage": "https://github.com/coreteameng/p2p#readme"
+}
