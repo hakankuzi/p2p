@@ -1,0 +1,40 @@
+[{
+        "name": "Profil",
+        "icon": "icon-user icons",
+        "href": "/profile",
+        "class": "nav-link text-nowrap d-flex",
+        "authorize": ["user", "admin"]
+    },
+    {
+        "name": "Run Task",
+        "icon": "icon-umbrella icons",
+        "href": "/task",
+        "class": "nav-link text-nowrap d-flex",
+        "authorize": ["admin"]
+    },
+
+    {
+        "name": "Yetkilendirme",
+        "icon": "icon-settings icons",
+        "href": "/authorization",
+        "class": "nav-link text-nowrap d-flex",
+        "authorize": ["admin"]
+    },
+
+    {
+        "name": "Kullanıcılar",
+        "icon": "icon-speech icons",
+        "href": "/users",
+        "class": "nav-link text-nowrap d-flex",
+        "authorize": ["admin"]
+    },
+
+    {
+        "name": "Exit",
+        "icon": "icon-power icons",
+        "href": "",
+        "class": "nav-link text-nowrap d-flex",
+        "authorize": ["user", "admin", "author", "author-admin", "donator", "donator-admin", "worker", "worker-admin", "second-admin"]
+    }
+
+]
