@@ -59,6 +59,7 @@ P2PService.service('P2P', function ($http, $q) {
 
     socket.on('generate-token', (data) => {
         let result = false;
+        var count = false;
         for (let i = 0; i < students.length; i++) {
             let student = students[i];
             if (student.customid == data.customid) {
@@ -70,33 +71,39 @@ P2PService.service('P2P', function ($http, $q) {
         if (result == false) {
 
 
-            P2PService.getStream((stream) => {
-                p = new SimplePeer({
-                    initiator: true,
-                    trickle: false,
-                    stream
+            p = new SimplePeer({
+                initiator: true,
+                trickle: false,
+            });
+
+            p.addStream(local_stream);
+
+            let student = data;
+            student.p = p;
+
+
+            student.p.on('connect', () => {
+                student.p.on('data', data => {
+                    console.log('' + data);
                 });
+            });
 
-                let student = data;
-                student.p = p;
-                student.p.on('connect', () => {
-                    student.p.on('data', data => {
-                        console.log('' + data);
-                    });
-                });
+            student.p.on('negotiate ', (data) => {
+                console.log(data);
+            })
 
+            student.p.on('stream', (remoteStream) => {
+                let div = document.getElementById('clients');
+                let video = document.createElement('video');
+                video.srcObject = remoteStream;
+                video.autoplay = true;
+                div.appendChild(video);
 
-                student.p.on('stream', (remoteStream) => {
-                    let div = document.getElementById('clients');
-                    let video = document.createElement('video');
-                    video.srcObject = remoteStream;
-                    video.autoplay = true;
-                    div.appendChild(video);
+            });
 
-                });
+            student.p.on('signal', (token) => {
 
-                student.p.on('signal', (token) => {
-
+                if (count == false) {
                     document.getElementById('minetoken').value = JSON.stringify(token);
                     socket.emit('teacher-token', {
                         token: token,
@@ -104,12 +111,15 @@ P2PService.service('P2P', function ($http, $q) {
                         room: 'teacher-custom',
                         live: 'online'
                     });
-                });
+
+                    count = true;
+
+                }
+            });
 
 
-                students.push(student);
+            students.push(student);
 
-            })
 
 
 
@@ -120,36 +130,42 @@ P2PService.service('P2P', function ($http, $q) {
 
     socket.on('teacher-token', (data) => {
 
-        P2PService.getStream((stream) => {
-            p = new SimplePeer({
-                initiator: false,
-                trickle: false,
-                stream
-            });
 
-            p.signal(data.token);
-            p.on('signal', (token) => {
+        p = new SimplePeer({
+            initiator: false,
+            trickle: false,
+        });
+        p.addStream(local_stream);
+        p.signal(data.token);
 
-                document.getElementById('othertoken').value = JSON.stringify(data.token);
-                document.getElementById('minetoken').value = JSON.stringify(token);
-                socket.emit('student-token', {
-                    token: token,
-                    customid: 'student-' + random
-                });
-            });
 
-            p.on('stream', (remoteStream) => {
-                let div = document.getElementById('clients');
-                let video = document.createElement('video');
-                video.srcObject = remoteStream;
-                video.autoplay = true;
-                div.appendChild(video);;
-            });
+        p.on('negotiate ', (data) => {
+            console.log(data);
+        })
 
-            p.on('connect', () => {
-                p.send('hello')
+
+
+        p.on('signal', (token) => {
+            document.getElementById('othertoken').value = JSON.stringify(data.token);
+            document.getElementById('minetoken').value = JSON.stringify(token);
+            socket.emit('student-token', {
+                token: token,
+                customid: 'student-' + random
             });
         });
+
+        p.on('stream', (remoteStream) => {
+            let div = document.getElementById('clients');
+            let video = document.createElement('video');
+            video.srcObject = remoteStream;
+            video.autoplay = true;
+            div.appendChild(video);;
+        });
+
+        p.on('connect', () => {
+            p.send('hello')
+        });
+
 
 
 
@@ -175,19 +191,25 @@ P2PService.service('P2P', function ($http, $q) {
 
     P2PService.doLesson = function (grade) {
 
-        if (grade == 'teacher') {
-            socket.emit('generate-room', {
-                room: 'teacher-1',
-                customid: 'teacher-custom',
-                live: 'online'
-            });
-        } else if (grade == 'student') {
-            socket.emit('join-room', {
-                room: 'teacher-1',
-                customid: 'student-' + random,
-                live: 'online'
-            });
-        }
+
+        P2PService.getStream((stream) => {
+            local_stream = stream;
+            if (grade == 'teacher') {
+                socket.emit('generate-room', {
+                    room: 'teacher-1',
+                    customid: 'teacher-custom',
+                    live: 'online'
+                });
+            } else if (grade == 'student') {
+                socket.emit('join-room', {
+                    room: 'teacher-1',
+                    customid: 'student-' + random,
+                    live: 'online'
+                });
+            }
+        })
+
+
 
     }
 
