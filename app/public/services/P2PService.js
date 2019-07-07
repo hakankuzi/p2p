@@ -10,6 +10,13 @@ P2PService.service('P2P', function ($http, $q) {
     var random = parseInt(Math.random() * 20);
     var students = [];
     var local_stream;
+    var ICE_SERVERS = [{
+        urls: "stun:stun.l.google.com:19302"
+    }, {
+        urls: 'turn:numb.viagenie.ca:3478',
+        credential: 'Hk5967245.', //your  password
+        username: 'coreteameng@email.com'
+    }];
 
 
 
@@ -71,7 +78,12 @@ P2PService.service('P2P', function ($http, $q) {
         if (result == false) {
 
 
+
+
             p = new SimplePeer({
+                config: {
+                    iceServers: ICE_SERVERS
+                },
                 initiator: true,
                 trickle: false,
             });
@@ -130,8 +142,10 @@ P2PService.service('P2P', function ($http, $q) {
 
     socket.on('teacher-token', (data) => {
 
-
         p = new SimplePeer({
+            config: {
+                iceServers: ICE_SERVERS
+            },
             initiator: false,
             trickle: false,
         });
@@ -216,12 +230,78 @@ P2PService.service('P2P', function ($http, $q) {
 
     // GetStream -----------------------------------
     P2PService.getStream = function (callback) {
-        navigator.mediaDevices.getUserMedia({
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+        // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        let parameters = {
+            width: {
+                min: 180,
+                ideal: 180
+            },
+            height: {
+                min: 180,
+                ideal: 180
+            },
+            advanced: [{
+                    width: 1920,
+                    height: 1280
+                },
+                {
+                    aspectRatio: 1.333
+                }
+            ],
             audio: false,
             video: true
-        }).then((stream) => {
+        }
+
+
+        // Older browsers might not implement mediaDevices at all, so we set an empty object first
+        if (navigator.mediaDevices === undefined) {
+            navigator.mediaDevices = {};
+        }
+        // -------------------------------------------------------------------------------------
+        // Some browsers partially implement mediaDevices. We can't just assign an object
+        // with getUserMedia as it would overwrite existing properties.
+        // Here, we will just add the getUserMedia property if it's missing.
+        if (navigator.mediaDevices.getUserMedia === undefined) {
+            navigator.mediaDevices.getUserMedia = function (constraints) {
+
+                // First get ahold of the legacy getUserMedia, if present
+                var getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+                // Some browsers just don't implement it - return a rejected promise with an error
+                // to keep a consistent interface
+                if (!getUserMedia) {
+                    return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+                }
+
+                // Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+                return new Promise(function (resolve, reject) {
+                    getUserMedia.call(navigator, constraints, resolve, reject);
+                });
+            }
+        }
+        // -----------------------------------------------------------------------------------------
+        navigator.mediaDevices.getUserMedia(parameters).then(function (stream) {
             callback(stream);
+        }).catch(function (error) {
+            if (error.name === 'ConstraintNotSatisfiedError') {
+                console.log('The resolution ' + constraints.video.width.exact + 'x' +
+                    constraints.video.width.exact + ' px is not supported by your device.');
+            } else if (error.name === 'PermissionDeniedError') {
+                console.log('Permissions have not been granted to use your camera and ' +
+                    'microphone, you need to allow the page access to your devices in ' +
+                    'order for the demo to work.');
+            }
+            console.log('getUserMedia error: ' + error.name, error);
         });
+        // ------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
     }
     // ---------------------------------------------
 
