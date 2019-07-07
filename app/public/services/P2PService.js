@@ -233,23 +233,7 @@ P2PService.service('P2P', function ($http, $q) {
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
         // ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
         let parameters = {
-            width: {
-                min: 180,
-                ideal: 180
-            },
-            height: {
-                min: 180,
-                ideal: 180
-            },
-            advanced: [{
-                    width: 1920,
-                    height: 1280
-                },
-                {
-                    aspectRatio: 1.333
-                }
-            ],
-            audio: false,
+            audio: true,
             video: true
         }
 
