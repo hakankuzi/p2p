@@ -10,5 +10,4 @@ LoginCtrl.controller('LoginController', function ($timeout, $scope, $rootScope, 
 
     }
 
-
 });

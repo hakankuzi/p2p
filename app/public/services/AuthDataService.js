@@ -4,71 +4,6 @@ var AuthDataService = angular.module('AuthDataService', []);
 AuthDataService.service("AuthWrapper", function ($http, AuthToken) {
     var authService = {};
 
-
-    authService.checkUsername = function (item, callback) {
-        console.log('check-username : ', item.username);
-        return $http.post('/api/checkusername', {
-            item: item
-        }).then(function (response) {
-            callback(response);
-        });
-    };
-
-    authService.checkEmail = function (item, callback) {
-        console.log('check-email : ', item.email);
-        return $http.post('/api/checkemail', {
-            item: item
-        }).then(function (response) {
-            callback(response);
-        });
-    };
-
-    authService.activateAccount = function (item, callback) {
-        console.log('activate-account-token', item.token);
-        return $http.post('/api/activate', {
-            item: item
-        }).then(function (response) {
-            callback(response);
-        });
-    }
-
-    authService.checkCredentials = function (item, callback) {
-        return $http.post('/api/resend', {
-            item: item
-        }).then(function (response) {
-            callback(response);
-        });
-    }
-
-    authService.resendlink = function (item, callback) {
-        return $http.post('/api/resendlink', {
-            item: item
-        }).then(function (response) {
-            callback(response);
-        });
-    }
-
-    authService.authenticate = function (item, callback) {
-        console.log("authenticate-user ?", item);
-        return $http.post('/api/authenticate', {
-            item: item
-        }).then(function (response) {
-            console.log('token', response.data.token);
-            AuthToken.setToken(response.data.token);
-            authService.isLoggedIn();
-            callback(response);
-        });
-    }
-
-
-    authService.facebook = function (token) {
-        AuthToken.setToken(token);
-    }
-
-    authService.getFacebookToken = function (token) {
-        return AuthToken.getToken();
-    }
-
     authService.isLoggedIn = function () {
         if (AuthToken.getToken()) {
             return true
@@ -80,7 +15,6 @@ AuthDataService.service("AuthWrapper", function ($http, AuthToken) {
     authService.logout = function () {
         AuthToken.setToken();
     }
-
 
     authService.register = function (item, callback) {
         console.log("new-user :", item);
@@ -101,9 +35,11 @@ AuthDataService.service("AuthWrapper", function ($http, AuthToken) {
             });
         }
     }
-
     return authService;
 });
+
+
+
 
 AuthDataService.service('AuthToken', function ($window) {
     var authTokenService = {}
