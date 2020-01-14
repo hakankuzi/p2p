@@ -45,11 +45,4 @@ SubscriberCtrl.controller('SubscriberController', function ($rootScope, $scope, 
             // -----------------------------------------
         }
     });
-
-
-
-
-    
-
-
 });
