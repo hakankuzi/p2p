@@ -2,17 +2,13 @@ var TestCtrl = angular.module('TestCtrl', []);
 
 TestCtrl.controller('TestController', function ($rootScope, TokBoxData, $location) {
     var vm = this;
-
     let item = {
         scheduleId : '123'
     }
-    
-
     TokBoxData.createSession(item, (response)=>{
         if(response.data.status === '200' ){
             let sessionId = response.data.document.sessionId;
             item.sessionId = sessionId;
-
             TokBoxData.generateToken(item ,(response)=>{    
                 if(response.data.status === '200'){    
                     let document = response.data.document;

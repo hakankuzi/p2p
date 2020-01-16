@@ -1,15 +1,12 @@
 var PublisherCtrl = angular.module('PublisherCtrl', []);
 
 PublisherCtrl.controller('PublisherController', function ($rootScope, $scope, $location, TokBoxData) {
-    
     var vm = this;
     var session = null;
     $scope.message = '';
-    
     let item = {
         scheduleId : '123'
     }
-
     TokBoxData.createSession(item, (response)=>{
         if(response.data.status === '200' ){
             let sessionId = response.data.document.sessionId;
@@ -22,7 +19,7 @@ PublisherCtrl.controller('PublisherController', function ($rootScope, $scope, $l
             },(error)=>{
                 console.log(error);
             });
-
+            
             TokBoxData.generateToken(item ,(response)=>{    
                 if(response.data.status === '200'){    
                     let document = response.data.document;
@@ -53,8 +50,6 @@ PublisherCtrl.controller('PublisherController', function ($rootScope, $scope, $l
             console.log(response.data);
         }
     });
-
-
     $scope.sendMessage = function(){
         session.signal({
             type : 'msg',

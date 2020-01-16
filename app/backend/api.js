@@ -25,12 +25,7 @@ const opentok = new OpenTok(tokboxApiKey, tokboxSecretKey);
 // get sessionId by scheduleId --------------------------------------------------------- 
 router.post('/getSessionByScheduleId', (req,res)=>{
     let item = req.body.item;
-
-
-    
-
     dbstore.collection('sessions').where('scheduleId', '==', item.scheduleId).get().then((snapshot)=>{
-
         if(snapshot.docs.length ===0){
             res.json({
                 status : '409',
