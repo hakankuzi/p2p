@@ -8,6 +8,7 @@ const router = express.Router();
 const fbadmin = require('firebase-admin');
 const account = require('../backend/accountKey.json');
 
+// Initialize Firebase
 fbadmin.initializeApp({
     credential: fbadmin.credential.cert(account),
     databaseURL: "https://online-school-dev.firebaseio.com",
@@ -15,6 +16,9 @@ fbadmin.initializeApp({
 });
 
 const dbstore = fbadmin.firestore();
+
+// update firestore setting
+dbstore.settings({timestampsInSnapshots: true});
 // Tokbox -----------------------------------------------
 
 const OpenTok = require('opentok');

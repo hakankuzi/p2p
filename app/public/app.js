@@ -1,16 +1,21 @@
-var app = angular.module('app', [ 'ngRoute',  'TestCtrl',  'LoginCtrl', 'SubscriberCtrl',  'PublisherCtrl', 'ProfileCtrl', 'IndexCtrl', 'TokboxDataService', 'MockDataService', 'AuthDataService']);
+var app = angular.module('app', [ 'ngRoute', 'SignupCtrl','TestCtrl',  'LoginCtrl', 'SubscriberCtrl',  'PublisherCtrl', 'ProfileCtrl', 'IndexCtrl', 'TokboxDataService', 'MockDataService', 'AuthDataService']);
 
 // Environments -----------------------------------------
 app.run(function ($rootScope, $location, $window, AuthWrapper) {
 
     var config = {
+        apiKey: "AIzaSyA7F_X1u_aP97NkDHm0T6lJEpt-WUIuucg",
+        authDomain: "online-school-dev.firebaseapp.com",
         databaseURL: "https://online-school-dev.firebaseio.com",
-        storageBucket: "online-school-dev.appspot.com"
+        projectId: "online-school-dev",
+        storageBucket: "online-school-dev.appspot.com",
+        messagingSenderId: "190057098945",
+        appId: "1:190057098945:web:ba77a116ec435c98372e40"
     }
 
     firebase.initializeApp(config); 
     $rootScope.storage = firebase.storage();
-
+    $rootScope.auth= firebase.auth();
     $rootScope.$on('$locationChangeStart', function (event, next, current) {});
 
 });
@@ -42,6 +47,12 @@ app.config(function ($routeProvider, $locationProvider, $httpProvider) {
             templateUrl: '../views/login.html',
             controller: 'LoginController',
             controllerAs: 'login',
+            authenticated: false
+        })
+        .when('/signup', {
+            templateUrl: '../views/signup.html',
+            controller: 'SignupController',
+            controllerAs: 'signup',
             authenticated: false
         })
         .when('/profile', {
