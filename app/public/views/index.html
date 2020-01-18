@@ -20,36 +20,36 @@
 
 <body class="grey lighten-3">
 
-    <div ng-controller="IndexController as index">
 
-        <nav class="z-depth-0 grey lighten-4">
-            <div class="nav-wrapper container">
-                <a href="#" class="brand-logo">
-                    <img src="../assets/img/logo.png" style="padding-top: 10px;" width="40" height="50" />
-                </a>
 
-                <ul id="nav-mobile" class="right hide-on-med-and-down">
+    <nav class="z-depth-0 grey lighten-4">
+        <div class="nav-wrapper container">
+            <a href="#" class="brand-logo">
+                <img src="../assets/img/logo.png" style="padding-top: 10px;" width="40" height="50" />
+            </a>
 
-                    <li class="logged-in">
-                        <a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
-                    </li>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
 
-                    <li class="logged-in">
-                        <a href="#" class="grey-text" id="logout">Logout</a>
-                    </li>
+                <li class="logged-in">
+                    <a href="#" class="grey-text modal-trigger" data-target="modal-account">Account</a>
+                </li>
 
-                    <li class="logged-out">
-                        <a href="#" class="grey-text modal-trigger" data-target="modal-login">Login</a>
-                    </li>
+                <li class="logged-in">
+                    <a href="#" class="grey-text modal-trigger" id="logout" data-target="modal-logout">Logout</a>
+                </li>
 
-                    <li class="logged-out">
-                        <a href="#" class="grey-text modal-trigger" data-target="modal-signup">Sign
-                            up</a>
-                    </li>
-                    </span>
-                </ul>
-            </div>
-        </nav>
+                <li class="logged-out">
+                    <a href="#" class="grey-text modal-trigger" data-target="modal-login">Login</a>
+                </li>
+
+                <li class="logged-out">
+                    <a href="#" class="grey-text modal-trigger" data-target="modal-signup">Sign
+                        up</a>
+                </li>
+                </span>
+            </ul>
+        </div>
+    </nav>
     </div>
 
 
@@ -57,53 +57,65 @@
     <div ng-view></div>
 
 
+    <div ng-controller="IndexController as index">
 
-    <!--Login Modal  -->
-    <div id="modal-login" class="modal">
-        <div class="modal-content">
-            <h4>Login</h4><br />
-            <form class="form-login" ng-submit="index.doLogin()" id="login-form">
-                <div class="input-field">
-                    <input type="email" ng-model="index.loginData.email" id="login-email" required>
-                    <label for="login-email">Email address</label>
-                </div>
-                <div class="input-field">
-                    <input type="password" ng-model="index.loginData.password" id="login-password" required>
-                    <label for="login-password">Choose password</label>
-                </div>
-                <button class="btn yellow darken-2 z-depth-0">Login</button>
-            </form>
-        </div>
-    </div>
-
-    <!--Signup Modal -->
-    <div id="modal-signup" class="modal">
-        <div class="modal-content">
-            <h4>Sign up</h4><br />
-            <form class="form-signup" ng-submit="index.doSignup()" id="signup-form">
-                <div class="input-field">
-                    <input type="email" ng-model="index.signupData.email" id="signup-email" required>
-                    <label for="signup-email">Email address</label>
-                </div>
-                <div class="input-field">
-                    <input type="password" ng-model="index.signupData.password" id="signup-password" required>
-                    <label for="signup-password">Choose password</label>
-                </div>
-                <button class="btn yellow darken-2 z-depth-0">Sign up</button>
-            </form>
-        </div>
-    </div>
-
-    <!--   Account Modal  -->
-    <div id="modal-account" class="modal">
-        <div class="modal-content center-align">
-            <h4>Account Details</h4>
-            <div class="account-details">
-                Account Information
+        <!--Login Modal  -->
+        <div id="modal-login" class="modal">
+            <div class="modal-content">
+                <h4>Login</h4><br />
+                <form class="form-login" ng-submit="index.doLogin()" id="login-form">
+                    <div class="input-field">
+                        <input type="email" ng-model="index.loginData.email" id="login-email" required>
+                        <label for="login-email">Email address</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="password" ng-model="index.loginData.password" id="login-password" required>
+                        <label for="login-password">Choose password</label>
+                    </div>
+                    <button class="btn yellow darken-2 z-depth-0">Login</button>
+                </form>
             </div>
         </div>
-    </div>
 
+        <!--Signup Modal -->
+        <div id="modal-signup" class="modal">
+            <div class="modal-content">
+                <h4>Sign up</h4><br />
+                <form class="form-signup" ng-submit="index.doSignup()" id="signup-form">
+                    <div class="input-field">
+                        <input type="email" ng-model="index.signupData.email" id="signup-email" required>
+                        <label for="signup-email">Email address</label>
+                    </div>
+                    <div class="input-field">
+                        <input type="password" ng-model="index.signupData.password" id="signup-password" required>
+                        <label for="signup-password">Choose password</label>
+                    </div>
+                    <button class="btn yellow darken-2 z-depth-0">Sign up</button>
+                </form>
+            </div>
+        </div>
+
+        <!--   Account Modal  -->
+        <div id="modal-account" class="modal">
+            <div class="modal-content center-align">
+                <h4>Account Details</h4>
+                <div class="account-details">
+                    Account Information
+                </div>
+            </div>
+        </div>
+
+
+        <!--   Logout Modal  -->
+        <div id="modal-logout" class="modal">
+            <div class="modal-content center-align">
+                <div class="account-details">
+                    <button class="btn yellow darken-2 z-depth-0" ng-click="index.logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
 
 
 
@@ -128,6 +140,7 @@
     <script type="text/javascript" src="../services/AuthDataService.js"></script>
     <script type="text/javascript" src="../services/MockDataService.js"></script>
     <script type="text/javascript" src="../services/TokboxDataService.js"></script>
+    <script type="text/javascript" src="../services/CrudDataService.js"></script>
 
     <!--Controllers -->
     <script type="text/javascript" src="../controllers/LoginCtrl.js"></script>

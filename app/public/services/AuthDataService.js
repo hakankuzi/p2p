@@ -4,6 +4,18 @@ var AuthDataService = angular.module('AuthDataService', []);
 AuthDataService.service("AuthWrapper", function ($http, AuthToken) {
     var authService = {};
 
+
+    // FBADMIN ------------------------------------------
+    authService.service = function (item, methodName, callback) {
+        return $http.post(methodName, {
+            item: item
+        }).then(function (response) {
+            callback(response);
+        });
+    }
+    // --------------------------------------------------
+
+
     authService.isLoggedIn = function () {
         if (AuthToken.getToken()) {
             return true
@@ -17,7 +29,6 @@ AuthDataService.service("AuthWrapper", function ($http, AuthToken) {
     }
 
     authService.register = function (item, callback) {
-        console.log("new-user :", item);
         return $http.post('/api/register', {
             item: item
         }).then(function (response) {
@@ -31,15 +42,12 @@ AuthDataService.service("AuthWrapper", function ($http, AuthToken) {
             return $http.post('/api/me');
         } else {
             $q.reject({
-                message: 'User has no token'
+                message: 'user has no token'
             });
         }
     }
     return authService;
 });
-
-
-
 
 AuthDataService.service('AuthToken', function ($window) {
     var authTokenService = {}
@@ -58,14 +66,10 @@ AuthDataService.service('AuthToken', function ($window) {
 
 AuthDataService.service('AuthInterceptors', function (AuthToken) {
     var interceptorService = {};
-
     interceptorService.request = function (config) {
         var token = AuthToken.getToken();
-
         if (token) config.headers['x-access-token'] = token;
         return config;
     }
-
     return interceptorService;
-
 });
