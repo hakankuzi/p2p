@@ -25,9 +25,6 @@ IndexCtrl.controller('IndexController', function ($rootScope, AuthWrapper, CrudD
     });
     */
 
-    
-
-
     vm.doSignup = function () {
         AuthWrapper.service(vm.signupData, $rootScope.apis.createUser, (response) => {
             console.log(response);
@@ -48,7 +45,7 @@ IndexCtrl.controller('IndexController', function ($rootScope, AuthWrapper, CrudD
 
     vm.doLogin = function () {
         console.log(vm.loginData);
-        AuthWrapper.service(vm.loginData, $rootScope.apis.getUserWithEmailAndPassword,(response)=>{
+        AuthWrapper.service(vm.loginData, $rootScope.apis.getUserWithEmailAndPassword, (response) => {
             console.log(response);
         });
 

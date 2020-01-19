@@ -1,8 +1,22 @@
 // Dependencies --------------------------
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const secretKey = "tokbox-sample";
+const secretKey = "tokbox-sample-wuüeç123dfjeo1";
 const encryption_secret_key = 'aisflkndgşsdbvidnwıweljfwnfew';
+const aes256 = require('aes256');
+
+
+// Encryption and Decryption -------------
+function encrypt(plainText) {
+    let encrypted = aes256.encrypt(encryption_secret_key, plainText);
+    return encrypted;
+}
+function decrypt(encrypted) {
+    let plainText = aes256.decrypt(encryption_secret_key, encrypted);
+    return plainText;
+}
+// ---------------------------------------
+
 const router = express.Router();
 
 // Firebase Connection --------------------
@@ -87,36 +101,58 @@ router.post('/getUser', (req, res) => {
 router.post('/getUserWithEmailAndPassword', (req, res) => {
     let item = req.body.item;
     auth.getUserByEmail(item.email).then(userRecord => {
-        dbstore.collection('users')
-            .where('email', '==', decrypt(userRecord.email))
-            .where('passwordHash', '==', userRecord.passwordHash).get().then(snapshot => {
+        if (userRecord) {
+            dbstore.collection('users').where('passwordHash', '==', userRecord.passwordHash).get().then(snapshot => {
                 if (snapshot.docs.length !== 0) {
-                    let token = createUserToken(userRecord.toJSON());
-                    res.json({
-                        status: '200',
-                        message: 'user success',
-                        user: userRecord,
-                        token: token
-                    });
+                    let user = snapshot.docs[0].data();
+                    let email = decrypt(user.email);
+                    let passwordHash = user.passwordHash;
+                    if (email === item.email && passwordHash === userRecord.passwordHash) {
+                        let token = createUserToken(userRecord.toJSON());
+                        res.json({
+                            status: '200',
+                            message: 'user success',
+                            user: userRecord,
+                            token: token
+                        });
+                    } else {
+                        res.json({
+                            status: '409',
+                            message: 'no user',
+                            user: null,
+                            token: null
+                        });
+                    }
                 } else {
                     res.json({
                         status: '409',
                         message: 'no user',
+                        user: null,
                         token: null
                     });
                 }
             }).catch(err => {
                 res.json({
                     status: '409',
-                    message: err.message,
-                    user: null
+                    message: 'no user',
+                    user: null,
+                    token: null
                 });
             });
+        } else {
+            res.json({
+                status: '409',
+                message: 'no user',
+                user: null,
+                token: null
+            });
+        }
     }).catch(err => {
         res.json({
             status: '409',
             message: err.message,
-            user: null
+            user: null,
+            token: null
         });
     });
 });

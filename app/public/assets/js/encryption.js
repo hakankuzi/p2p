@@ -2,7 +2,7 @@ const encyption = {}
 
 encyption.encrypt = function (plaintext, key) {
     var encryptedAES = CryptoJS.AES.encrypt(plaintext, key);
-    return encryptedAES;
+    return encryptedAES.toString();
 }
 
 encyption.decrypt = function (encrypted, key) {

@@ -3,21 +3,8 @@ var app = angular.module('app', ['ngRoute', 'SignupCtrl', 'TestCtrl', 'LoginCtrl
 // Environments -----------------------------------------
 app.run(function ($rootScope, $location, $window, AuthWrapper) {
 
-    var config = {
-        apiKey: "AIzaSyA7F_X1u_aP97NkDHm0T6lJEpt-WUIuucg",
-        authDomain: "online-school-dev.firebaseapp.com",
-        databaseURL: "https://online-school-dev.firebaseio.com",
-        projectId: "online-school-dev",
-        storageBucket: "online-school-dev.appspot.com",
-        messagingSenderId: "190057098945",
-        appId: "1:190057098945:web:ba77a116ec435c98372e40"
-    }
-
-    firebase.initializeApp(config);
-    $rootScope.storage = firebase.storage();
-    $rootScope.auth = firebase.auth();
+  
     $rootScope.apis = {};
-
     $rootScope.apis.createUser = '/api/createUser';
     $rootScope.apis.updateUser = '/api/updateUser';
     $rootScope.apis.deleteUser = '/api/deleteUser';
@@ -28,6 +15,7 @@ app.run(function ($rootScope, $location, $window, AuthWrapper) {
     $rootScope.$on('$locationChangeStart', function (event, next, current) { });
 
     // listen for auth status changes
+    /*
     $rootScope.auth.onAuthStateChanged(user => {
         console.log('state changed');
         if (user) {
@@ -44,6 +32,7 @@ app.run(function ($rootScope, $location, $window, AuthWrapper) {
             console.log('user logged out');
         }
     });
+    */
 
 
 
