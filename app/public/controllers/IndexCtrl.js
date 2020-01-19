@@ -1,11 +1,44 @@
 
 var IndexCtrl = angular.module('IndexCtrl', []);
 
-IndexCtrl.controller('IndexController', function ($rootScope, AuthWrapper, CrudData, $location) {
+IndexCtrl.controller('IndexController', function ($scope, $rootScope, MockData, AuthWrapper, CrudData, $location) {
     var vm = this;
     vm.header = {};
-    vm.header.brand = "Tokbox Sample";
+    vm.header.brand = "OWLEGE";
     vm.header.title = "Management";
+
+    vm.change = function (menu) {
+        if (menu === "/exit") {
+            AuthWrapper.logout();
+            window.location.href = '/login';
+        } else {
+            $location.path(menu);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    MockData.service({ roles: ['admin'] }, $rootScope.apis.menus, (response) => {
+        if (response.data.status === '200') {
+            $rootScope.menus = response.data.list;
+        }
+    });
+
+
 
     vm.signupData = {
         email: '',
@@ -46,7 +79,7 @@ IndexCtrl.controller('IndexController', function ($rootScope, AuthWrapper, CrudD
     vm.doLogin = function () {
         console.log(vm.loginData);
         AuthWrapper.service(vm.loginData, $rootScope.apis.getUserWithEmailAndPassword, (response) => {
-        //    console.log(response);
+            //    console.log(response);
         });
 
         /*
@@ -70,7 +103,7 @@ IndexCtrl.controller('IndexController', function ($rootScope, AuthWrapper, CrudD
 
     CrudData.getCourses({}, (response) => {
         if (response.data.status === '200') {
-          //  console.log(response.data.list);
+            //  console.log(response.data.list);
         } else {
             console.log(response.data.message);
         }

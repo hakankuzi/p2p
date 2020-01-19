@@ -1,0 +1,29 @@
+<div id="login-page">
+    <div class="container">
+        <form class="form-login">
+            <h2 class="form-login-heading">Register</h2>
+            <div class="login-wrap">
+
+                <input type="username" class="form-control" placeholder="Username" id="Username"
+                    ng-model="signup.signupData.username" required>
+                <br />
+
+                <input type="email" class="form-control" ng-model="signup.signupData.email" placeholder="Email"
+                    id="Email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" required>
+                <br>
+                <input type="password" class="form-control" placeholder="Password" id="Password"
+                    ng-model="signup.signupData.password" required>
+                <br />
+
+
+                <div class="input-group-append">
+
+                    <button class="btn btn-theme btn-block" ng-click="signup.doSignup()"><i class="fa fa-users"></i>
+                        Complete</button>
+
+                    <button class="btn btn-theme btn-block" ng-click="signup.goPath()">
+                        Back to login</button>
+                </div>
+        </form>
+    </div>
+</div>

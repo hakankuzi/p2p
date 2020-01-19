@@ -1,10 +1,13 @@
-var app = angular.module('app', ['ngRoute', 'SignupCtrl', 'TestCtrl', 'LoginCtrl', 'SubscriberCtrl', 'PublisherCtrl', 'ProfileCtrl', 'IndexCtrl', 'TokboxDataService', 'CrudDataService', 'MockDataService', 'AuthDataService']);
+var app = angular.module('app', ['ngRoute', 'TestCtrl', 'DashboardCtrl', 'SignupCtrl', 'LoginCtrl', 'SubscriberCtrl', 'PublisherCtrl', 'ProfileCtrl', 'IndexCtrl', 'TokboxDataService', 'CrudDataService', 'MockDataService', 'AuthDataService']);
 
 // Environments -----------------------------------------
 app.run(function ($rootScope, $location, $window, MockData, AuthWrapper) {
 
+    // variables and api names ---------------------------------
     $rootScope.apis = {};
-    $rootScope.json = {};
+    $rootScope.menus = [];
+    $rootScope.loggedIn = AuthWrapper.isLoggedIn();
+
     $rootScope.apis.menus = '/api/getMenusByRoles';
     $rootScope.apis.createUser = '/api/createUser';
     $rootScope.apis.updateUser = '/api/updateUser';
@@ -12,37 +15,22 @@ app.run(function ($rootScope, $location, $window, MockData, AuthWrapper) {
     $rootScope.apis.getUser = '/api/getUser';
     $rootScope.apis.getUserWithEmailAndPassword = '/api/getUserWithEmailAndPassword';
     $rootScope.apis.listAllUsers = '/api/listAllUsers';
+    // --------------------------------------------------------
 
-    /*
-    MockData.service({ roles: ['admin'] }, $rootScope.apis.menus, (response) => {
-        console.log(response);
-    });
-    */
-
-    $rootScope.$on('$locationChangeStart', function (event, next, current) { });
-
-    // listen for auth status changes
-    /*
-    $rootScope.auth.onAuthStateChanged(user => {
-        console.log('state changed');
-        if (user) {
-            var displayName = user.displayName;
-            var email = user.email;
-            var emailVerified = user.emailVerified;
-            var photoURL = user.photoURL;
-            var isAnonymous = user.isAnonymous;
-            var uid = user.uid;
-            var providerData = user.providerData;
-
-            console.log('user logged in: ', user);
+    // Change Route and Check Authorize --------------------------------
+    $rootScope.$on('$routeChangeStart', function (event, next, current) {
+        var authenticated = next.$$route.authenticated;
+        if ($rootScope.loggedIn) {
+            if (!authenticated) {
+                $location.path('/dashboard');
+            }
         } else {
-            console.log('user logged out');
+            if (authenticated) {
+                $location.path('/login');
+            }
         }
     });
-    */
-
-
-
+    // -----------------------------------------------------------------
 });
 
 // Routing ----------------------------------------------
@@ -54,19 +42,25 @@ app.config(function ($routeProvider, $locationProvider, $httpProvider) {
             templateUrl: '../views/test.html',
             controller: 'TestController',
             controllerAs: 'test',
-            authenticated: false
+            authenticated: true
+        })
+        .when('/dashboard', {
+            templateUrl: '../views/dashboard.html',
+            controller: 'DashboardController',
+            controllerAs: 'dashboard',
+            authenticated: true
         })
         .when('/publisher', {
             templateUrl: '../views/publisher.html',
             controller: 'PublisherController',
             controllerAs: 'publisher',
-            authenticated: false
+            authenticated: true
         })
         .when('/subscriber', {
             templateUrl: '../views/subscriber.html',
             controller: 'SubscriberController',
             controllerAs: 'subscriber',
-            authenticated: false
+            authenticated: true
         })
         .when('/login', {
             templateUrl: '../views/login.html',

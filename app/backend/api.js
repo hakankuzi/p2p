@@ -14,7 +14,7 @@ function encrypt(plainText) {
 }
 function decrypt(encrypted) {
     let plainText = aes256.decrypt(encryption_secret_key, encrypted);
-    return plainText;
+    return plainText.toString();
 }
 // ---------------------------------------
 
@@ -66,13 +66,13 @@ function toList(snapshot) {
     return list
 }
 
-
+// AUTH PROCESS ----------------------------------------
 router.post('/getMenusByRoles', (req, res) => {
     let item = req.body.item;
     var list = [];
     for (var i = 0; i < menus.length; i++) {
         var arr = menus[i];
-        var items = arr.authorize;
+        var items = arr.roles;
         for (var k = 0; k < items.length; k++) {
             var auth = items[k];
             if (item.roles.includes(auth)) {
@@ -85,7 +85,7 @@ router.post('/getMenusByRoles', (req, res) => {
         res.json({
             status: '200',
             message: 'menus by roles',
-            menus: list
+            list: list
         });
     } else {
         res.json({
@@ -95,8 +95,7 @@ router.post('/getMenusByRoles', (req, res) => {
         });
     }
 });
-
-// AUTH PROCESS ----------------------------------------
+// ----------------------------------------------------
 router.post('/getUser', (req, res) => {
     let item = req.body.item;
     auth.getUser(item.uid).then(userRecord => {
@@ -125,6 +124,7 @@ router.post('/getUserWithEmailAndPassword', (req, res) => {
                 if (snapshot.docs.length !== 0) {
                     let user = snapshot.docs[0].data();
                     let email = decrypt(user.email);
+                    console.log(email);
                     let passwordHash = user.passwordHash;
                     if (email === item.email && passwordHash === userRecord.passwordHash) {
                         let token = createUserToken(userRecord.toJSON());
@@ -296,8 +296,6 @@ router.post('/me', (req, res) => {
             user: null
         });
     }
-
-
 });
 // ------------------------------------------------------
 
@@ -449,13 +447,6 @@ router.post('/createSession', (req, res) => {
     });
 });
 // ----------------------------------------------------------------------------
-
-
-// 
-
-
-
-
 
 // -----------------------------------------------------
 

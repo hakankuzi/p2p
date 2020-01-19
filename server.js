@@ -1,12 +1,11 @@
 // Dependencies ---------------------
-var express = require('express');
-var bodyParser = require('body-parser');
-var morgan = require('morgan');
-var config = require('./config');
-var app = express();
-var http = require('http');
-var server = http.Server(app);
-
+const express = require('express');
+const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const config = require('./config');
+const app = express();
+const http = require('http');
+const server = http.Server(app);
 
 // Express -------------------------
 app.use(bodyParser.urlencoded({
@@ -24,8 +23,6 @@ app.use(express.static(__dirname + '/app/public'));
 //Routes ---------------------------
 var api = require(__dirname + '/app/backend/api');
 app.use('/api', api);
-
-
 
 app.get('*', function (req, res) {
     res.sendFile(__dirname + '/app/public/views/index.html');

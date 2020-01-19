@@ -1,7 +1,7 @@
 'use strict'
 var AuthDataService = angular.module('AuthDataService', []);
 
-AuthDataService.service("AuthWrapper", function ($http, AuthToken) {
+AuthDataService.service("AuthWrapper", function ($http, $rootScope, AuthToken) {
     var authService = {};
 
 
@@ -10,6 +10,11 @@ AuthDataService.service("AuthWrapper", function ($http, AuthToken) {
         return $http.post(methodName, {
             item: item
         }).then(function (response) {
+            if ((methodName === $rootScope.apis.createUser
+                || methodName === $rootScope.apis.getUserWithEmailAndPassword)
+                && response.data.status === '200') {
+                AuthToken.setToken(response.data.token);
+            }
             callback(response);
         });
     }
@@ -53,13 +58,13 @@ AuthDataService.service('AuthToken', function ($window) {
     var authTokenService = {}
     authTokenService.setToken = function (token) {
         if (token) {
-            $window.localStorage.setItem('token', token);
+            $window.localStorage.setItem('owlege-token', token);
         } else {
-            $window.localStorage.removeItem('token');
+            $window.localStorage.removeItem('owlege-token');
         }
     }
     authTokenService.getToken = function () {
-        return $window.localStorage.getItem('token');
+        return $window.localStorage.getItem('owlege-token');
     }
     return authTokenService;
 });

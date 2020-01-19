@@ -1,1 +1,21 @@
-Login
+<div id="login-page">
+    <div class="container">
+        <form class="form-login">
+            <h2 class="form-login-heading">Login</h2>
+            <div class="login-wrap">
+                <input type="email" class="form-control" ng-model="login.loginData.email" placeholder="Enter Email"
+                    id="Email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" required>
+                <br>
+                <input type="password" class="form-control" placeholder="Password" id="Password"
+                    ng-model="login.loginData.password" required>
+                <br />
+                <div class="input-group-append">
+                    <button class="btn btn-theme btn-block" ng-click="login.doLogin()"><i class="fa fa-lock"></i>
+                        Login</button>
+
+                    <button class="btn btn-theme btn-block" ng-click="login.doSignup()"><i class="fa fa-users"></i>
+                        Register</button>
+                </div>
+        </form>
+    </div>
+</div>
