@@ -1,10 +1,11 @@
 // Dependencies --------------------------
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const secretKey = "tokbox-sample-wuüeç123dfjeo1";
-const encryption_secret_key = 'aisflkndgşsdbvidnwıweljfwnfew';
+const keys = require('../backend/keys.json');
+const secretKey = keys.secretKey;
+const encryption_secret_key = keys.encryption_secret_key;
 const aes256 = require('aes256');
-
+const menus = require('../backend/menus.json');
 
 // Encryption and Decryption -------------
 function encrypt(plainText) {
@@ -21,7 +22,7 @@ const router = express.Router();
 
 // Firebase Connection --------------------
 const fbadmin = require('firebase-admin');
-const account = require('../backend/accountKey.json');
+const account = require('../backend/accountkey.json');
 
 // Initialize Firebase
 fbadmin.initializeApp({
@@ -33,6 +34,8 @@ fbadmin.initializeApp({
 
 const dbstore = fbadmin.firestore();
 const auth = fbadmin.auth();
+const storeage = fbadmin.storage();
+const bucket = storeage.bucket();
 
 
 // ----------------------------------------------------
@@ -46,12 +49,9 @@ function createUserToken(user) {
 function verifyUserToken(token) {
     jwt.verify(token, secretKey, (err, decoded) => {
         if (err) {
-            res.json({
-                status: '412',
-                message: 'token invalid'
-            });
+            return { status: '409', result: err.message }
         } else {
-            return decoded;
+            return { status: '200', result: decoded }
         }
     });
 }
@@ -67,17 +67,36 @@ function toList(snapshot) {
 }
 
 
-
+router.post('/getMenusByRoles', (req, res) => {
+    let item = req.body.item;
+    var list = [];
+    for (var i = 0; i < menus.length; i++) {
+        var arr = menus[i];
+        var items = arr.authorize;
+        for (var k = 0; k < items.length; k++) {
+            var auth = items[k];
+            if (item.roles.includes(auth)) {
+                list.push(menus[i]);
+                break;
+            }
+        }
+    }
+    if (list.length !== 0) {
+        res.json({
+            status: '200',
+            message: 'menus by roles',
+            menus: list
+        });
+    } else {
+        res.json({
+            status: '409',
+            message: 'no menus by roles',
+            menus: null
+        });
+    }
+});
 
 // AUTH PROCESS ----------------------------------------
-router.post('/getEncryptionKey', (req, res) => {
-    res.json({
-        status: '200',
-        message: 'be careful',
-        key: encryption_secret_key
-    });
-});
-// ----------------------------------------------------
 router.post('/getUser', (req, res) => {
     let item = req.body.item;
     auth.getUser(item.uid).then(userRecord => {
@@ -255,21 +274,30 @@ router.post('/listAllUsers', (req, res) => {
 });
 // ----------------------------------------------------
 router.post('/me', (req, res) => {
-    let decoded = verifyUserToken(token);
-    if (decoded) {
+    let valid = verifyUserToken(token);
+    if (valid.status === '200') {
+        if (valid.result) {
+            res.json({
+                status: '412',
+                message: 'token invalid',
+                user: null
+            });
+        } else {
+            res.json({
+                status: '200',
+                message: 'me',
+                user: valid.result
+            });
+        }
+    } else {
         res.json({
             status: '412',
             message: 'token invalid',
             user: null
         });
-    } else {
-
-        res.json({
-            status: '200',
-            message: 'me',
-            user: decoded
-        });
     }
+
+
 });
 // ------------------------------------------------------
 

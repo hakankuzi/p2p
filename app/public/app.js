@@ -1,17 +1,24 @@
 var app = angular.module('app', ['ngRoute', 'SignupCtrl', 'TestCtrl', 'LoginCtrl', 'SubscriberCtrl', 'PublisherCtrl', 'ProfileCtrl', 'IndexCtrl', 'TokboxDataService', 'CrudDataService', 'MockDataService', 'AuthDataService']);
 
 // Environments -----------------------------------------
-app.run(function ($rootScope, $location, $window, AuthWrapper) {
+app.run(function ($rootScope, $location, $window, MockData, AuthWrapper) {
 
-  
     $rootScope.apis = {};
+    $rootScope.json = {};
+    $rootScope.apis.menus = '/api/getMenusByRoles';
     $rootScope.apis.createUser = '/api/createUser';
     $rootScope.apis.updateUser = '/api/updateUser';
     $rootScope.apis.deleteUser = '/api/deleteUser';
     $rootScope.apis.getUser = '/api/getUser';
     $rootScope.apis.getUserWithEmailAndPassword = '/api/getUserWithEmailAndPassword';
     $rootScope.apis.listAllUsers = '/api/listAllUsers';
-    $rootScope.apis.getEncryptionKey = '/api/getEncryptionKey';
+
+    /*
+    MockData.service({ roles: ['admin'] }, $rootScope.apis.menus, (response) => {
+        console.log(response);
+    });
+    */
+
     $rootScope.$on('$locationChangeStart', function (event, next, current) { });
 
     // listen for auth status changes

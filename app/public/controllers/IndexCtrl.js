@@ -46,7 +46,7 @@ IndexCtrl.controller('IndexController', function ($rootScope, AuthWrapper, CrudD
     vm.doLogin = function () {
         console.log(vm.loginData);
         AuthWrapper.service(vm.loginData, $rootScope.apis.getUserWithEmailAndPassword, (response) => {
-            console.log(response);
+        //    console.log(response);
         });
 
         /*
@@ -70,7 +70,7 @@ IndexCtrl.controller('IndexController', function ($rootScope, AuthWrapper, CrudD
 
     CrudData.getCourses({}, (response) => {
         if (response.data.status === '200') {
-            console.log(response.data.list);
+          //  console.log(response.data.list);
         } else {
             console.log(response.data.message);
         }
