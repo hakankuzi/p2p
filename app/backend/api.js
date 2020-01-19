@@ -1,8 +1,14 @@
 // Dependencies --------------------------
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const secretKey = "tokbox-sample-123456";
+const secretKey = "tokbox";
 const router = express.Router();
+
+
+// Encryption and Decryption -------------
+var crypto = require('crypto');
+const password = 'crypto@123';
+// ----------------------------------------
 
 // Firebase Connection --------------------
 const fbadmin = require('firebase-admin');
@@ -16,14 +22,18 @@ fbadmin.initializeApp({
     serviceAccountId: "firebase-adminsdk-sazk4@online-school-dev.iam.gserviceaccount.com"
 });
 
+const dbstore = fbadmin.firestore();
+const auth = fbadmin.auth();
 
+
+// ----------------------------------------------------
 function createUserToken(user) {
     let token = jwt.sign(user, secretKey, {
         expiresIn: '24h'
     });
     return token;
 };
-
+// ----------------------------------------------------
 function verifyUserToken(token) {
     jwt.verify(token, secretKey, (err, decoded) => {
         if (err) {
@@ -36,7 +46,7 @@ function verifyUserToken(token) {
         }
     });
 }
-
+// ----------------------------------------------------
 function toList(snapshot) {
     let list = [];
     snapshot.docs.forEach(function (doc) {
@@ -46,9 +56,22 @@ function toList(snapshot) {
     });
     return list
 }
+// ----------------------------------------------------
+function encrypt(text) {
+    const cipher = crypto.createCipher('aes128', secretKey);
+    var encrypted = cipher.update(text, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    return encrypted;
+}
 
-const dbstore = fbadmin.firestore();
-const auth = fbadmin.auth();
+function decrypt(encrypted) {
+
+    const decipher = crypto.createDecipher('aes128',secretKey);
+    var decrypted = decipher.update(encrypted,'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+    console.log(decrypted);
+}
+// ----------------------------------------------------
 
 
 // AUTH PROCESS ----------------------------------------
@@ -72,18 +95,72 @@ router.post('/getUser', (req, res) => {
     });
 });
 // ----------------------------------------------------
+router.post('/getUserWithEmailAndPassword', (req, res) => {
+    let item = req.body.item;
+    auth.getUserByEmail(item.email).then(userRecord => {
+
+
+        decrypt(userRecord.email);
+
+
+        dbstore.collection('users')
+            .where('email', '==', decrypt(userRecord.email))
+            .where('passwordHash', '==', userRecord.passwordHash).get().then(snapshot => {
+                if (snapshot.docs.length !== 0) {
+                    let token = createUserToken(userRecord.toJSON());
+                    res.json({
+                        status: '200',
+                        message: 'user success',
+                        user: userRecord,
+                        token: token
+                    });
+                } else {
+                    res.json({
+                        status: '409',
+                        message: 'no user',
+                        token: null
+                    });
+                }
+            }).catch(err => {
+                res.json({
+                    status: '409',
+                    message: err.message,
+                    user: null
+                });
+            });
+    }).catch(err => {
+        res.json({
+            status: '409',
+            message: err.message,
+            user: null
+        });
+    });
+});
+// ----------------------------------------------------
 router.post('/createUser', (req, res) => {
     let item = req.body.item;
     auth.createUser({
         email: item.email,
         password: item.password,
     }).then(userRecord => {
-        let token = createUserToken(userRecord.toJSON());
-        res.json({
-            status: '200',
-            message: 'created new user',
-            user: userRecord,
-            token: token
+        dbstore.collection('users').add({
+            email: encrypt(userRecord.email),
+            passwordHash: userRecord.passwordHash,
+        }).then(() => {
+            let token = createUserToken(userRecord.toJSON());
+            res.json({
+                status: '200',
+                message: 'created new user',
+                user: userRecord,
+                token: token
+            });
+        }).catch(err => {
+            res.json({
+                status: '409',
+                message: err.message,
+                user: null,
+                token: null
+            });
         });
     }).catch(err => {
         res.json({
@@ -221,9 +298,6 @@ router.post('/getCourses', (req, res) => {
         });
     });
 });
-
-
-
 
 
 

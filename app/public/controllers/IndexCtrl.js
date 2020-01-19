@@ -25,6 +25,7 @@ IndexCtrl.controller('IndexController', function ($rootScope, AuthWrapper, CrudD
     });
     */
 
+    
 
 
     vm.doSignup = function () {
@@ -47,11 +48,19 @@ IndexCtrl.controller('IndexController', function ($rootScope, AuthWrapper, CrudD
 
     vm.doLogin = function () {
         console.log(vm.loginData);
+        AuthWrapper.service(vm.loginData, $rootScope.apis.getUserWithEmailAndPassword,(response)=>{
+            console.log(response);
+        });
+
+        /*
         $rootScope.auth.signInWithEmailAndPassword(vm.loginData.email, vm.loginData.password).then(credential => {
             console.log(credential.user);
         }).catch(err => {
             console.log(err.message);
         });
+        */
+
+
     }
 
 

@@ -22,8 +22,8 @@ app.run(function ($rootScope, $location, $window, AuthWrapper) {
     $rootScope.apis.updateUser = '/api/updateUser';
     $rootScope.apis.deleteUser = '/api/deleteUser';
     $rootScope.apis.getUser = '/api/getUser';
+    $rootScope.apis.getUserWithEmailAndPassword = '/api/getUserWithEmailAndPassword';
     $rootScope.apis.listAllUsers = '/api/listAllUsers';
-
 
     $rootScope.$on('$locationChangeStart', function (event, next, current) { });
 
