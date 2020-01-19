@@ -1,14 +1,9 @@
 // Dependencies --------------------------
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const secretKey = "tokbox";
+const secretKey = "tokbox-sample";
+const encryption_secret_key = 'aisflkndgşsdbvidnwıweljfwnfew';
 const router = express.Router();
-
-
-// Encryption and Decryption -------------
-var crypto = require('crypto');
-const password = 'crypto@123';
-// ----------------------------------------
 
 // Firebase Connection --------------------
 const fbadmin = require('firebase-admin');
@@ -56,25 +51,19 @@ function toList(snapshot) {
     });
     return list
 }
-// ----------------------------------------------------
-function encrypt(text) {
-    const cipher = crypto.createCipher('aes128', secretKey);
-    var encrypted = cipher.update(text, 'utf8', 'hex');
-    encrypted += cipher.final('hex');
-    return encrypted;
-}
 
-function decrypt(encrypted) {
 
-    const decipher = crypto.createDecipher('aes128',secretKey);
-    var decrypted = decipher.update(encrypted,'hex', 'utf8');
-    decrypted += decipher.final('utf8');
-    console.log(decrypted);
-}
-// ----------------------------------------------------
 
 
 // AUTH PROCESS ----------------------------------------
+router.post('/getEncryptionKey', (req, res) => {
+    res.json({
+        status: '200',
+        message: 'be careful',
+        key: encryption_secret_key
+    });
+});
+// ----------------------------------------------------
 router.post('/getUser', (req, res) => {
     let item = req.body.item;
     auth.getUser(item.uid).then(userRecord => {
@@ -98,11 +87,6 @@ router.post('/getUser', (req, res) => {
 router.post('/getUserWithEmailAndPassword', (req, res) => {
     let item = req.body.item;
     auth.getUserByEmail(item.email).then(userRecord => {
-
-
-        decrypt(userRecord.email);
-
-
         dbstore.collection('users')
             .where('email', '==', decrypt(userRecord.email))
             .where('passwordHash', '==', userRecord.passwordHash).get().then(snapshot => {

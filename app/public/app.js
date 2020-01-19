@@ -24,7 +24,7 @@ app.run(function ($rootScope, $location, $window, AuthWrapper) {
     $rootScope.apis.getUser = '/api/getUser';
     $rootScope.apis.getUserWithEmailAndPassword = '/api/getUserWithEmailAndPassword';
     $rootScope.apis.listAllUsers = '/api/listAllUsers';
-
+    $rootScope.apis.getEncryptionKey = '/api/getEncryptionKey';
     $rootScope.$on('$locationChangeStart', function (event, next, current) { });
 
     // listen for auth status changes
