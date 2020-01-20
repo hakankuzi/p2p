@@ -58,7 +58,6 @@ function verifyUserToken(token) {
         }
     });
 }
-
 // ----------------------------------------------------
 function toList(snapshot) {
     let list = [];
@@ -71,54 +70,6 @@ function toList(snapshot) {
 }
 
 // AUTH PROCESS ----------------------------------------
-router.post('/getMenusByRoles', (req, res) => {
-    let item = req.body.item;
-    var list = [];
-    for (var i = 0; i < menus.length; i++) {
-        var arr = menus[i];
-        var items = arr.roles;
-        for (var k = 0; k < items.length; k++) {
-            var auth = items[k];
-            if (item.roles.includes(auth)) {
-                list.push(menus[i]);
-                break;
-            }
-        }
-    }
-    if (list.length !== 0) {
-        res.json({
-            status: '200',
-            message: 'menus by roles',
-            list: list
-        });
-    } else {
-        res.json({
-            status: '409',
-            message: 'no menus by roles',
-            menus: null
-        });
-    }
-});
-// ----------------------------------------------------
-router.post('/getUser', (req, res) => {
-    let item = req.body.item;
-    auth.getUser(item.uid).then(userRecord => {
-        let token = createUserToken(userRecord.toJSON());
-        res.json({
-            status: '200',
-            message: 'get new user',
-            user: userRecord,
-            token: token
-        });
-    }).catch(err => {
-        res.json({
-            status: '409',
-            message: err.message,
-            user: null,
-            token: null
-        });
-    });
-});
 // ----------------------------------------------------
 router.post('/getUserWithEmailAndPassword', (req, res) => {
     let item = req.body.item;
@@ -209,6 +160,86 @@ router.post('/createUser', (req, res) => {
     });
 });
 // ----------------------------------------------------
+
+// ----------------------------------------------------
+router.post('/me', (req, res) => {
+    let valid = verifyUserToken(token);
+    if (valid.status === '200') {
+        if (valid.result) {
+            res.json({
+                status: '412',
+                message: 'token invalid',
+                user: null
+            });
+        } else {
+            res.json({
+                status: '200',
+                message: 'me',
+                user: valid.result
+            });
+        }
+    } else {
+        res.json({
+            status: '412',
+            message: 'token invalid',
+            user: null
+        });
+    }
+});
+// ------------------------------------------------------------
+
+
+
+
+
+// *************************************************************
+// MiddleWare --------------------------------------------------
+router.use(function (req, res, next) {
+    var token = req.body.token || req.body.query || req.headers['x-access-token'];
+    if (token) {
+        req.decoded = verifyUserToken(token);
+        next();
+    } else {
+        res.json({
+            status: '412',
+            message: 'token not exist'
+        });
+    }
+});
+// -------------------------------------------------------------
+// *************************************************************
+
+
+// ------------------------------------------------------------
+router.post('/getMenusByRoles', (req, res) => {
+    let item = req.body.item;
+    var list = [];
+    for (var i = 0; i < menus.length; i++) {
+        var arr = menus[i];
+        var items = arr.roles;
+        for (var k = 0; k < items.length; k++) {
+            var auth = items[k];
+            if (item.roles.includes(auth)) {
+                list.push(menus[i]);
+                break;
+            }
+        }
+    }
+    if (list.length !== 0) {
+        res.json({
+            status: '200',
+            message: 'menus by roles',
+            list: list
+        });
+    } else {
+        res.json({
+            status: '409',
+            message: 'no menus by roles',
+            menus: null
+        });
+    }
+});
+// ----------------------------------------------------
 router.post('/updateUser', (req, res) => {
     let item = req.body.item;
     auth.updateUser(item.uid, {
@@ -271,49 +302,27 @@ router.post('/listAllUsers', (req, res) => {
     });
 });
 // ----------------------------------------------------
-router.post('/me', (req, res) => {
-    let valid = verifyUserToken(token);
-    if (valid.status === '200') {
-        if (valid.result) {
-            res.json({
-                status: '412',
-                message: 'token invalid',
-                user: null
-            });
-        } else {
-            res.json({
-                status: '200',
-                message: 'me',
-                user: valid.result
-            });
-        }
-    } else {
+router.post('/getUser', (req, res) => {
+    let item = req.body.item;
+    auth.getUser(item.uid).then(userRecord => {
+        let token = createUserToken(userRecord.toJSON());
         res.json({
-            status: '412',
-            message: 'token invalid',
-            user: null
+            status: '200',
+            message: 'get new user',
+            user: userRecord,
+            token: token
         });
-    }
+    }).catch(err => {
+        res.json({
+            status: '409',
+            message: err.message,
+            user: null,
+            token: null
+        });
+    });
 });
 // ------------------------------------------------------
 
-
-// *************************************************************
-// MiddleWare --------------------------------------------------
-router.use(function (req, res, next) {
-    var token = req.body.token || req.body.query || req.headers['x-access-token'];
-    if (token) {
-        req.decoded = verifyUserToken(token);
-        next();
-    } else {
-        res.json({
-            status: '412',
-            message: 'token not exist'
-        });
-    }
-});
-// -------------------------------------------------------------
-// *************************************************************
 
 // Tokbox -----------------------------------------------
 const OpenTok = require('opentok');
