@@ -7,17 +7,6 @@ const encryption_secret_key = keys.encryption_secret_key;
 const aes256 = require('aes256');
 const menus = require('../backend/menus.json');
 
-// Encryption and Decryption -------------
-function encrypt(plainText) {
-    let encrypted = aes256.encrypt(encryption_secret_key, plainText);
-    return encrypted;
-}
-function decrypt(encrypted) {
-    let plainText = aes256.decrypt(encryption_secret_key, encrypted);
-    return plainText.toString();
-}
-// ---------------------------------------
-
 // Router --------------------------------
 const router = express.Router();
 // ---------------------------------------
@@ -40,7 +29,15 @@ const auth = fbadmin.auth();
 const storeage = fbadmin.storage();
 const bucket = storeage.bucket();
 
-
+// Encryption and Decryption ------------------------
+function encrypt(plainText) {
+    let encrypted = aes256.encrypt(encryption_secret_key, plainText);
+    return encrypted;
+}
+function decrypt(encrypted) {
+    let plainText = aes256.decrypt(encryption_secret_key, encrypted);
+    return plainText.toString();
+}
 // ----------------------------------------------------
 function createUserToken(user) {
     let token = jwt.sign(user, secretKey, {
@@ -68,6 +65,7 @@ function toList(snapshot) {
     });
     return list
 }
+// ----------------------------------------------------
 
 // AUTH PROCESS ----------------------------------------
 // ----------------------------------------------------
