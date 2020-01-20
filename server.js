@@ -18,6 +18,7 @@ app.use(bodyParser.json({
     limit: '5mb'
 }));
 app.use(morgan('dev'));
+app.disable('x-powered-by') // at a minimum, disable X-Powered By Header
 app.use(express.static(__dirname + '/app/public'));
 
 //Routes ---------------------------

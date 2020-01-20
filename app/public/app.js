@@ -1,7 +1,7 @@
 var app = angular.module('app', ['ngRoute', 'TestCtrl', 'DashboardCtrl', 'SignupCtrl', 'LoginCtrl', 'SubscriberCtrl', 'PublisherCtrl', 'ProfileCtrl', 'IndexCtrl', 'TokboxDataService', 'CrudDataService', 'MockDataService', 'AuthDataService']);
 
 // Environments -----------------------------------------
-app.run(function ($rootScope, $location, $window, MockData, AuthWrapper) {
+app.run(function ($rootScope, $location, $window, MockData, AuthToken, AuthWrapper) {
 
     // variables and api names ---------------------------------
     $rootScope.apis = {};
@@ -14,16 +14,35 @@ app.run(function ($rootScope, $location, $window, MockData, AuthWrapper) {
     $rootScope.apis.deleteUser = '/api/deleteUser';
     $rootScope.apis.getUser = '/api/getUser';
     $rootScope.apis.getCourses = '/api/getCourses'
+    $rootScope.apis.me = '/api/me';
     $rootScope.apis.getUserWithEmailAndPassword = '/api/getUserWithEmailAndPassword';
     $rootScope.apis.listAllUsers = '/api/listAllUsers';
-    // --------------------------------------------------------
+    // ----------------------------------------------------------------
 
+    if ($rootScope.menus.length === 0) {
+        let token = AuthToken.getToken();
+        if (token) {
+            AuthWrapper.service({ token: token }, $rootScope.apis.me, (response) => {
+                if (response.data.status === '200') {
+                    $rootScope.menus = response.data.user.menus;
+                    $rootScope.user = response.data.user;
+                }
+            });
+        } else {
+            $location.path('/login');
+        }
+    }
+
+    // ----------------------------------------------------------------
     // Change Route and Check Authorize --------------------------------
     $rootScope.$on('$routeChangeStart', function (event, next, current) {
         var authenticated = next.$$route.authenticated;
+
         if ($rootScope.loggedIn) {
             if (!authenticated) {
                 $location.path('/dashboard');
+            } else {
+
             }
         } else {
             if (authenticated) {

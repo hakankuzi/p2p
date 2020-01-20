@@ -11,7 +11,6 @@ const menus = require('../backend/menus.json');
 const router = express.Router();
 // ---------------------------------------
 
-
 // Firebase Connection --------------------
 const fbadmin = require('firebase-admin');
 const account = require('../backend/accountkey.json');
@@ -46,16 +45,6 @@ function createUserToken(user) {
     return token;
 };
 // ----------------------------------------------------
-function verifyUserToken(token) {
-    jwt.verify(token, secretKey, (err, decoded) => {
-        if (err) {
-            return { status: '409', result: err.message }
-        } else {
-            return { status: '200', result: decoded }
-        }
-    });
-}
-// ----------------------------------------------------
 function toList(snapshot) {
     let list = [];
     snapshot.docs.forEach(function (doc) {
@@ -67,6 +56,22 @@ function toList(snapshot) {
 }
 // ----------------------------------------------------
 
+function getMenusByRoles(roles) {
+    var list = [];
+    for (var i = 0; i < menus.length; i++) {
+        var arr = menus[i];
+        var items = arr.roles;
+        for (var k = 0; k < items.length; k++) {
+            var auth = items[k];
+            if (roles.includes(auth)) {
+                list.push(menus[i]);
+                break;
+            }
+        }
+    }
+    return list;
+}
+
 // AUTH PROCESS ----------------------------------------
 // ----------------------------------------------------
 router.post('/getUserWithEmailAndPassword', (req, res) => {
@@ -77,7 +82,7 @@ router.post('/getUserWithEmailAndPassword', (req, res) => {
                 let user = snapshot.docs[0].data();
                 let password = decrypt(user.passwordHash);
                 if (item.password === password && item.email === user.email) {
-                    let token = createUserToken(userRecord.toJSON());
+                    let token = createUserToken(user);
                     user.token = token;
                     res.json({
                         status: '200',
@@ -126,17 +131,24 @@ router.post('/createUser', (req, res) => {
     }).then(userRecord => {
         passwordHash = encrypt(item.password);
         dbstore.collection('users').add({
+            uid: userRecord.uid,
             email: item.email,
             username: item.username,
-            uid: userRecord.uid,
+            courses: item.courses,
+            profilePicPath: item.profilePicPath,
+            roles: item.roles,
+            status: item.status,
+            userSituation: item.userSituation,
+            nameSurname: item.nameSurname,
+            registeredDate: item.registeredDate,
             passwordHash: passwordHash,
         }).then(() => {
-            let token = createUserToken(userRecord.toJSON());
+            let token = createUserToken(item);
+            let user = { item, token };
             res.json({
                 status: '200',
                 message: 'created new user',
-                user: userRecord,
-                token: token
+                user: user,
             });
         }).catch(err => {
             res.json({
@@ -159,35 +171,6 @@ router.post('/createUser', (req, res) => {
 });
 // ----------------------------------------------------
 
-// ----------------------------------------------------
-router.post('/me', (req, res) => {
-    let valid = verifyUserToken(token);
-    if (valid.status === '200') {
-        if (valid.result) {
-            res.json({
-                status: '412',
-                message: 'token invalid',
-                user: null
-            });
-        } else {
-            res.json({
-                status: '200',
-                message: 'me',
-                user: valid.result
-            });
-        }
-    } else {
-        res.json({
-            status: '412',
-            message: 'token invalid',
-            user: null
-        });
-    }
-});
-// ------------------------------------------------------------
-
-
-
 
 
 // *************************************************************
@@ -195,12 +178,17 @@ router.post('/me', (req, res) => {
 router.use(function (req, res, next) {
     var token = req.body.token || req.body.query || req.headers['x-access-token'];
     if (token) {
-        req.decoded = verifyUserToken(token);
-        next();
-    } else {
-        res.json({
-            status: '412',
-            message: 'token not exist'
+        jwt.verify(token, secretKey, (err, decoded) => {
+            if (err) {
+                res.json({
+                    status: '409',
+                    message: 'invalid token',
+                    user: null
+                });
+            } else {
+                req.decoded = decoded;
+                next();
+            }
         });
     }
 });
@@ -208,21 +196,36 @@ router.use(function (req, res, next) {
 // *************************************************************
 
 
+// ----------------------------------------------------
+router.post('/me', (req, res) => {
+    let item = req.body.item;
+    jwt.verify(item.token, secretKey, (err, decoded) => {
+        if (err) {
+            res.json({
+                status: '409',
+                message: 'invalid token',
+                user: null
+            });
+        } else {
+            let menus = getMenusByRoles(decoded.roles);
+            user = decoded;
+            user.menus = menus;
+            res.json({
+                status: '200',
+                message: 'me',
+                user: user
+            });
+        }
+
+    });
+});
+// ------------------------------------------------------------
+
+
 // ------------------------------------------------------------
 router.post('/getMenusByRoles', (req, res) => {
     let item = req.body.item;
-    var list = [];
-    for (var i = 0; i < menus.length; i++) {
-        var arr = menus[i];
-        var items = arr.roles;
-        for (var k = 0; k < items.length; k++) {
-            var auth = items[k];
-            if (item.roles.includes(auth)) {
-                list.push(menus[i]);
-                break;
-            }
-        }
-    }
+    let list = getMenusByRoles(item.roles);
     if (list.length !== 0) {
         res.json({
             status: '200',

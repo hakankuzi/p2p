@@ -1,16 +1,17 @@
 
 var IndexCtrl = angular.module('IndexCtrl', []);
 
-IndexCtrl.controller('IndexController', function ($scope, $rootScope, MockData, AuthWrapper, CrudData, $location) {
+IndexCtrl.controller('IndexController', function ($scope, $rootScope, $window, MockData, AuthWrapper, CrudData, $location) {
     var vm = this;
     vm.header = {};
     vm.header.brand = "OWLEGE";
     vm.header.title = "Management";
 
+
     vm.change = function (menu) {
         if (menu === "/exit") {
             AuthWrapper.logout();
-            window.location.href = '/login';
+            $window.location.href = '/login';
         } else {
             $location.path(menu);
         }
@@ -18,13 +19,15 @@ IndexCtrl.controller('IndexController', function ($scope, $rootScope, MockData, 
 
 
 
+
     // WORK ON .....
+    /*
     MockData.service({ roles: ['admin'] }, $rootScope.apis.menus, (response) => {
         if (response.data.status === '200') {
             $rootScope.menus = response.data.list;
         }
     });
-
+    */
 
 
 

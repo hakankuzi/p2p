@@ -13,7 +13,6 @@ AuthDataService.service("AuthWrapper", function ($http, $window, $rootScope, Aut
                 || methodName === $rootScope.apis.getUserWithEmailAndPassword)
                 && response.data.status === '200') {
                 AuthToken.setToken(response.data.user.token);
-                authService.setUser(response.data.user);
             }
             callback(response);
         });
@@ -31,7 +30,11 @@ AuthDataService.service("AuthWrapper", function ($http, $window, $rootScope, Aut
     }
 
     authService.setUser = function (user) {
-        $window.localStorage.setItem('owlege-user', JSON.stringify({ email: user.email, username: user.username }));
+        if (user) {
+            $window.localStorage.setItem('owlege-user', JSON.stringify({ email: user.email, username: user.username }));
+        } else {
+            $window.localStorage.removeItem('owlege-user');
+        }
     }
     authService.getUser = function () {
         return $window.localStorage.getItem('owlege-user');
