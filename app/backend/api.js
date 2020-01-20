@@ -18,7 +18,10 @@ function decrypt(encrypted) {
 }
 // ---------------------------------------
 
+// Router --------------------------------
 const router = express.Router();
+// ---------------------------------------
+
 
 // Firebase Connection --------------------
 const fbadmin = require('firebase-admin');
@@ -55,6 +58,7 @@ function verifyUserToken(token) {
         }
     });
 }
+
 // ----------------------------------------------------
 function toList(snapshot) {
     let list = [];
@@ -119,59 +123,48 @@ router.post('/getUser', (req, res) => {
 router.post('/getUserWithEmailAndPassword', (req, res) => {
     let item = req.body.item;
     auth.getUserByEmail(item.email).then(userRecord => {
-        if (userRecord) {
-            dbstore.collection('users').where('passwordHash', '==', userRecord.passwordHash).get().then(snapshot => {
-                if (snapshot.docs.length !== 0) {
-                    let user = snapshot.docs[0].data();
-                    let email = decrypt(user.email);
-                    console.log(email);
-                    let passwordHash = user.passwordHash;
-                    if (email === item.email && passwordHash === userRecord.passwordHash) {
-                        let token = createUserToken(userRecord.toJSON());
-                        res.json({
-                            status: '200',
-                            message: 'user success',
-                            user: userRecord,
-                            token: token
-                        });
-                    } else {
-                        res.json({
-                            status: '409',
-                            message: 'no user',
-                            user: null,
-                            token: null
-                        });
-                    }
+        dbstore.collection('users').where('email', '==', item.email).get().then(snapshot => {
+            if (snapshot.docs.length !== 0) {
+                let user = snapshot.docs[0].data();
+                let password = decrypt(user.passwordHash);
+                if (item.password === password && item.email === user.email) {
+                    let token = createUserToken(userRecord.toJSON());
+                    user.token = token;
+                    res.json({
+                        status: '200',
+                        message: 'user success',
+                        user: user
+                    });
                 } else {
                     res.json({
                         status: '409',
-                        message: 'no user',
-                        user: null,
-                        token: null
+                        message: 'entered wrong password',
+                        code: 'wrong-password',
+                        user: null
                     });
                 }
-            }).catch(err => {
+            } else {
                 res.json({
                     status: '409',
-                    message: 'no user',
-                    user: null,
-                    token: null
+                    message: 'user authenticated but no in db',
+                    code: 'record in db',
+                    user: null
                 });
-            });
-        } else {
+            }
+        }).catch(err => {
             res.json({
                 status: '409',
                 message: 'no user',
-                user: null,
-                token: null
+                code: err.code,
+                user: null
             });
-        }
+        });
     }).catch(err => {
         res.json({
             status: '409',
             message: err.message,
-            user: null,
-            token: null
+            code: err.code,
+            user: null
         });
     });
 });
@@ -182,9 +175,12 @@ router.post('/createUser', (req, res) => {
         email: item.email,
         password: item.password,
     }).then(userRecord => {
+        passwordHash = encrypt(item.password);
         dbstore.collection('users').add({
-            email: encrypt(userRecord.email),
-            passwordHash: userRecord.passwordHash,
+            email: item.email,
+            username: item.username,
+            uid: userRecord.uid,
+            passwordHash: passwordHash,
         }).then(() => {
             let token = createUserToken(userRecord.toJSON());
             res.json({
@@ -197,6 +193,7 @@ router.post('/createUser', (req, res) => {
             res.json({
                 status: '409',
                 message: err.message,
+                code: err.code,
                 user: null,
                 token: null
             });
@@ -205,6 +202,7 @@ router.post('/createUser', (req, res) => {
         res.json({
             status: '409',
             message: err.message,
+            code: err.code,
             user: null,
             token: null
         });
@@ -309,44 +307,13 @@ router.use(function (req, res, next) {
         next();
     } else {
         res.json({
-            status: 412,
+            status: '412',
             message: 'token not exist'
         });
     }
 });
 // -------------------------------------------------------------
 // *************************************************************
-
-
-// CRUD PROGRESSING ------------------------------------
-router.post('/getCourses', (req, res) => {
-    let item = req.body.item;
-    dbstore.collection('courses').get().then((snapshot) => {
-        if (snapshot.docs.length === 0) {
-            res.json({
-                status: '409',
-                message: 'no course',
-                list: []
-            });
-        } else {
-            let list = toList(snapshot);
-            res.json({
-                status: '200',
-                message: 'success list',
-                list: list
-            });
-        }
-    }).catch(err => {
-        res.json({
-            status: '409',
-            message: err,
-            list: []
-        });
-    });
-});
-
-
-
 
 // Tokbox -----------------------------------------------
 const OpenTok = require('opentok');
@@ -448,33 +415,33 @@ router.post('/createSession', (req, res) => {
 });
 // ----------------------------------------------------------------------------
 
-// -----------------------------------------------------
-
-// MiddleWare -------------------------
-router.use(function (req, res, next) {
-    var token = req.body.token || req.body.query || req.headers['x-access-token'];
-
-    if (token) {
-        // verify token
-        jwt.verify(token, secretKey, function (err, decoded) {
-            if (err) {
-                res.json({
-                    status: 412,
-                    message: 'Token invalid'
-                });
-            } else {
-                req.decoded = decoded;
-                next();
-            }
-        });
-
-    } else {
+// CRUD PROGRESSING -----------------------------------------------------------
+router.post('/getCourses', (req, res) => {
+    let item = req.body.item;
+    dbstore.collection('courses').get().then((snapshot) => {
+        if (snapshot.docs.length === 0) {
+            res.json({
+                status: '409',
+                message: 'no course',
+                list: []
+            });
+        } else {
+            let list = toList(snapshot);
+            res.json({
+                status: '200',
+                message: 'success list',
+                list: list
+            });
+        }
+    }).catch(err => {
         res.json({
-            status: 412,
-            message: 'No token provide'
+            status: '409',
+            message: err,
+            list: []
         });
-    }
+    });
 });
+// ----------------------------------------------------------------------------
 
 
 

@@ -18,25 +18,13 @@ IndexCtrl.controller('IndexController', function ($scope, $rootScope, MockData, 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // WORK ON .....
     MockData.service({ roles: ['admin'] }, $rootScope.apis.menus, (response) => {
         if (response.data.status === '200') {
             $rootScope.menus = response.data.list;
         }
     });
+
 
 
 
@@ -99,13 +87,4 @@ IndexCtrl.controller('IndexController', function ($scope, $rootScope, MockData, 
             console.log('user sign out')
         });
     }
-
-
-    CrudData.getCourses({}, (response) => {
-        if (response.data.status === '200') {
-            //  console.log(response.data.list);
-        } else {
-            console.log(response.data.message);
-        }
-    });
 });

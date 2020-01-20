@@ -3,8 +3,11 @@ var CrudDataService = angular.module('CrudDataService', []);
 CrudDataService.service('CrudData', function ($http, $q) {
     var crudService = {};
 
-    crudService.getCourses = function (item, callback) {
-        return $http.post('/api/getCourses', {
+    crudService.service = function (item, methodName, callback) {
+    
+        
+        console.log(methodName);
+        return $http.post(methodName, {
             item: item
         }).then(function (response) {
             callback(response);

@@ -13,6 +13,7 @@ app.run(function ($rootScope, $location, $window, MockData, AuthWrapper) {
     $rootScope.apis.updateUser = '/api/updateUser';
     $rootScope.apis.deleteUser = '/api/deleteUser';
     $rootScope.apis.getUser = '/api/getUser';
+    $rootScope.apis.getCourses = '/api/getCourses'
     $rootScope.apis.getUserWithEmailAndPassword = '/api/getUserWithEmailAndPassword';
     $rootScope.apis.listAllUsers = '/api/listAllUsers';
     // --------------------------------------------------------

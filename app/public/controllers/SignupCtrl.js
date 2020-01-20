@@ -4,7 +4,7 @@ SignupCtrl.controller('SignupController', function ($timeout, $scope, $rootScope
     var vm = this;
 
     vm.signupData = {
-        uid : '',
+        uid: '',
         username: '',
         email: '',
         password: '',
@@ -12,8 +12,13 @@ SignupCtrl.controller('SignupController', function ($timeout, $scope, $rootScope
 
     vm.doSignup = function () {
         AuthWrapper.service(vm.signupData, $rootScope.apis.createUser, (response) => {
-            console.log(response.data.user);
-
+            if (response.data.status === '200') {
+                window.location.href = '/dashboard';
+            } else {
+                if (response.data.code === 'auth/invalid-password') {
+                    alert(response.data.message);
+                }
+            }
         });
     }
 
