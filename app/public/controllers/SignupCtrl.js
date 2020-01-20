@@ -1,21 +1,22 @@
 var SignupCtrl = angular.module('SignupCtrl', []);
 
-SignupCtrl.controller('SignupController', function ($timeout, $scope, $rootScope, $location, AuthWrapper) {
+SignupCtrl.controller('SignupController', function ($timeout, $window, $scope, $rootScope, $location, AuthWrapper) {
     var vm = this;
 
     vm.signupData = {
         uid: '',
+        photoURL: '',
         username: '',
+        biography: '',
+        phoneNumber: '',
         email: '',
         password: '',
         roles: ['p2p', 'group'],
         status: 'student',
         userSituation: true,
-        nameSurname: '',
-        profilePicPath: '',
+        displayName: '',
         registeredDate: new Date(),
         courses: [],
-
     }
 
     vm.doSignup = function () {

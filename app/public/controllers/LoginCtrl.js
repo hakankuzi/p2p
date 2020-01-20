@@ -3,8 +3,8 @@ var LoginCtrl = angular.module('LoginCtrl', []);
 LoginCtrl.controller('LoginController', function ($timeout, $scope, MockData, $window, $rootScope, $location, AuthWrapper) {
     var vm = this;
     vm.loginData = {
-        email: "",
-        password: "",
+        email: '',
+        password: '',
     }
     vm.doLogin = function () {
         AuthWrapper.service(vm.loginData, $rootScope.apis.getUserWithEmailAndPassword, (response) => {

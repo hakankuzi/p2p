@@ -6,6 +6,7 @@ AuthDataService.service("AuthWrapper", function ($http, $window, $rootScope, Aut
 
     // FBADMIN ------------------------------------------
     authService.service = function (item, methodName, callback) {
+
         return $http.post(methodName, {
             item: item
         }).then(function (response) {
@@ -18,26 +19,16 @@ AuthDataService.service("AuthWrapper", function ($http, $window, $rootScope, Aut
         });
     }
     // --------------------------------------------------
-    authService.isLoggedIn = function () {
+    authService.isLoggedIn = function (item, methodName, callback) {
         if (AuthToken.getToken()) {
-            return true
+            return true;
         } else {
             return false;
         }
     }
+    // --------------------------------------------------
     authService.logout = function () {
         AuthToken.setToken();
-    }
-
-    authService.setUser = function (user) {
-        if (user) {
-            $window.localStorage.setItem('owlege-user', JSON.stringify({ email: user.email, username: user.username }));
-        } else {
-            $window.localStorage.removeItem('owlege-user');
-        }
-    }
-    authService.getUser = function () {
-        return $window.localStorage.getItem('owlege-user');
     }
     return authService;
 });

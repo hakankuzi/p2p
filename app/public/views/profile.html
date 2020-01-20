@@ -1,1 +1,84 @@
-Profile
+<section id="main-content">
+    <section class="wrapper">
+        <div class="col-lg-5">
+            <div class="form-panel" style="text-align: center">
+                <h3>Profile</h3>
+                <hr>
+                <a href="/profile"><img style="border-radius: 10%!important" width="200" height="150"
+                        ng-src="{{profile.profileData.photoURL}}" class="rounded-circle shadow "
+                        alt="profile-image"></a>
+                <br />
+                <h4 class="m-t-10">{{profile.profileData.displayName}}</h4>
+                <br />
+
+                <div class="fileupload fileupload-exists" data-provides="fileupload"><input type="hidden" value=""
+                        name="">
+                    <span class="btn btn-theme02 btn-file">
+                        <span class="fileupload-new"><i class="fa fa-paperclip"></i>Select file</span>
+                        <span class="fileupload-exists"><i class="fa fa-undo"></i> Change</span>
+                        <input type="file" class="default" name=""
+                            oninput="angular.element(this).scope().profilePicSelected(this)">
+                    </span>
+                    <span class="fileupload-preview" style="margin-left:5px;"></span>
+                    <a href="#" class="close fileupload-exists" data-dismiss="fileupload"
+                        style="float: none; margin-left:5px;"></a>
+                </div>
+                <hr>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="form-panel">
+
+                <div class="alert alert-info" ng-show="visible">
+                    <b>{{message}}</b>
+                </div>
+
+                <form class="form-horizontal style-form" name="Form" ng-submit="profile.updateProfile()">
+                    <br />
+                    <div class="form-group">
+                        <label class="col-sm-2 col-sm-2 control-label">Display Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" placeholder="Display Name" id="displayName"
+                                ng-model="profile.profileData.displayName" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 col-sm-2 control-label">Username</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" placeholder="Username" id="username"
+                                ng-model="profile.profileData.username" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 col-sm-2 control-label">Password</label>
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" placeholder="Password" id="Password"
+                                ng-model="profile.profileData.password" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control" placeholder="Email" id="email"
+                                pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$"
+                                ng-model="profile.profileData.email" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 col-sm-2 control-label">Biography</label>
+                        <div class="col-sm-10">
+                            <textarea style="resize: none;" rows="4" class="form-control" placeholder="Biography"
+                                id="biography" ng-model="profile.profileData.biography"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            <button type="submit" style="float: right" class="btn btn-theme04">Update</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</section>

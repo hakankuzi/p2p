@@ -80,7 +80,9 @@ router.post('/getUserWithEmailAndPassword', (req, res) => {
         dbstore.collection('users').where('email', '==', item.email).get().then(snapshot => {
             if (snapshot.docs.length !== 0) {
                 let user = snapshot.docs[0].data();
+                user.documentId = snapshot.docs[0].id;
                 let password = decrypt(user.passwordHash);
+                user.password = password
                 if (item.password === password && item.email === user.email) {
                     let token = createUserToken(user);
                     user.token = token;
@@ -135,14 +137,18 @@ router.post('/createUser', (req, res) => {
             email: item.email,
             username: item.username,
             courses: item.courses,
-            profilePicPath: item.profilePicPath,
+            biography: item.biography,
+            photoURL: item.photoURL,
             roles: item.roles,
             status: item.status,
+            phoneNumber: item.phoneNumber,
             userSituation: item.userSituation,
-            nameSurname: item.nameSurname,
+            displayName: item.displayName,
             registeredDate: item.registeredDate,
             passwordHash: passwordHash,
-        }).then(() => {
+        }).then((doc) => {
+            item.documentId = doc.id;
+            user.uid = userRecord.uid;
             let token = createUserToken(item);
             let user = { item, token };
             res.json({
@@ -195,11 +201,10 @@ router.use(function (req, res, next) {
 // -------------------------------------------------------------
 // *************************************************************
 
-
-// ----------------------------------------------------
+// ------------------------------------------------------------
 router.post('/me', (req, res) => {
-    let item = req.body.item;
-    jwt.verify(item.token, secretKey, (err, decoded) => {
+    let token = req.body.token || req.body.query || req.headers['x-access-token'];
+    jwt.verify(token, secretKey, (err, decoded) => {
         if (err) {
             res.json({
                 status: '409',
@@ -216,7 +221,6 @@ router.post('/me', (req, res) => {
                 user: user
             });
         }
-
     });
 });
 // ------------------------------------------------------------
@@ -243,19 +247,33 @@ router.post('/getMenusByRoles', (req, res) => {
 // ----------------------------------------------------
 router.post('/updateUser', (req, res) => {
     let item = req.body.item;
+
+
+
     auth.updateUser(item.uid, {
         email: item.email,
-        phoneNumber: item.phoneNumber,
-        emailVerified: item.emailVerified,
         password: item.password,
-        displayName: item.displayName,
-        photoURL: item.photoURL,
     }).then((userRecord) => {
-        res.json({
-            status: '200',
-            message: 'updated user',
-            user: userRecord
-        })
+        passwordHash = encrypt(item.password);
+        dbstore.collection('users').doc(item.documentId).update({
+            email: item.email,
+            phoneNumber: item.phoneNumber,
+            passwordHash: passwordHash,
+            displayName: item.displayName,
+            photoURL: item.photoURL,
+            biography: item.biography
+        }).then(function () {
+            res.json({
+                status: '200',
+                message: 'profile updated'
+            });
+        }).then(function (err) {
+            res.json({
+                status: '409',
+                message: err.message,
+                user: null
+            });
+        });
     }).catch(err => {
         res.json({
             status: '409',
@@ -439,7 +457,33 @@ router.post('/getCourses', (req, res) => {
             let list = toList(snapshot);
             res.json({
                 status: '200',
-                message: 'success list',
+                message: 'success course list',
+                list: list
+            });
+        }
+    }).catch(err => {
+        res.json({
+            status: '409',
+            message: err,
+            list: []
+        });
+    });
+});
+// ----------------------------------------------------------------------------
+router.post('/getPaymentsByUid', (req, res) => {
+    let item = req.body.item;
+    dbstore.collection('courses').where('uid', '==', item.uid).get().then((snapshot) => {
+        if (snapshot.docs.length === 0) {
+            res.json({
+                status: '409',
+                message: 'no payments',
+                list: []
+            });
+        } else {
+            let list = toList(snapshot);
+            res.json({
+                status: '200',
+                message: 'success payment list',
                 list: list
             });
         }

@@ -15,24 +15,21 @@ app.run(function ($rootScope, $location, $window, MockData, AuthToken, AuthWrapp
     $rootScope.apis.getUser = '/api/getUser';
     $rootScope.apis.getCourses = '/api/getCourses'
     $rootScope.apis.me = '/api/me';
+    $rootScope.apis.token = '/api/token';
+    $rootScope.apis.getPaymentByUid = '/api/getPaymentsByUid';
     $rootScope.apis.getUserWithEmailAndPassword = '/api/getUserWithEmailAndPassword';
     $rootScope.apis.listAllUsers = '/api/listAllUsers';
     // ----------------------------------------------------------------
-
     if ($rootScope.menus.length === 0) {
-        let token = AuthToken.getToken();
-        if (token) {
-            AuthWrapper.service({ token: token }, $rootScope.apis.me, (response) => {
-                if (response.data.status === '200') {
-                    $rootScope.menus = response.data.user.menus;
-                    $rootScope.user = response.data.user;
-                }
-            });
-        } else {
-            $location.path('/login');
-        }
+        AuthWrapper.service({}, $rootScope.apis.me, (response) => {
+            if (response.data.status === '200') {
+                $rootScope.menus = response.data.user.menus;
+                $rootScope.user = response.data.user;
+            } else {
+                $location.path('/login')
+            }
+        });
     }
-
     // ----------------------------------------------------------------
     // Change Route and Check Authorize --------------------------------
     $rootScope.$on('$routeChangeStart', function (event, next, current) {
