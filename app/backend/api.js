@@ -2,10 +2,12 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const keys = require('../backend/keys.json');
+const collections = require('../backend/collections.json');
 const secretKey = keys.secretKey;
-const encryption_secret_key = keys.encryption_secret_key;
+const encryptionSecretKey = keys.encryptionSecretKey;
 const aes256 = require('aes256');
 const menus = require('../backend/menus.json');
+const firebaseConfig = require('../backend/firebase-config.json')
 
 // Router --------------------------------
 const router = express.Router();
@@ -26,15 +28,15 @@ fbadmin.initializeApp({
 const dbstore = fbadmin.firestore();
 const auth = fbadmin.auth();
 const storeage = fbadmin.storage();
-const bucket = storeage.bucket();
+
 
 // Encryption and Decryption ------------------------
 function encrypt(plainText) {
-    let encrypted = aes256.encrypt(encryption_secret_key, plainText);
+    let encrypted = aes256.encrypt(encryptionSecretKey, plainText);
     return encrypted;
 }
 function decrypt(encrypted) {
-    let plainText = aes256.decrypt(encryption_secret_key, encrypted);
+    let plainText = aes256.decrypt(encryptionSecretKey, encrypted);
     return plainText.toString();
 }
 // ----------------------------------------------------
@@ -201,6 +203,19 @@ router.use(function (req, res, next) {
 // -------------------------------------------------------------
 // *************************************************************
 
+
+// ------------------------------------------------------------
+router.post('/getFirebaseConfig', (req, res) => {
+    let item = req.body.item;
+    res.json({
+        status: '200',
+        message: 'firebase config',
+        config: firebaseConfig
+    });
+});
+
+// ------------------------------------------------------------
+
 // ------------------------------------------------------------
 router.post('/me', (req, res) => {
     let token = req.body.token || req.body.query || req.headers['x-access-token'];
@@ -267,7 +282,7 @@ router.post('/updateUser', (req, res) => {
                 status: '200',
                 message: 'profile updated'
             });
-        }).then(function (err) {
+        }).catch(function (err) {
             res.json({
                 status: '409',
                 message: err.message,
@@ -345,8 +360,8 @@ router.post('/getUser', (req, res) => {
 
 // Tokbox -----------------------------------------------
 const OpenTok = require('opentok');
-let tokboxApiKey = '46488052';
-let tokboxSecretKey = '2c86770ac45f5ac8ae8860356535e97af293a116';
+let tokboxApiKey = keys.tokboxApiKey;
+let tokboxSecretKey = keys.tokboxSecretKey;
 const opentok = new OpenTok(tokboxApiKey, tokboxSecretKey);
 
 // get sessionId by scheduleId --------------------------------------------------------- 
@@ -381,7 +396,6 @@ router.post('/getSessionByScheduleId', (req, res) => {
 router.post('/generateToken', (req, res) => {
     let item = req.body.item;
     dbstore.collection('sessions').where('scheduleId', '==', item.scheduleId).get().then((snapshot) => {
-
         if (snapshot.docs.length === 0) {
             res.json({
                 status: '409',
@@ -444,46 +458,78 @@ router.post('/createSession', (req, res) => {
 // ----------------------------------------------------------------------------
 
 // CRUD PROGRESSING -----------------------------------------------------------
+
+router.post('/getDepartments', (req, res) => {
+    getCollections(collections.departments, res);
+});
+
+
 router.post('/getCourses', (req, res) => {
+    getCollections(collections.courses, res);
+});
+// ----------------------------------------------------------------------------
+router.post('/addDepartment', (req, res) => {
     let item = req.body.item;
-    dbstore.collection('courses').get().then((snapshot) => {
-        if (snapshot.docs.length === 0) {
-            res.json({
-                status: '409',
-                message: 'no course',
-                list: []
-            });
-        } else {
-            let list = toList(snapshot);
-            res.json({
-                status: '200',
-                message: 'success course list',
-                list: list
-            });
-        }
-    }).catch(err => {
-        res.json({
-            status: '409',
-            message: err,
-            list: []
-        });
-    });
+    let payload = {
+        department: item.department,
+        description: item.description,
+        photoURL: item.photoURL,
+        situation: item.situation,
+        version: item.version,
+        registeredDate: item.registeredDate
+    }
+    addRecord(collections.departments, payload, res);
+});
+// ----------------------------------------------------------------------------
+router.post('/updateDepartment', (req, res) => {
+    let item = req.body.item;
+    let documentId = item.documentId;
+    let payload = {
+        department: item.department,
+        description: item.description,
+        photoURL: item.photoURL,
+        situation: item.situation,
+        version: item.version,
+        registeredDate: item.registeredDate
+    }
+    updateRecord(collections.departments, documentId, payload, res);
 });
 // ----------------------------------------------------------------------------
 router.post('/getPaymentsByUid', (req, res) => {
     let item = req.body.item;
-    dbstore.collection('courses').where('uid', '==', item.uid).get().then((snapshot) => {
+
+});
+
+
+// ----------------------------------------------------------------------------
+function updateRecord(collectionName, documentId, payload, res) {
+    dbstore.collection(collectionName).doc(documentId).update(payload).then(function () {
+        res.json({
+            status: '200',
+            message: 'updated'
+        });
+    }).catch(function (err) {
+        res.json({
+            status: '409',
+            message: err.message,
+            user: null
+        });
+    });
+}
+// ----------------------------------------------------------------------------
+function getCollections(collectionName, res) {
+    dbstore.collection(collectionName).get().then((snapshot) => {
         if (snapshot.docs.length === 0) {
             res.json({
                 status: '409',
-                message: 'no payments',
+                message: 'no list',
                 list: []
             });
         } else {
             let list = toList(snapshot);
             res.json({
                 status: '200',
-                message: 'success payment list',
+                message: 'success list',
                 list: list
             });
         }
@@ -494,11 +540,25 @@ router.post('/getPaymentsByUid', (req, res) => {
             list: []
         });
     });
-});
+}
 // ----------------------------------------------------------------------------
-
-
-
+function addRecord(collectionName, payload, res) {
+    dbstore.collection(collectionName).add(payload).then((doc) => {
+        res.json({
+            status: '200',
+            message: 'added successfully',
+            document: doc,
+        });
+    }).catch(err => {
+        res.json({
+            status: '409',
+            message: err.message,
+            code: err.code,
+            document: null
+        });
+    });
+}
+// ----------------------------------------------------------------------------
 
 
 // Return Router

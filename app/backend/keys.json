@@ -1,5 +1,6 @@
 {
-    "tokbox_api_key": "46488052",
-    "encryption_secret_key": "46488052",
+    "tokboxApiKey": "46488052",
+    "tokboxSecretKey": "2c86770ac45f5ac8ae8860356535e97af293a116",
+    "encryptionSecretKey": "46488052",
     "secretKey": "tokbox-sample-wuüeç123dfjeo1"
 }

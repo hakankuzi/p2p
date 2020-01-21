@@ -19,7 +19,7 @@
 
 {
     "name": "P2P Lesson",
-    "icon": "fa fa-book",
+    "icon": "fa fa-superscript",
     "href": "/peertopeer",
     "class": "sub-menu",
     "module": true,
@@ -28,7 +28,7 @@
 
 {
     "name": "Group Lesson",
-    "icon": "fa fa-accusoft",
+    "icon": "fa fa-user-md",
     "href": "/online-class",
     "class": "sub-menu",
     "module": true,
@@ -37,7 +37,7 @@
 
 {
     "name": "Courses",
-    "icon": "fa fa-shapes",
+    "icon": "fa fa-hand-spock-o",
     "href": "/course",
     "class": "sub-menu",
     "module": true,
@@ -46,7 +46,7 @@
 
 {
     "name": "Schedules",
-    "icon": "fa fa-user-graduate",
+    "icon": "fa fa-chain-broken",
     "href": "/schedule",
     "class": "sub-menu",
     "module": true,

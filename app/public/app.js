@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute', 'TestCtrl', 'DashboardCtrl', 'SignupCtrl', 'LoginCtrl', 'SubscriberCtrl', 'PublisherCtrl', 'ProfileCtrl', 'IndexCtrl', 'TokboxDataService', 'CrudDataService', 'MockDataService', 'AuthDataService']);
+var app = angular.module('app', ['ngRoute', 'TestCtrl', 'CoreService', 'DepartmentCtrl', 'CourseCtrl', 'DashboardCtrl', 'SignupCtrl', 'LoginCtrl', 'SubscriberCtrl', 'PublisherCtrl', 'ProfileCtrl', 'IndexCtrl', 'TokboxDataService', 'CrudDataService', 'MockDataService', 'AuthDataService']);
 
 // Environments -----------------------------------------
 app.run(function ($rootScope, $location, $window, MockData, AuthToken, AuthWrapper) {
@@ -8,12 +8,18 @@ app.run(function ($rootScope, $location, $window, MockData, AuthToken, AuthWrapp
     $rootScope.menus = [];
     $rootScope.loggedIn = AuthWrapper.isLoggedIn();
 
+
+
     $rootScope.apis.menus = '/api/getMenusByRoles';
     $rootScope.apis.createUser = '/api/createUser';
     $rootScope.apis.updateUser = '/api/updateUser';
     $rootScope.apis.deleteUser = '/api/deleteUser';
     $rootScope.apis.getUser = '/api/getUser';
-    $rootScope.apis.getCourses = '/api/getCourses'
+    $rootScope.apis.getDepartments = '/api/getDepartments';
+    $rootScope.apis.addDepartment = '/api/addDepartment';
+    $rootScope.apis.updateDepartment = '/api/updateDepartment';
+    $rootScope.apis.getCourses = '/api/getCourses';
+    $rootScope.apis.getFirebaseConfig = '/api//getFirebaseConfig';
     $rootScope.apis.me = '/api/me';
     $rootScope.apis.token = '/api/token';
     $rootScope.apis.getPaymentByUid = '/api/getPaymentsByUid';
@@ -59,6 +65,18 @@ app.config(function ($routeProvider, $locationProvider, $httpProvider) {
             templateUrl: '../views/test.html',
             controller: 'TestController',
             controllerAs: 'test',
+            authenticated: true
+        })
+        .when('/department', {
+            templateUrl: '../views/department.html',
+            controller: 'DepartmentController',
+            controllerAs: 'department',
+            authenticated: true
+        })
+        .when('/course', {
+            templateUrl: '../views/courses.html',
+            controller: 'CourseController',
+            controllerAs: 'course',
             authenticated: true
         })
         .when('/dashboard', {

@@ -1,0 +1,74 @@
+<section id="main-content">
+    <section class="wrapper">
+        <form name="Form" class="form-panel" ng-submit="department.saveOrUpdateWithPhoto()">
+            <h4>Departments</h4>
+            <div class="row clearfix">
+                <div class="col-md-4 col-sm-12">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Department" id="Department"
+                            name="Department" ng-model="department.departmentData.department" required />
+                    </div>
+                </div>
+                <div class="col-md-8 col-sm-12">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Description" id="Description"
+                            name="Description" ng-model="department.departmentData.description" required />
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12">
+                    <div class="fileupload fileupload-exists" style="float: right;" data-provides="fileupload"><input
+                            type="hidden" value="" name="">
+                        <span class="btn btn-theme02 btn-file">
+                            <input type="file" class="default" name="" id="DepartmentPicFile"
+                                oninput="angular.element(this).scope().choosePicPath(this)">
+                            <span class="fileupload-exists"><i class="fa fa-undo"></i> Choose Course Picture</span>
+
+                        </span>
+                        <span>{{departmentPicName}}</span>
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12">
+                    <button type="submit" style="float: right"
+                        class="btn btn-info waves-effect m-t-20">{{ department.action}}</button>
+                    <button type="button" style="float: right; margin-right: 5px" ng-if="selected"
+                        ng-click="department.cancel()" class="btn btn-warning waves-effect m-t-20">CANCEL</button>
+                </div>
+            </div>
+        </form>
+        <form name="Form" class="form-panel" style="text-align: center">
+            <div class="alert alert-info" ng-show="visible">
+                <b>{{message}}</b>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover c_table theme-color">
+                    <thead>
+                        <tr>
+                            <th>Department</th>
+                            <th>Saved Date</th>
+                            <th>Situation</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in department.departments track by $index">
+                            <td>{{item.department}}</td>
+                            <td>{{item.registeredDate | date:"MM/dd/yyyy 'at' h:mma" }}</td>
+                            <td>
+                                <button ng-if="item.situation" type="button"
+                                    ng-click="department.changeSituation(item.documentId)"
+                                    class="btn btn-success waves-effect m-t-20">Active</button>
+
+                                <button ng-if="!item.situation" type="button"
+                                    ng-click="department.changeSituation(item.documentId)"
+                                    class="btn btn-pink waves-effect m-t-20">Passive</button>
+                            </td>
+                            <td> <button type="button" ng-click="department.choose(item.documentId)"
+                                    class="btn btn-warning waves-effect m-t-20">Choose</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </section>
+</section>
