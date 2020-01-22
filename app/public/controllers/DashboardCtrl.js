@@ -9,8 +9,7 @@ DashboardCtrl.controller('DashboardController', function ($timeout, $scope, Crud
     }
 
     // Get Payment Detail --------------------------------
-     let item = { uid : ''};
-    CrudData.service(item, $rootScope.apis.getPaymentByUid , (response) => {
+    CrudData.service({ uid: $rootScope.user.uid }, $rootScope.apis.getPaymentByUid, (response) => {
         if (response.data.status === '200') {
             vm.dashboardData.payments = response.data.list;
             let total = 0;
@@ -18,11 +17,14 @@ DashboardCtrl.controller('DashboardController', function ($timeout, $scope, Crud
                 total = total + o.Price;
             });
             vm.dashboardData.totalPayment = total + '.00 £';
+        } else {
+            vm.dashboardData.totalPayment = '0.00 £';
+            vm.dashboardData.payments = response.data.list;
         }
     });
     // ---------------------------------------------------
-
     vm.popPayments = function () {
         $('#minemodal').modal('show');
     }
+    // ---------------------------------------------------
 });

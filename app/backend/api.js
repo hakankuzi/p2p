@@ -213,7 +213,6 @@ router.post('/getFirebaseConfig', (req, res) => {
         config: firebaseConfig
     });
 });
-
 // ------------------------------------------------------------
 
 // ------------------------------------------------------------
@@ -262,8 +261,6 @@ router.post('/getMenusByRoles', (req, res) => {
 // ----------------------------------------------------
 router.post('/updateUser', (req, res) => {
     let item = req.body.item;
-
-
 
     auth.updateUser(item.uid, {
         email: item.email,
@@ -420,8 +417,6 @@ router.post('/generateToken', (req, res) => {
     });
 });
 // -------------------------------------------------------------------------------
-
-
 // Create a session that will attempt to transmit streams directly between clients
 // If clients cannot connect, the session uses the OpenTok TURN SERVER
 // create tokbox session ----------------------------------------------------------
@@ -457,13 +452,17 @@ router.post('/createSession', (req, res) => {
 });
 // ----------------------------------------------------------------------------
 
-// CRUD PROGRESSING -----------------------------------------------------------
 
+// CRUD PROGRESSING -----------------------------------------------------------
+router.post('/getLevelsByDepartmentId', (req, res) => {
+    let item = req.body.item;
+    getCollectionByDocumentId(collections.levels, item, res);
+});
+// ----------------------------------------------------------------------------
 router.post('/getDepartments', (req, res) => {
     getCollections(collections.departments, res);
 });
-
-
+// ----------------------------------------------------------------------------
 router.post('/getCourses', (req, res) => {
     getCollections(collections.courses, res);
 });
@@ -479,6 +478,37 @@ router.post('/addDepartment', (req, res) => {
         registeredDate: item.registeredDate
     }
     addRecord(collections.departments, payload, res);
+});
+// ----------------------------------------------------------------------------
+router.post('/addLevel', (req, res) => {
+    let item = req.body.item;
+    let payload = {
+        departmentId: item.departmentId,
+        situation: item.situation,
+        level: item.level,
+        amount: item.amount,
+        rootLevel: item.rootLevel,
+        version: item.version,
+        description: item.description,
+        registeredDate: item.registeredDate,
+    }
+    addRecord(collections.levels, payload, res);
+});
+// ----------------------------------------------------------------------------
+router.post('/updateLevel', (req, res) => {
+    let item = req.body.item;
+    let documentId = item.documentId;
+    let payload = {
+        departmentId: item.departmentId,
+        description: item.description,
+        level: item.level,
+        amount: item.amount,
+        rootLevel: true,
+        situation: item.situation,
+        version: item.version,
+        registeredDate: item.registeredDate
+    }
+    updateRecord(collections.levels, documentId, payload, res);
 });
 // ----------------------------------------------------------------------------
 router.post('/updateDepartment', (req, res) => {
@@ -497,10 +527,33 @@ router.post('/updateDepartment', (req, res) => {
 // ----------------------------------------------------------------------------
 router.post('/getPaymentsByUid', (req, res) => {
     let item = req.body.item;
-
+    getCollectionsByUid(collections.payments, item.uid, res);
 });
-
-
+// ----------------------------------------------------------------------------
+function getCollectionsByUid(collectionName, uid, res) {
+    dbstore.collection('payments').where('uid', '==', uid).get().then(snapshot => {
+        if (snapshot.docs.length !== 0) {
+            let list = toList(snapshot);
+            res.json({
+                status: '200',
+                message: 'success list',
+                list: list
+            });
+        } else {
+            res.json({
+                status: '409',
+                message: 'no list',
+                list: null
+            });
+        }
+    }).catch(err => {
+        res.json({
+            status: '409',
+            message: err.message,
+            list: null
+        });
+    });
+}
 // ----------------------------------------------------------------------------
 function updateRecord(collectionName, documentId, payload, res) {
     dbstore.collection(collectionName).doc(documentId).update(payload).then(function () {
@@ -513,6 +566,31 @@ function updateRecord(collectionName, documentId, payload, res) {
             status: '409',
             message: err.message,
             user: null
+        });
+    });
+}
+// ----------------------------------------------------------------------------
+function getCollectionByDocumentId(collectionName, item, res) {
+    dbstore.collection(collectionName).where(item.parameter, '==', item.documentId).get().then(snapshot => {
+        if (snapshot.docs.length !== 0) {
+            let list = toList(snapshot);
+            res.json({
+                status: '200',
+                message: 'success list',
+                list: list
+            });
+        } else {
+            res.json({
+                status: '409',
+                message: 'no record',
+                list: null
+            });
+        }
+    }).catch(err => {
+        res.json({
+            status: '409',
+            message: err,
+            list: null
         });
     });
 }

@@ -17,15 +17,6 @@ DepartmentCtrl.controller('DepartmentController', function ($rootScope, Core, Cr
         }
     });
     // --------------------------------------------------------------------
-
-  // firebase storage ----------------------------------------------------
-    CrudData.service({}, $rootScope.apis.getFirebaseConfig, (response) => {
-        if (response.data.status === '200') {
-            firebase.initializeApp(response.data.config);
-            $scope.storage = firebase.storage();
-        }
-    });
-    // --------------------------------------------------------------------
     vm.saveOrUpdateWithPhoto = function () {
         let methodName = null;
         if (vm.isSave) {
@@ -33,7 +24,7 @@ DepartmentCtrl.controller('DepartmentController', function ($rootScope, Core, Cr
         } else {
             methodName = $rootScope.apis.updateDepartment;
         }
-        Core.saveOrUpdateWithPhoto($scope.storage, vm.departmentData, methodName, vm.image, vm.isSave, (response) => {
+        Core.saveOrUpdateWithPhoto($rootScope.storage, vm.departmentData, methodName, vm.image, vm.isSave, (response) => {
             console.log(response.status);
         });
     };
@@ -47,11 +38,13 @@ DepartmentCtrl.controller('DepartmentController', function ($rootScope, Core, Cr
         if (record !== null) {
             vm.departmentData = record;
             vm.isSave = false;
+            vm.action = 'Update';
         }
     }
     vm.cancel = function () {
         vm.departmentData = models.department;
         vm.isSave = true;
+        vm.action = 'Save';
     }
     // --------------------------------------------------------------------
     $scope.choosePicPath = function (element) {

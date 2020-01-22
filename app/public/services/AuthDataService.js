@@ -18,8 +18,7 @@ AuthDataService.service("AuthWrapper", function ($http, $window, $rootScope, Aut
         });
     }
     // --------------------------------------------------
-
-        // --------------------------------------------------
+    // --------------------------------------------------
     authService.isLoggedIn = function (item, methodName, callback) {
         if (AuthToken.getToken()) {
             return true;

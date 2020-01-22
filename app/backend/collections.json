@@ -1,4 +1,6 @@
 {
     "departments": "departments",
-    "courses": "courses"
+    "courses": "courses",
+    "payments": "payments",
+    "levels": "levels"
 }

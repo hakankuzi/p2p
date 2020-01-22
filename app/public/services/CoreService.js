@@ -21,9 +21,9 @@ CoreService.service('Core', function ($http, CrudData, $q) {
                 });
             }
         } else {
-            if (isEmpty !== undefined
-                && image.size === true
-                && image.changed === true) {
+            if (isEmpty !== true
+                && image.item.size === true
+                && image.item.changed === true) {
                 coreService.uploadPhoto(storage, image.item, (response) => {
                     if (response.status === globe.config.status_ok) {
                         item.photoURL = response.photoURL;

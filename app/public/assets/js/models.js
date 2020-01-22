@@ -22,3 +22,15 @@ models.profile = {
     email: '',
     biography: ''
 }
+
+models.level = {
+    documentId: '',
+    departmentId: '',
+    description: '',
+    level: '',
+    situation: true,
+    rootLevel: true,
+    amount: 0,
+    version: 0,
+    registeredDate: new Date(),
+}

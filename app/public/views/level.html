@@ -1,0 +1,154 @@
+<section id="main-content">
+    <section class="wrapper">
+        <form name="Form" class="form-panel" ng-submit="level.saveOrUpdate()">
+            <h4>Levels</h4>
+            <div class="row">
+                <div class="col-md-4 col-sm-12">
+                    <div class="form-group">
+                        <label>Choose Department</label>
+                        <select class="form-control show-tick ms select2" ng-disabled="level.selectedLevel"
+                            ng-model="level.levelData.departmentId" id="department" ng-change="level.changeDepartment()"
+                            data-placeholder="Department">
+                            <option ng-value="none">Choose Department</option>
+                            <option ng-repeat="item in level.departments track by $index" ng-value="item.documentId">
+                                {{item.department}} </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-12">
+                    <div class="form-group">
+                        <label>Level Name</label>
+                        <input type="text" class="form-control" placeholder="Level" id="level" name="Level"
+                            ng-model="level.levelData.level" required />
+                    </div>
+                </div>
+                <div class="col-md-4 col-sm-12">
+                    <div class="form-group">
+                        <label>Lesson Quantity</label>
+                        <input type="number" min="1" class="form-control" placeholder="Amount"
+                            ng-disabled="level.selectedLevel" id="amount" name="Amount"
+                            ng-model="level.levelData.amount" required />
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label>Level Description</label>
+                        <input type="text" class="form-control" placeholder="Description" id="levelDescription"
+                            name="Description" ng-model="level.levelData.description" required />
+                    </div>
+                </div>
+                <div class="col-md-12 col-sm-12">
+                    <button type="submit" style="float: right"
+                        class="btn btn-info waves-effect m-t-20">{{ level.action}}</button>
+
+                    <button type="button" style="float: right; margin-right: 5px" ng-show="selectedLevel"
+                        ng-click="level.cancel()" class="btn btn-warning waves-effect m-t-20">CANCEL</button>
+
+                    <button type="button" style="float: right; margin-right: 5px" ng-show="selectedLevel"
+                        ng-click="popVersion()" class="btn btn-danger waves-effect m-t-20">CREATE NEW
+                        VERSION</button>
+                </div>
+            </div>
+        </form>
+
+
+        <form name="Form" class="form-panel" style="text-align: center">
+            <div class="alert alert-info" ng-show="visible">
+                <b>{{message}}</b>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover c_table theme-color">
+                    <thead>
+                        <tr>
+                            <th>Version</th>
+                            <th>Level</th>
+                            <th>Quantity</th>
+                            <th>Date</th>
+                            <th>Situation</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in level.levels track by $index">
+                            <td>V-{{item.version}}</td>
+                            <td>{{item.level}}</td>
+                            <td>{{item.amount}} Lessons</td>
+                            <td>{{item.registeredDate | date:"MM/dd/yyyy 'at' h:mma" }}</td>
+                            <td>
+                                <button ng-if="item.situation" type="button" ng-click="level.change(item.documentId)"
+                                    class="btn btn-success waves-effect m-t-20">Active</button>
+
+                                <button ng-if="!item.situation" type="button" ng-click="level.change(item.documentId)"
+                                    class="btn btn-pink waves-effect m-t-20">Passive</button>
+                            </td>
+                            <td> <button type="button" ng-click="level.choose(item)"
+                                    class="btn btn-warning waves-effect m-t-20">Choose</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </section>
+</section>
+
+
+<!-- Modal -->
+<div>
+    <div class="modal fade" id="minemodal" data-backdrop="static" data-keyboard="false" tabindex=" -1" role="dialog"
+        aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Create New Version</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+
+                        <div class="col-md-6 col-sm-12">
+                            <label>Department</label>
+                            <select class="form-control show-tick ms select2" ng-disabled="true"
+                                ng-model="level.levelData.departmentId" id="department"
+                                ng-change="level.changeDepartment()" data-placeholder="Department">
+                                <option ng-value="none">Choose Department</option>
+                                <option ng-repeat="item in departments track by $index" ng-value="item.documentId">
+                                    {{item.department}} </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label>Level Name</label>
+                                <input type="text" class="form-control" placeholder="Level" ng-disabled="true"
+                                    id="levelPop" name="Level" ng-model="level.levelData.level" required />
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-12">
+                            <div class="form-group">
+                                <label> Quantity</label>
+                                <input type="number" min="1" class="form-control" placeholder="Quantity" id="amount"
+                                    name="Amount" ng-model="level.levelData.amount" required />
+                            </div>
+                        </div>
+
+                        <div class="col-md-8 col-sm-12">
+                            <div class="form-group">
+                                <label>Level Description</label>
+                                <input type="text" class="form-control" placeholder="Description" id="description"
+                                    name="Description" ng-model="level.levelData.description" required />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="close()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="level.createNewVersion()">CREATE NEW
+                        VERSION</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
