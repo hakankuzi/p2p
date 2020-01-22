@@ -8,14 +8,17 @@ DepartmentCtrl.controller('DepartmentController', function ($rootScope, Core, Cr
     $scope.storage = null;
     vm.image = {};
     vm.departmentData = models.department;
+
+    // Get Departments ----------------------------------------------------
     CrudData.service({}, $rootScope.apis.getDepartments, (response) => {
         if (response.data.status === globe.config.status_ok) {
             vm.departments = response.data.list;
             console.log(vm.departments);
         }
     });
+    // --------------------------------------------------------------------
 
-    // firebase storage ----------------------------------------------------
+  // firebase storage ----------------------------------------------------
     CrudData.service({}, $rootScope.apis.getFirebaseConfig, (response) => {
         if (response.data.status === '200') {
             firebase.initializeApp(response.data.config);

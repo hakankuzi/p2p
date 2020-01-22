@@ -6,7 +6,6 @@ AuthDataService.service("AuthWrapper", function ($http, $window, $rootScope, Aut
 
     // FBADMIN ------------------------------------------
     authService.service = function (item, methodName, callback) {
-
         return $http.post(methodName, {
             item: item
         }).then(function (response) {
@@ -19,6 +18,8 @@ AuthDataService.service("AuthWrapper", function ($http, $window, $rootScope, Aut
         });
     }
     // --------------------------------------------------
+
+        // --------------------------------------------------
     authService.isLoggedIn = function (item, methodName, callback) {
         if (AuthToken.getToken()) {
             return true;
