@@ -34,3 +34,16 @@ models.level = {
     version: 0,
     registeredDate: new Date(),
 }
+
+models.lesson = {
+    departmentId: '',
+    levelId: '',
+    no: '',
+    topic: '',
+    duration: '',
+    description: '',
+    situation: true,
+    TopicSeoPath: null,
+    version: 0,
+    registeredDate: new Date()
+}

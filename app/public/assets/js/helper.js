@@ -26,3 +26,12 @@ globe.messages = {
 }
 
 
+globe.popModal = function (id) {
+    $('#' + id).modal('show');
+}
+
+globe.hideModal = function (id) {
+    $('#' + id).modal('hide');
+}
+
+

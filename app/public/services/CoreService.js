@@ -2,6 +2,28 @@
 var CoreService = angular.module('CoreService', []);
 CoreService.service('Core', function ($http, CrudData, $q) {
     let coreService = {};
+
+    coreService.createNewVersion = function (collection, model, methodName, callback) {
+        var version = (model.version + 1);
+        let control = false;
+        // check situation -------------------------------------
+        angular.forEach(collection, (item) => {
+            if (item.version === version) {
+                control = true;
+            }
+        });
+        // -------------------------------------------------------------
+        if (control) {
+            console.log('exist version');
+        } else {
+            model.rootLevel = false;
+            model.version = version;
+            model.registeredDate = new Date();
+            CrudData.service(model, methodName, (response) => {
+                callback(response);
+            });
+        }
+    }
     // ---------------------------------------------------------------------------------------------
     coreService.saveOrUpdateWithPhoto = function (storage, item, methodName, image, isSave, callback) {
         let isEmpty = angular.equals({}, image);

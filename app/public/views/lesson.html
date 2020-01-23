@@ -1,0 +1,254 @@
+<section id="main-content">
+    <section class="wrapper">
+        <form name="Form" class="form-panel" ng-submit="lesson.saveOrUpdate()">
+            <h4>Lessons</h4>
+            <div class="row">
+
+                <div class="col-md-4 col-sm-12">
+                    <div class="form-group">
+                        <label>Choose Department</label>
+                        <select class="form-control show-tick ms select2" ng-model="lesson.lessonData.departmentId"
+                            ng-change="lesson.changeDepartment()" id="department" data-placeholder="Department"
+                            required>
+                            <option ng-value="none">Choose Department</option>
+                            <option ng-repeat="item in lesson.departments track by $index" ng-value="item.documentId">
+                                {{item.department}} </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-sm-12">
+                    <div class="form-group">
+                        <label>version</label>
+                        <select class="form-control show-tick ms select2" ng-model="lesson.lessonData.version"
+                            ng-change="lesson.changeVersion()" id="version" data-placeholder="Version" required>
+                            <option ng-repeat="item in vm.versions track by $index" ng-value="item.version">
+                                {{item.text}} </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label>Choose Level</label>
+                        <select class="form-control show-tick ms select2" ng-change="lesson.changeLevel()"
+                            ng-model="lesson.lessonData.documentId" id="level" data-placeholder="Level">
+                            <option ng-repeat="item in vm.templevels track by $index" ng-value="item.documentId">
+                                {{item.level}}</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label>Lesson No</label>
+                        <select class="form-control show-tick ms select2" ng-disabled="IsLesson"
+                            ng-model="lesson.lessonData.no" id="level" data-placeholder="Lesson" required>
+                            <option ng-value="none">Choose</option>
+                            <option ng-repeat="item in vm.numbers track by $index" ng-value="item.mo">
+                                {{item.name}}</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-8 col-sm-12">
+                    <div class="form-group" style="padding-top: 10px">
+                        <label>Lesson Topic</label>
+                        <input type="text" class="form-control" placeholder="Topic" required id="topic" name="Topic"
+                            ng-model="lesson.lessonData.topic" required />
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-12">
+                    <div class="form-group" style="padding-top: 10px">
+                        <label>Lesson Duration</label>
+                        <select class="form-control" ng-model="lesson.lessonData.duration" required>
+                            <option ng-value="15">15 Minutes</option>
+                            <option ng-value="30">30 Minutes</option>
+                            <option ng-value="45">45 Minutes</option>
+                            <option ng-value="60">60 Minutes</option>
+                            <option ng-value="75">75 Minutes</option>
+                            <option ng-value="90">90 Minutes</option>
+                            <option ng-value="120">120 Minutes</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group" style="padding-top: 10px">
+                        <label>Lesson Description</label>
+                        <input type="text" class="form-control" placeholder="Description" required id="Description"
+                            name="Description" ng-model="lesson.lessonData.description" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <button type="submit" style="float: right"
+                        class="btn btn-info waves-effect m-t-20">{{lesson.action}}</button>
+                    <button type="button" style="float: right;margin-right: 5px" ng-show="selectedLesson"
+                        ng-click="lesson.cancel()" class="btn btn-warning waves-effect m-t-20">CANCEL</button>
+
+                    <!--<button type="button" style="float: right;margin-right: 5px" ng-if="selectedLesson"
+                        ng-click="lesson.OpenModal()" class="btn btn-danger waves-effect m-t-20">CREATE NEW
+                        VERSION</button>-->
+                </div>
+            </div>
+        </form>
+
+        <form name="Form" class="form-panel" style="text-align: center">
+            <div class="alert alert-info" ng-show="visible">
+                <b>{{message}}</b>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover c_table theme-color">
+                    <thead>
+                        <tr>
+                            <th>Version</th>
+                            <th>Level</th>
+                            <th>Lesson</th>
+                            <th>Topic</th>
+                            <th>Duration</th>
+                            <th>Situation</th>
+                            <th>Choose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in lessons track by $index">
+                            <td>Version-{{item.version}}</td>
+                            <td>{{item.level}}</td>
+                            <td>Lesson-{{item.no}}</td>
+                            <td>{{item.topic}}</td>
+                            <td>{{item.duration}} Mn</td>
+                            <td>
+                                <button ng-if="item.situation" type="button"
+                                    ng-click="lesson.changeSituation(item.lessonId)"
+                                    class="btn btn-success waves-effect m-t-20">Active</button>
+
+                                <button ng-if="!item.situation" type="button"
+                                    ng-click="lesson.changeSituation(item.lessonId)"
+                                    class="btn btn-pink waves-effect m-t-20">Passive</button>
+                            </td>
+
+                            <td> <button type="button" ng-click="lesson.ComboChoose(item)"
+                                    class="btn btn-warning waves-effect m-t-20">Choose</button>
+                            </td>
+
+                            <!-- 
+                            <td> <button type="button" data-toggle="modal" data-target="#minemodal"
+                                    ng-click="lesson.Choose(item.LessonId)"
+                                    class="btn btn-danger waves-effect m-t-20">Delete</button>
+                            </td>-->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </section>
+</section>
+
+
+<!-- /showback -->
+<!-- Modal -->
+<div>
+    <div class="modal fade" id="minemodal" data-backdrop="static" data-keyboard="false" tabindex=" -1" role="dialog"
+        aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>-->
+                    <h4 class="modal-title" id="myModalLabel">Create New Version</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+
+                        <div class="col-md-2 col-sm-12">
+                            <div class="form-group">
+                                <label>Version</label>
+                                <input type="text" class="form-control" placeholder="Version" required id="version"
+                                    ng-disabled="true" name="Version" ng-model="lesson.tempData.version" required />
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-12">
+                            <label>Department</label>
+                            <select class="form-control show-tick ms select2" ng-disabled="true"
+                                ng-model="lesson.tempData.departmentId" id="department" data-placeholder="Department">
+                                <option ng-value="none">Choose Department</option>
+                                <option ng-repeat="item in  lesson.departments track by $index"
+                                    ng-value="item.documentId">
+                                    {{item.department}} </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 col-sm-12">
+                            <div class="form-group">
+                                <label>Choose Level</label>
+                                <select class="form-control show-tick ms select2" required ng-disabled="true"
+                                    ng-model="lesson.tempData.levelId" id="level" data-placeholder="Level">
+                                    <option ng-value='none'>Choose</option>
+                                    <option ng-repeat="item in levels track by $index" ng-value="item.levelId">
+                                        {{item.level}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <label>Lesson No</label>
+                                <select class="form-control show-tick ms select2" ng-disabled="true" required
+                                    ng-model="lesson.tempData.no" id="level" data-placeholder="Lesson">
+                                    <option ng-repeat="item in lesson.numbers track by $index" ng-value="item.no">
+                                        {{item.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-8 col-sm-12">
+                            <div class="form-group" style="padding-top: 10px">
+                                <label>Lesson Topic</label>
+                                <input type="text" class="form-control" placeholder="Topic" required id="topic"
+                                    name="Topic" ng-model="lesson.tempData.topic" required />
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-12">
+                            <div class="form-group" style="padding-top: 10px">
+                                <label>Lesson Duration</label>
+                                <select class="form-control" ng-model="lesson.tempData.duration">
+                                    <option ng-value="15">15 Minutes</option>
+                                    <option ng-value="30">30 Minutes</option>
+                                    <option ng-value="45">45 Minutes</option>
+                                    <option ng-value="60">60 Minutes</option>
+                                    <option ng-value="75">75 Minutes</option>
+                                    <option ng-value="90">90 Minutes</option>
+                                    <option ng-value="120">120 Minutes</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-md-12 col-sm-12">
+                            <div class="form-group">
+                                <label>Level Description</label>
+                                <input type="text" class="form-control" placeholder="Description" id="description"
+                                    name="Description" ng-model="lesson.tempData.description" required />
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="lesson.close()">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="lesson.createNewVersion()">CREATE NEW
+                        VERSION</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

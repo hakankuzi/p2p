@@ -1,174 +1,209 @@
-[{
-    "name": "Dashboard",
-    "icon": "fa fa-dashboard",
-    "href": "/dashboard",
-    "class": "mt",
-    "module": true,
-    "roles": ["p2p", "group", "video", "admin", "academy", "super-admin"]
-},
-
-
-{
-    "name": "Profile",
-    "icon": "fa fa-blind",
-    "href": "/profile",
-    "class": "sub-menu",
-    "module": true,
-    "roles": ["p2p", "group", "video", "admin", "academy", "super-admin"]
-},
-
-{
-    "name": "P2P Lesson",
-    "icon": "fa fa-superscript",
-    "href": "/peertopeer",
-    "class": "sub-menu",
-    "module": true,
-    "roles": ["p2p", "super-admin"]
-},
-
-{
-    "name": "Group Lesson",
-    "icon": "fa fa-user-md",
-    "href": "/online-class",
-    "class": "sub-menu",
-    "module": true,
-    "roles": ["group", "super-admin", "academy"]
-},
-
-{
-    "name": "Courses",
-    "icon": "fa fa-hand-spock-o",
-    "href": "/course",
-    "class": "sub-menu",
-    "module": true,
-    "roles": ["p2p", "group", "video", "academy", "super-admin"]
-},
-
-{
-    "name": "Schedules",
-    "icon": "fa fa-chain-broken",
-    "href": "/schedule",
-    "class": "sub-menu",
-    "module": true,
-    "roles": ["p2p", "group", "video", "academy", "super-admin"]
-},
-
-{
-    "name": "Video Customize",
-    "icon": "fa fa-book",
-    "href": "/video-lesson",
-    "class": "sub-menu",
-    "module": true,
-    "roles": ["super-admin"]
-},
-
-{
-    "name": "Video Lessons",
-    "icon": "fa fa-book",
-    "href": "/tutorial",
-    "class": "sub-menu",
-    "module": true,
-    "roles": ["video"]
-},
-
-
-
-{
-    "name": "Candidates",
-    "icon": "fa fa-book",
-    "href": "/teacher",
-    "class": "sub-menu",
-    "module": true,
-    "roles": ["admin", "super-admin"]
-},
-{
-    "name": "Authorizations",
-    "icon": "fa fa-book",
-    "href": "/authorization",
-    "class": "sub-menu",
-    "module": true,
-    "roles": ["super-admin"]
-},
-
-{
-    "name": "Exams",
-    "icon": "fa fa-book",
-    "href": "/exam",
-    "class": "sub-menu",
-    "module": true,
-    "roles": ["super-admin"]
-},
-
-{
-    "name": "Reports",
-    "icon": "fa fa-book",
-    "href": "/report",
-    "class": "sub-menu",
-    "module": true,
-    "roles": ["super-admin"]
-},
-
-{
-    "name": "Departments",
-    "icon": "fa fa-graduation-cap",
-    "href": "/department",
-    "class": "sub-menu",
-    "module": true,
-    "roles": ["admin", "super-admin"]
-},
-
-
-{
-    "name": "Levels",
-    "icon": "fa fa-balance-scale",
-    "href": "/level",
-    "class": "sub-menu",
-    "module": true,
-    "roles": ["admin", "super-admin"]
-},
-
-{
-    "name": "Lessons",
-    "icon": "fa fa-tasks",
-    "href": "/lesson",
-    "class": "sub-menu",
-    "module": true,
-    "roles": ["admin", "super-admin"]
-},
-
-{
-    "name": "Abilities",
-    "icon": "fa fa-umbrella",
-    "href": "/ability",
-    "class": "sub-menu",
-    "module": true,
-    "roles": ["super-admin"]
-},
-
-{
-    "name": "Packages",
-    "icon": "fa fa-umbrella",
-    "href": "/package",
-    "class": "sub-menu",
-    "module": true,
-    "roles": ["admin", "super-admin"]
-},
-
-{
-    "name": "Questions",
-    "icon": "fa fa-umbrella",
-    "href": "/question",
-    "class": "sub-menu",
-    "module": true,
-    "roles": ["super-admin"]
-},
-
-{
-    "name": "Presentations",
-    "icon": "fa fa-umbrella",
-    "href": "/presentation",
-    "class": "sub-menu",
-    "module": true,
-    "roles": ["super-admin"]
-}
+[
+    {
+        "name": "Dashboard",
+        "icon": "fa fa-dashboard",
+        "href": "/dashboard",
+        "class": "mt",
+        "module": true,
+        "roles": [
+            "p2p",
+            "group",
+            "video",
+            "admin",
+            "academy",
+            "super-admin"
+        ]
+    },
+    {
+        "name": "Profile",
+        "icon": "fa fa-blind",
+        "href": "/profile",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "p2p",
+            "group",
+            "video",
+            "admin",
+            "academy",
+            "super-admin"
+        ]
+    },
+    {
+        "name": "Departments",
+        "icon": "fa fa-graduation-cap",
+        "href": "/department",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "admin",
+            "super-admin"
+        ]
+    },
+    {
+        "name": "Levels",
+        "icon": "fa fa-balance-scale",
+        "href": "/level",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "admin",
+            "super-admin"
+        ]
+    },
+    {
+        "name": "Lessons",
+        "icon": "fa fa-tasks",
+        "href": "/lesson",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "admin",
+            "super-admin"
+        ]
+    },
+    {
+        "name": "Courses",
+        "icon": "fa fa-hand-spock-o",
+        "href": "/course",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "p2p",
+            "group",
+            "video",
+            "academy",
+            "super-admin"
+        ]
+    },
+    {
+        "name": "P2P Lesson",
+        "icon": "fa fa-superscript",
+        "href": "/peertopeer",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "p2p",
+            "super-admin"
+        ]
+    },
+    {
+        "name": "Group Lesson",
+        "icon": "fa fa-user-md",
+        "href": "/online-class",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "group",
+            "super-admin",
+            "academy"
+        ]
+    },
+   
+    {
+        "name": "Schedules",
+        "icon": "fa fa-chain-broken",
+        "href": "/schedule",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "p2p",
+            "group",
+            "video",
+            "academy",
+            "super-admin"
+        ]
+    },
+    {
+        "name": "Video Customize",
+        "icon": "fa fa-book",
+        "href": "/video-lesson",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "super-admin"
+        ]
+    },
+    {
+        "name": "Video Lessons",
+        "icon": "fa fa-book",
+        "href": "/tutorial",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "video"
+        ]
+    },
+    {
+        "name": "Candidates",
+        "icon": "fa fa-book",
+        "href": "/teacher",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "admin",
+            "super-admin"
+        ]
+    },
+    {
+        "name": "Authorizations",
+        "icon": "fa fa-book",
+        "href": "/authorization",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "super-admin"
+        ]
+    },
+    {
+        "name": "Exams",
+        "icon": "fa fa-book",
+        "href": "/exam",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "super-admin"
+        ]
+    },
+    {
+        "name": "Reports",
+        "icon": "fa fa-book",
+        "href": "/report",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "super-admin"
+        ]
+    },
+    {
+        "name": "Abilities",
+        "icon": "fa fa-umbrella",
+        "href": "/ability",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "super-admin"
+        ]
+    },
+ 
+    {
+        "name": "Questions",
+        "icon": "fa fa-umbrella",
+        "href": "/question",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "super-admin"
+        ]
+    },
+    {
+        "name": "Presentations",
+        "icon": "fa fa-umbrella",
+        "href": "/presentation",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "super-admin"
+        ]
+    }
 ]

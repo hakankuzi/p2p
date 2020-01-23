@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute', 'TestCtrl', 'LevelCtrl', 'DepartmentCtrl', 'CourseCtrl', 'DashboardCtrl', 'SignupCtrl', 'LoginCtrl', 'SubscriberCtrl', 'PublisherCtrl', 'ProfileCtrl', 'IndexCtrl', 'TokboxDataService', 'CrudDataService', 'MockDataService', , 'CoreService', 'AuthDataService']);
+var app = angular.module('app', ['ngRoute', 'TestCtrl', 'LessonCtrl', 'LevelCtrl', 'DepartmentCtrl', 'CourseCtrl', 'DashboardCtrl', 'SignupCtrl', 'LoginCtrl', 'SubscriberCtrl', 'PublisherCtrl', 'ProfileCtrl', 'IndexCtrl', 'TokboxDataService', 'CrudDataService', 'MockDataService', , 'CoreService', 'AuthDataService']);
 
 // Environments -----------------------------------------
 app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken, AuthWrapper) {
@@ -8,7 +8,6 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
     $rootScope.menus = [];
     $rootScope.storage = null;
     $rootScope.loggedIn = AuthWrapper.isLoggedIn();
-
     $rootScope.apis.menus = '/api/getMenusByRoles';
     $rootScope.apis.createUser = '/api/createUser';
     $rootScope.apis.updateUser = '/api/updateUser';
@@ -27,7 +26,8 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
     $rootScope.apis.getPaymentByUid = '/api/getPaymentsByUid';
     $rootScope.apis.getUserWithEmailAndPassword = '/api/getUserWithEmailAndPassword';
     $rootScope.apis.listAllUsers = '/api/listAllUsers';
-    // ----------------------------------------------------------------
+    // ---------------------------------------------------------------------
+
     // firebase storage ----------------------------------------------------
     CrudData.service({}, $rootScope.apis.getFirebaseConfig, (response) => {
         if (response.data.status === '200') {
@@ -36,23 +36,21 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
         }
     });
     // --------------------------------------------------------------------
+    AuthWrapper.service({}, $rootScope.apis.me, (response) => {
+        if (response.data.status === '200') {
+            $rootScope.menus = response.data.user.menus;
+            $rootScope.user = response.data.user;
+        } else {
+            AuthWrapper.logout();
+            $location.path('/');
+            $location.replace();
+        }
+    });
 
-
-    if ($rootScope.menus.length === 0) {
-        AuthWrapper.service({}, $rootScope.apis.me, (response) => {
-            if (response.data.status === '200') {
-                $rootScope.menus = response.data.user.menus;
-                $rootScope.user = response.data.user;
-            } else {
-                $location.path('/login')
-            }
-        });
-    }
     // ----------------------------------------------------------------
     // Change Route and Check Authorize --------------------------------
     $rootScope.$on('$routeChangeStart', function (event, next, current) {
         var authenticated = next.$$route.authenticated;
-
         if ($rootScope.loggedIn) {
             if (!authenticated) {
                 $location.path('/dashboard');
@@ -72,11 +70,16 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
 app.config(function ($routeProvider, $locationProvider, $httpProvider) {
     $httpProvider.interceptors.push('AuthInterceptors');
     $routeProvider
-
         .when('/', {
-            templateUrl: '../views/test.html',
-            controller: 'TestController',
-            controllerAs: 'test',
+            templateUrl: '../views/login.html',
+            controller: 'LoginController',
+            controllerAs: 'login',
+            authenticated: true
+        })
+        .when('/lesson', {
+            templateUrl: '../views/lesson.html',
+            controller: 'LessonController',
+            controllerAs: 'lesson',
             authenticated: true
         })
         .when('/level', {
@@ -133,7 +136,6 @@ app.config(function ($routeProvider, $locationProvider, $httpProvider) {
             controllerAs: 'profile',
             authenticated: true
         });
-
     $locationProvider.html5Mode({
         enabled: true,
         requireBase: false
