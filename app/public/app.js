@@ -16,6 +16,7 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
     $rootScope.apis.getUser = '/api/getUser';
     $rootScope.apis.getDepartments = '/api/getDepartments';
     $rootScope.apis.addLevel = '/api/addLevel';
+    $rootScope.apis.addLesson = '/api/addLesson';
     $rootScope.apis.addDepartment = '/api/addDepartment';
     $rootScope.apis.updateDepartment = '/api/updateDepartment';
     $rootScope.apis.getCourses = '/api/getCourses';

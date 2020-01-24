@@ -34,9 +34,9 @@ models.level = {
 
 models.lesson = {
     levels: [],
-    lesson : {},
+    lesson: {},
+    rootLevel: true,
     departmentId: '',
-    levelId: '',
     no: '',
     topic: '',
     duration: '',

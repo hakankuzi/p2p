@@ -2,5 +2,6 @@
     "departments": "departments",
     "courses": "courses",
     "payments": "payments",
-    "levels": "levels"
+    "levels": "levels",
+    "lessons" : "lessons"
 }

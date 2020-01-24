@@ -21,7 +21,7 @@
                     <div class="form-group">
                         <label>Choose Level</label>
                         <select class="form-control show-tick ms select2" ng-change="lesson.changeLevel()"
-                            ng-model="lesson.lessonData.levels" id="level" data-placeholder="Level">
+                            ng-model="lesson.lessonData.levels" data-placeholder="Level">
                             <option ng-repeat="item in lesson.levels track by $index" ng-value="item.levels">
                                 {{item.level}}</option>
                         </select>
@@ -169,7 +169,7 @@
                         <div class="col-md-2 col-sm-12">
                             <div class="form-group">
                                 <label>Version</label>
-                                <input type="text" class="form-control" placeholder="Version" required id="version"
+                                <input type="text" class="form-control" placeholder="Version" required id="modalVersion"
                                     ng-disabled="true" name="Version" ng-model="lesson.tempData.version" required />
                             </div>
                         </div>
@@ -177,7 +177,7 @@
                         <div class="col-md-3 col-sm-12">
                             <label>Department</label>
                             <select class="form-control show-tick ms select2" ng-disabled="true"
-                                ng-model="lesson.tempData.departmentId" id="department" data-placeholder="Department">
+                                ng-model="lesson.tempData.departmentId" id="modalDepartment" data-placeholder="Department">
                                 <option ng-value="none">Choose Department</option>
                                 <option ng-repeat="item in  lesson.departments track by $index"
                                     ng-value="item.documentId">
@@ -189,7 +189,7 @@
                             <div class="form-group">
                                 <label>Choose Level</label>
                                 <select class="form-control show-tick ms select2" required ng-disabled="true"
-                                    ng-model="lesson.tempData.levelId" id="level" data-placeholder="Level">
+                                    ng-model="lesson.tempData.levelId" id="modalLevel" data-placeholder="Level">
                                     <option ng-value='none'>Choose</option>
                                     <option ng-repeat="item in levels track by $index" ng-value="item.levelId">
                                         {{item.level}}</option>
@@ -201,7 +201,7 @@
                             <div class="form-group">
                                 <label>Lesson No</label>
                                 <select class="form-control show-tick ms select2" ng-disabled="true" required
-                                    ng-model="lesson.tempData.no" id="level" data-placeholder="Lesson">
+                                    ng-model="lesson.tempData.no" id="modalNo" data-placeholder="Lesson">
                                     <option ng-repeat="item in lesson.numbers track by $index" ng-value="item.no">
                                         {{item.name}}</option>
                                 </select>
@@ -211,7 +211,7 @@
                         <div class="col-md-8 col-sm-12">
                             <div class="form-group" style="padding-top: 10px">
                                 <label>Lesson Topic</label>
-                                <input type="text" class="form-control" placeholder="Topic" required id="topic"
+                                <input type="text" class="form-control" placeholder="Topic" required id="modalTopic"
                                     name="Topic" ng-model="lesson.tempData.topic" required />
                             </div>
                         </div>
@@ -231,12 +231,10 @@
                             </div>
                         </div>
 
-
-
                         <div class="col-md-12 col-sm-12">
                             <div class="form-group">
                                 <label>Level Description</label>
-                                <input type="text" class="form-control" placeholder="Description" id="description"
+                                <input type="text" class="form-control" placeholder="Description" id="modalDescription"
                                     name="Description" ng-model="lesson.tempData.description" required />
                             </div>
                         </div>

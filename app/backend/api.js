@@ -482,21 +482,14 @@ router.post('/addDepartment', (req, res) => {
 // ----------------------------------------------------------------------------
 router.post('/addLevel', (req, res) => {
     let item = req.body.item;
-    payload = item;
-    /*
-    let payload = {
-        departmentId: item.departmentId,
-        situation: item.situation,
-        level: item.level,
-        amount: item.amount,
-        rootLevel: item.rootLevel,
-        version: item.version,
-        description: item.description,
-        registeredDate: item.registeredDate,
-    }
-    */
-
+    let payload = item;
     addRecord(collections.levels, payload, res);
+});
+// ----------------------------------------------------------------------------
+router.post('/addLesson', (req,res)=>{
+    let item = req.body.item;
+    let payload = item;
+    addRecord(collections.lessons, payload ,res);
 });
 // ----------------------------------------------------------------------------
 router.post('/updateLevel', (req, res) => {

@@ -3,6 +3,7 @@ var LessonCtrl = angular.module('LessonCtrl', []);
 LessonCtrl.controller('LessonController', function ($rootScope, CrudData, Core, $scope, $location) {
     var vm = this;
     vm.action = 'Save';
+    vm.isSave = true;
     vm.lessonData = models.lesson;
 
     vm.departments = [];
@@ -36,9 +37,25 @@ LessonCtrl.controller('LessonController', function ($rootScope, CrudData, Core, 
     }
     // -----------------------------------------------------------------
     vm.saveOrUpdate = function () {
-
-    console.log(vm.lessonData);
-
+        if (vm.isSave) {
+            let item = {
+                rootLevel: true,
+                departmentId: vm.lessonData.departmentId,
+                levelId: vm.lessonData.lesson.documentId,
+                version: vm.lessonData.lesson.version,
+                situation: vm.lessonData.situation,
+                registeredDate: vm.lessonData.registeredDate,
+                duration: vm.lessonData.duration,
+                no: vm.lessonData.no,
+                topic: vm.lessonData.topic,
+                description: vm.lessonData.description,
+            }
+            CrudData.service(item, $rootScope.apis.addLesson, (response) => {
+                if (response.data.status === globe.config.status_ok) {
+                    console.log(response);
+                }
+            });
+        }
     }
 
 
