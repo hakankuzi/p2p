@@ -41,8 +41,7 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
             $rootScope.menus = response.data.user.menus;
             $rootScope.user = response.data.user;
         } else {
-            AuthWrapper.logout();
-            $location.path('/');
+            $location.path('/login');
             $location.replace();
         }
     });
@@ -71,9 +70,9 @@ app.config(function ($routeProvider, $locationProvider, $httpProvider) {
     $httpProvider.interceptors.push('AuthInterceptors');
     $routeProvider
         .when('/', {
-            templateUrl: '../views/login.html',
-            controller: 'LoginController',
-            controllerAs: 'login',
+            templateUrl: '../views/dashboard.html',
+            controller: 'DashboardController',
+            controllerAs: 'dashboard',
             authenticated: true
         })
         .when('/lesson', {

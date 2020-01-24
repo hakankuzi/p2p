@@ -4,10 +4,9 @@ LessonCtrl.controller('LessonController', function ($rootScope, CrudData, Core, 
     var vm = this;
     vm.action = 'Save';
     vm.lessonData = models.lesson;
-    vm.tempDate = models.lesson;
+
     vm.departments = [];
     vm.levels = [];
-    vm.versions = [];
     vm.numbers = [];
     vm.selectedLesson = false;
 
@@ -18,8 +17,30 @@ LessonCtrl.controller('LessonController', function ($rootScope, CrudData, Core, 
         }
     });
     // -----------------------------------------------------------------
+    vm.changeDepartment = function () {
+        let item = { parameter: 'departmentId', documentId: vm.lessonData.departmentId };
+        CrudData.service(item, $rootScope.apis.getLevelsByDepartmentId, (response) => {
+            if (response.data.status === globe.config.status_ok) {
+                vm.levels = Core.findHierarchy(response.data.list);
+            }
+        });
+    }
+    // -----------------------------------------------------------------
+    vm.changeVersion = function () {
+        vm.numbers = [];
+        if (vm.lessonData.lesson !== undefined) {
+            for (let i = 0; i < vm.lessonData.lesson.amount; i++) {
+                vm.numbers.push({ no: i });
+            }
+        }
+    }
+    // -----------------------------------------------------------------
+    vm.saveOrUpdate = function () {
 
-    
+    console.log(vm.lessonData);
+
+    }
+
 
 
 });

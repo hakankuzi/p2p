@@ -7,6 +7,7 @@ LevelCtrl.controller('LevelController', function ($rootScope, Core, $scope, Crud
     $scope.selectedLevel = false;
     vm.isDepartment = false;
     vm.isAmount = false;
+    vm.isSave = true;
     vm.departments = [];
     vm.levels = [];
 
@@ -21,25 +22,34 @@ LevelCtrl.controller('LevelController', function ($rootScope, Core, $scope, Crud
         if (vm.isSave) {
             CrudData.service(vm.levelData, $rootScope.apis.addLevel, (response) => {
                 if (response.data.status === globe.config.status_ok) {
-                    alert(response.data.message);
+                    vm.getLevelsByDepartmentId();
+
                 }
             });
         } else {
             CrudData.service(vm.levelData, $rootScope.apis.updateLevel, (response) => {
                 if (response.data.status === globe.config.status_ok) {
                     alert(response.data.message);
+                    vm.getLevelsByDepartmentId();
                 }
             });
         }
     }
-    // -----------------------------------------------------------------
-    vm.changeDepartment = function () {
+
+    vm.getLevelsByDepartmentId = function () {
         let item = { parameter: 'departmentId', documentId: vm.levelData.departmentId };
         CrudData.service(item, $rootScope.apis.getLevelsByDepartmentId, (response) => {
             if (response.data.status === globe.config.status_ok) {
                 vm.levels = response.data.list;
+            } else {
+                alert(response.data.message);
             }
+            vm.hideModal();
         });
+    }
+    // -----------------------------------------------------------------
+    vm.changeDepartment = function () {
+        vm.getLevelsByDepartmentId();
     }
     // -----------------------------------------------------------------
     vm.choose = function (item) {
@@ -75,6 +85,7 @@ LevelCtrl.controller('LevelController', function ($rootScope, Core, $scope, Crud
     }
     // -----------------------------------------------------------------
     vm.createNewVersion = function () {
+        vm.levelData.levelId = vm.levelData.documentId;
         Core.createNewVersion(vm.levels, vm.levelData, $rootScope.apis.addLevel, (response) => {
             if (response.data.status === globe.config.status_ok) {
                 let item = { parameter: 'departmentId', documentId: vm.levelData.departmentId };

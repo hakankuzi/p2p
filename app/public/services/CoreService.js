@@ -116,7 +116,25 @@ CoreService.service('Core', function ($http, CrudData, $q) {
         });
         return item;
     }
-
+    // ---------------------------------------------------------------------------------------------
+    coreService.findHierarchy = function (collection) {
+        let roots = []
+        for (let i = 0; i < collection.length; i++) {
+            if (collection[i].rootLevel === true) {
+                let root = collection[i];
+                root.levels = [];
+                root.levels.push(root);
+                for (let k = 0; k < collection.length; k++) {
+                    let level = collection[k];
+                    if (root.documentId === level.levelId) {
+                        root.levels.push(level);
+                    }
+                }
+                roots.push(root);
+            }
+        }
+        return roots;
+    }
     // ---------------------------------------------------------------------------------------------
     coreService.getExtension = function (type) {
         var extension = type
@@ -157,7 +175,5 @@ CoreService.service('Core', function ($http, CrudData, $q) {
         return item;
     }
     // ---------------------------------------------------------------------------------------------
-
-
     return coreService;
 });

@@ -482,6 +482,8 @@ router.post('/addDepartment', (req, res) => {
 // ----------------------------------------------------------------------------
 router.post('/addLevel', (req, res) => {
     let item = req.body.item;
+    payload = item;
+    /*
     let payload = {
         departmentId: item.departmentId,
         situation: item.situation,
@@ -492,6 +494,8 @@ router.post('/addLevel', (req, res) => {
         description: item.description,
         registeredDate: item.registeredDate,
     }
+    */
+
     addRecord(collections.levels, payload, res);
 });
 // ----------------------------------------------------------------------------

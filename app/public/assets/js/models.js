@@ -1,7 +1,6 @@
 const models = {};
 
 models.department = {
-    documentId: '',
     department: '',
     photoURL: '',
     situation: true,
@@ -12,7 +11,6 @@ models.department = {
 
 
 models.profile = {
-    documentId: '',
     uid: '',
     photoURL: 'assets/img/avatar.jpg',
     displayName: '',
@@ -24,7 +22,6 @@ models.profile = {
 }
 
 models.level = {
-    documentId: '',
     departmentId: '',
     description: '',
     level: '',
@@ -36,6 +33,8 @@ models.level = {
 }
 
 models.lesson = {
+    levels: [],
+    lesson : {},
     departmentId: '',
     levelId: '',
     no: '',
@@ -43,7 +42,6 @@ models.lesson = {
     duration: '',
     description: '',
     situation: true,
-    TopicSeoPath: null,
     version: 0,
     registeredDate: new Date()
 }
