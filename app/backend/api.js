@@ -461,6 +461,9 @@ router.post('/getLevelsByDepartmentId', (req, res) => {
 // ----------------------------------------------------------------------------
 router.post('/getLessonsByLevelId', (req, res) => {
     let item = req.body.item;
+
+
+    console.log(item);
     getCollectionByDocumentId(collections.lessons, item, res);
 });
 // ----------------------------------------------------------------------------

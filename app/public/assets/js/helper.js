@@ -26,6 +26,13 @@ globe.messages = {
 }
 
 
+globe.isNone = function (variable) {
+    if (variable === 'none' || variable === undefined) {
+        return true;
+    } else {
+        return false;
+    }
+}
 globe.popModal = function (id) {
     $('#' + id).modal('show');
 }

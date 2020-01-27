@@ -33,8 +33,7 @@ models.level = {
 }
 
 models.lesson = {
-    levels: [],
-    lesson: {},
+    levelId : '',
     rootLevel: true,
     departmentId: '',
     no: '',

@@ -118,22 +118,19 @@ CoreService.service('Core', function ($http, CrudData, $q) {
     }
     // ---------------------------------------------------------------------------------------------
     coreService.findHierarchy = function (collection) {
-        let roots = []
+        let levels = []
         for (let i = 0; i < collection.length; i++) {
             if (collection[i].rootLevel === true) {
-                let root = collection[i];
-                root.levels = [];
-                root.levels.push(root);
+                let level = { rootLevel: true, root: collection[i], levels: [] };
                 for (let k = 0; k < collection.length; k++) {
-                    let level = collection[k];
-                    if (root.documentId === level.levelId) {
-                        root.levels.push(level);
+                    if (collection[k].rootLevel === false && collection[k].levelId === level.root.documentId) {
+                        level.levels.push(collection[k]);
                     }
                 }
-                roots.push(root);
+                levels.push(level);
             }
         }
-        return roots;
+        return levels;
     }
     // ---------------------------------------------------------------------------------------------
     coreService.getExtension = function (type) {

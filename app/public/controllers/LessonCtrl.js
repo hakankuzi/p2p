@@ -8,7 +8,7 @@ LessonCtrl.controller('LessonController', function ($rootScope, CrudData, Core, 
 
     vm.departments = [];
     vm.levels = [];
-    vm.numbers = [];
+    vm.versions = [];
     vm.lessons = [];
     vm.selectedLesson = false;
 
@@ -19,33 +19,58 @@ LessonCtrl.controller('LessonController', function ($rootScope, CrudData, Core, 
         }
     });
     // -----------------------------------------------------------------
-    vm.changeLevel = function () {
-        let item = { parameter: 'levelId', documentId: vm.lessonData.lesson.levelId };
+    vm.changeDepartment = function () {
+        let isNone = globe.isNone(vm.lessonData.departmentId);
+        if (!isNone) {
+            let item = { parameter: 'departmentId', documentId: vm.lessonData.departmentId };
+            CrudData.service(item, $rootScope.apis.getLevelsByDepartmentId, (response) => {
+                if (response.data.status === globe.config.status_ok) {
+                    vm.levels = Core.findHierarchy(response.data.list);
 
+                }
+            });
+        }
+    }
+    // -----------------------------------------------------------------
+    vm.changeLevel = function () {
+        let isNone = globe.isNone(vm.lessonData.levelId);
+        if (!isNone) {
+            vm.versions = [];
+            angular.forEach(vm.levels, (record) => {
+                if (record.root.documentId === vm.lessonData.levelId) {
+                    vm.versions.push(record.root);
+                    angular.forEach(record.levels, (level) => {
+                        vm.versions.push(level);
+                    });
+                }
+            });
+        }
+
+        /*
+        let item = { parameter: 'levelId', documentId: vm.lessonData.levelId };
         CrudData.service(item, $rootScope.apis.getLessonsByLevelId, (response) => {
             if (response.data.status === globe.config.status_ok) {
                 vm.lessons = response.data.list;
             } else {
+                vm.lessons = [];
                 alert(response.data.message);
             }
         });
+        */
     }
-    // -----------------------------------------------------------------
-    vm.changeDepartment = function () {
-        let item = { parameter: 'departmentId', documentId: vm.lessonData.departmentId };
-        CrudData.service(item, $rootScope.apis.getLevelsByDepartmentId, (response) => {
-            if (response.data.status === globe.config.status_ok) {
-                vm.levels = Core.findHierarchy(response.data.list);
-            }
-        });
-    }
+
     // -----------------------------------------------------------------
     vm.changeVersion = function () {
-        vm.numbers = [];
-        if (vm.lessonData.lesson !== undefined) {
-            for (let i = 0; i < vm.lessonData.lesson.amount; i++) {
-                vm.numbers.push({ no: i });
-            }
+        let isNone = globe.isNone(vm.lessonData.version);
+        if (!isNone) {
+            vm.versions = [];
+            angular.forEach(vm.levels, (record) => {
+                if (vm.lessonData.levelId === record.documentId) {
+                    for (let i = 0; i < record.amount; i++) {
+                        vm.numbers.push({ no: i });
+                    }
+                }
+            });
         }
     }
     // -----------------------------------------------------------------

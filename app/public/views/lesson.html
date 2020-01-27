@@ -10,30 +10,30 @@
                         <select class="form-control show-tick ms select2" ng-model="lesson.lessonData.departmentId"
                             ng-change="lesson.changeDepartment()" id="department" data-placeholder="Department"
                             required>
-                            <option ng-value="none">Choose Department</option>
+                            <option ng-value="none">Choose</option>
                             <option ng-repeat="item in lesson.departments track by $index" ng-value="item.documentId">
                                 {{item.department}} </option>
                         </select>
                     </div>
                 </div>
-
                 <div class="col-md-3 col-sm-12">
                     <div class="form-group">
                         <label>Choose Level</label>
                         <select class="form-control show-tick ms select2" ng-change="lesson.changeLevel()"
-                            ng-model="lesson.lessonData.levels" data-placeholder="Level">
-                            <option ng-repeat="item in lesson.levels track by $index" ng-value="item.levels">
-                                {{item.level}}</option>
+                            ng-model="lesson.lessonData.levelId" data-placeholder="Level">
+                            <option ng-value="none">Choose</option>
+                            <option ng-repeat="item in lesson.levels track by $index" ng-value="item.root.documentId">
+                                {{item.root.level}}</option>
                         </select>
                     </div>
                 </div>
-
                 <div class="col-md-2 col-sm-12">
                     <div class="form-group">
                         <label>version</label>
-                        <select class="form-control show-tick ms select2" ng-model="lesson.lessonData.lesson"
+                        <select class="form-control show-tick ms select2" ng-model="lesson.lessonData.version"
                             ng-change="lesson.changeVersion()" id="version" data-placeholder="Version" required>
-                            <option ng-repeat="item in lesson.lessonData.levels track by $index" ng-value="item">
+                            <option ng-value="none">Choose</option>
+                            <option ng-repeat="item in lesson.versions track by $index" ng-value="item.version">
                                 Version-{{item.version}} </option>
                         </select>
                     </div>
@@ -46,7 +46,7 @@
                             ng-model="lesson.lessonData.no" id="level" data-placeholder="Lesson" required>
                             <option ng-value="none">Choose</option>
                             <option ng-repeat="item in lesson.numbers track by $index" ng-value="item.no">
-                                Lesson-{{item.no +1 }}</option>
+                                Lesson-{{item.no + 1 }}</option>
                         </select>
                     </div>
                 </div>
