@@ -459,6 +459,11 @@ router.post('/getLevelsByDepartmentId', (req, res) => {
     getCollectionByDocumentId(collections.levels, item, res);
 });
 // ----------------------------------------------------------------------------
+router.post('/getLessonsByLevelId', (req, res) => {
+    let item = req.body.item;
+    getCollectionByDocumentId(collections.lessons, item, res);
+});
+// ----------------------------------------------------------------------------
 router.post('/getDepartments', (req, res) => {
     getCollections(collections.departments, res);
 });
@@ -486,10 +491,10 @@ router.post('/addLevel', (req, res) => {
     addRecord(collections.levels, payload, res);
 });
 // ----------------------------------------------------------------------------
-router.post('/addLesson', (req,res)=>{
+router.post('/addLesson', (req, res) => {
     let item = req.body.item;
     let payload = item;
-    addRecord(collections.lessons, payload ,res);
+    addRecord(collections.lessons, payload, res);
 });
 // ----------------------------------------------------------------------------
 router.post('/updateLevel', (req, res) => {

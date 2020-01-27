@@ -9,6 +9,7 @@ LessonCtrl.controller('LessonController', function ($rootScope, CrudData, Core, 
     vm.departments = [];
     vm.levels = [];
     vm.numbers = [];
+    vm.lessons = [];
     vm.selectedLesson = false;
 
     // get Departments --------------------------------------------------
@@ -17,6 +18,18 @@ LessonCtrl.controller('LessonController', function ($rootScope, CrudData, Core, 
             vm.departments = response.data.list;
         }
     });
+    // -----------------------------------------------------------------
+    vm.changeLevel = function () {
+        let item = { parameter: 'levelId', documentId: vm.lessonData.lesson.levelId };
+
+        CrudData.service(item, $rootScope.apis.getLessonsByLevelId, (response) => {
+            if (response.data.status === globe.config.status_ok) {
+                vm.lessons = response.data.list;
+            } else {
+                alert(response.data.message);
+            }
+        });
+    }
     // -----------------------------------------------------------------
     vm.changeDepartment = function () {
         let item = { parameter: 'departmentId', documentId: vm.lessonData.departmentId };
@@ -52,12 +65,12 @@ LessonCtrl.controller('LessonController', function ($rootScope, CrudData, Core, 
             }
             CrudData.service(item, $rootScope.apis.addLesson, (response) => {
                 if (response.data.status === globe.config.status_ok) {
-                    console.log(response);
+
+
+
+
                 }
             });
         }
     }
-
-
-
 });

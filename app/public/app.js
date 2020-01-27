@@ -24,6 +24,8 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
     $rootScope.apis.me = '/api/me';
     $rootScope.apis.token = '/api/token';
     $rootScope.apis.getLevelsByDepartmentId = '/api/getLevelsByDepartmentId';
+    $rootScope.apis.getLessonsByDepartmentId = '/api/getLessonsByDepartmentId';
+    $rootScope.apis.getLessonsByLevelId = '/api/getLessonsByLevelId';
     $rootScope.apis.getPaymentByUid = '/api/getPaymentsByUid';
     $rootScope.apis.getUserWithEmailAndPassword = '/api/getUserWithEmailAndPassword';
     $rootScope.apis.listAllUsers = '/api/listAllUsers';
@@ -41,9 +43,6 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
         if (response.data.status === '200') {
             $rootScope.menus = response.data.user.menus;
             $rootScope.user = response.data.user;
-        } else {
-            $location.path('/login');
-            $location.replace();
         }
     });
 
@@ -51,15 +50,20 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
     // Change Route and Check Authorize --------------------------------
     $rootScope.$on('$routeChangeStart', function (event, next, current) {
         var authenticated = next.$$route.authenticated;
-        if ($rootScope.loggedIn) {
-            if (!authenticated) {
-                $location.path('/dashboard');
-            } else {
 
-            }
+        if ($rootScope.user === null) {
+            AuthToken.setToken();
+            $location.path('/login');
+            $location.replace();
         } else {
-            if (authenticated) {
-                $location.path('/login');
+            if ($rootScope.loggedIn) {
+                if (!authenticated) {
+                    $location.path('/dashboard');
+                }
+            } else {
+                if (authenticated) {
+                    $location.path('/login');
+                }
             }
         }
     });
