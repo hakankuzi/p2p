@@ -5,7 +5,7 @@ ProfileCtrl.controller('ProfileController', function ($timeout, Core, $scope, Cr
     $scope.storage = null;
     vm.image = {};
     vm.isSave = false;
-    vm.profileData = models.profile;
+    vm.profileData = models.createProfileObj();
     vm.profileData.documentId = $rootScope.user.documentId;
     vm.profileData.uid = $rootScope.user.uid;
     vm.profileData.photoURL = $rootScope.user.photoURL;

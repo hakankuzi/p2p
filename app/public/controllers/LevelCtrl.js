@@ -3,7 +3,7 @@ var LevelCtrl = angular.module('LevelCtrl', []);
 LevelCtrl.controller('LevelController', function ($rootScope, Core, $scope, CrudData, $location) {
     var vm = this;
     vm.action = 'Save';
-    vm.levelData = models.level;
+    vm.levelData = models.createLevelObj();
     $scope.selectedLevel = false;
     vm.isDepartment = false;
     vm.isAmount = false;
@@ -70,7 +70,7 @@ LevelCtrl.controller('LevelController', function ($rootScope, Core, $scope, Crud
     }
     // -----------------------------------------------------------------
     vm.cancel = function () {
-        vm.levelData = models.level;
+        vm.levelData = models.createLevelObj();
         vm.isSave = true;
         vm.action = 'Save';
         $scope.selectedLevel = false;

@@ -7,7 +7,7 @@ DepartmentCtrl.controller('DepartmentController', function ($rootScope, Core, Cr
     vm.departments = [];
     $scope.storage = null;
     vm.image = {};
-    vm.departmentData = models.department;
+    vm.departmentData = models.createDepartmentObj();
 
     // Get Departments ----------------------------------------------------
     CrudData.service({}, $rootScope.apis.getDepartments, (response) => {
@@ -42,7 +42,7 @@ DepartmentCtrl.controller('DepartmentController', function ($rootScope, Core, Cr
         }
     }
     vm.cancel = function () {
-        vm.departmentData = models.department;
+        vm.departmentData = models.createDepartmentObj();
         vm.isSave = true;
         vm.action = 'Save';
     }

@@ -4,7 +4,7 @@ LessonCtrl.controller('LessonController', function ($rootScope, CrudData, Core, 
     var vm = this;
     vm.action = 'Save';
     vm.isSave = true;
-    vm.lessonData = models.lesson;
+    vm.lessonData = models.createLessonObj();
     vm.departments = [];
     vm.levels = [];
     vm.versions = [];
@@ -114,7 +114,7 @@ LessonCtrl.controller('LessonController', function ($rootScope, CrudData, Core, 
     }
     // -----------------------------------------------------------------
     vm.cancel = function () {
-        vm.lessonData = models.lesson;
+        vm.lessonData = models.createLessonObj();
         vm.selectedLesson = false;
         vm.action = 'Save';
         vm.isSave = true;

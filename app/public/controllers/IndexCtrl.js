@@ -7,9 +7,6 @@ IndexCtrl.controller('IndexController', function ($scope, $rootScope, $window, M
     vm.header.brand = "OWLEGE";
     vm.header.title = "Management";
 
-
-
-
     AuthWrapper.service({}, $rootScope.apis.me, (response) => {
         if (response.data.status === '200') {
             $rootScope.menus = response.data.user.menus;

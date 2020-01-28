@@ -3,21 +3,8 @@ var SignupCtrl = angular.module('SignupCtrl', []);
 SignupCtrl.controller('SignupController', function ($timeout, $window, $scope, $rootScope, $location, AuthWrapper) {
     var vm = this;
 
-    vm.signupData = {
-        uid: '',
-        photoURL: '',
-        username: '',
-        biography: '',
-        phoneNumber: '',
-        email: '',
-        password: '',
-        roles: ['p2p', 'group'],
-        status: 'student',
-        userSituation: true,
-        displayName: '',
-        registeredDate: new Date(),
-        courses: [],
-    }
+    vm.signupData = models.createSignupObj();
+  
 
     vm.doSignup = function () {
         AuthWrapper.service(vm.signupData, $rootScope.apis.createUser, (response) => {

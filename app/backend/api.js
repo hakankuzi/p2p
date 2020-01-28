@@ -473,6 +473,11 @@ router.post('/getCourses', (req, res) => {
     getCollections(collections.courses, res);
 });
 // ----------------------------------------------------------------------------
+router.post('/addPackage', (req, res) => {
+    let item = req.body.item;
+    addRecord(collections.packages, item, res);
+});
+// ----------------------------------------------------------------------------
 router.post('/addDepartment', (req, res) => {
     let item = req.body.item;
     let payload = {
@@ -498,7 +503,6 @@ router.post('/addLesson', (req, res) => {
     addRecord(collections.lessons, payload, res);
 });
 // ----------------------------------------------------------------------------
-
 router.post('/updateLesson', (req, res) => {
     let item = req.body.item;
     let documentId = item.documentId;
@@ -509,8 +513,19 @@ router.post('/updateLesson', (req, res) => {
     }
     updateRecord(collections.lessons, documentId, payload, res);
 });
-
-
+// ----------------------------------------------------------------------------
+router.post('/updatePackage', (req, res) => {
+    let item = req.body.item;
+    let documentId = item.documentId;
+    let payload = {
+        special: item.special,
+        package: item.package,
+        description: item.description,
+        agrement: item.agrement
+    }
+    updateRecord(collections.packages, documentId, payload, res);
+});
+// ----------------------------------------------------------------------------
 router.post('/updateLevel', (req, res) => {
     let item = req.body.item;
     let documentId = item.documentId;
@@ -544,6 +559,11 @@ router.post('/updateDepartment', (req, res) => {
 router.post('/getPaymentsByUid', (req, res) => {
     let item = req.body.item;
     getCollectionByParameterId(collections.payments, item, res)
+});
+// ----------------------------------------------------------------------------
+router.post('/getPackagesByDepartmentId', (req, res) => {
+    let item = req.body.item;
+    getCollectionByParameterId(collections.packages, item, res)
 });
 // ----------------------------------------------------------------------------
 function updateRecord(collectionName, documentId, payload, res) {

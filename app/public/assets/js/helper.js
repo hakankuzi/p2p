@@ -27,11 +27,22 @@ globe.messages = {
 
 
 globe.isNone = function (variable) {
-    if (variable === 'none' || variable === undefined || variable === null) {
+    if (variable === 'none' || variable === undefined || variable === null || variable === 0 || variable === '0' || variable === '') {
         return true;
     } else {
         return false;
     }
+}
+
+globe.isValidate = function (list) {
+    let result = true;
+    for (let i = 0; i < list.length; i++) {
+        let variable = list[i];
+        if (variable === 'none' || variable === undefined || variable === null || variable === 0 || variable === '0' || variable === '') {
+            result = false;
+        }
+    }
+    return result;
 }
 globe.popModal = function (id) {
     $('#' + id).modal('show');
@@ -40,5 +51,13 @@ globe.popModal = function (id) {
 globe.hideModal = function (id) {
     $('#' + id).modal('hide');
 }
+
+
+
+
+
+
+
+
 
 

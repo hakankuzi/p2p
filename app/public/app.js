@@ -17,6 +17,8 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
     $rootScope.apis.getUser = '/api/getUser';
     $rootScope.apis.getDepartments = '/api/getDepartments';
     $rootScope.apis.addLevel = '/api/addLevel';
+    $rootScope.apis.addPackage = '/api/addPackage';
+    $rootScope.apis.updatePackage = '/api/updatePackage';
     $rootScope.apis.addLesson = '/api/addLesson';
     $rootScope.apis.addDepartment = '/api/addDepartment';
     $rootScope.apis.updateDepartment = '/api/updateDepartment';
@@ -25,6 +27,7 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
     $rootScope.apis.me = '/api/me';
     $rootScope.apis.token = '/api/token';
     $rootScope.apis.getLevelsByDepartmentId = '/api/getLevelsByDepartmentId';
+    $rootScope.apis.getPackagesByDepartmentId = '/api/getPackagesByDepartmentId';
     $rootScope.apis.getLessonsByDepartmentId = '/api/getLessonsByDepartmentId';
     $rootScope.apis.getLessonsByLevelIdAndVersion = '/api/getLessonsByLevelIdAndVersion';
     $rootScope.apis.getPaymentByUid = '/api/getPaymentsByUid';

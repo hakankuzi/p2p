@@ -1,3 +1,16 @@
+<script>
+    $("#price").on("keypress keyup blur", function (event) {
+        //this.value = this.value.replace(/[^0-9\.]/g,'');
+        $(this).val($(this).val().replace(/[^0-9\.]/g, ''));
+        if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+            event.preventDefault();
+        }
+    });
+
+
+</script>
+
+
 <section id="main-content">
     <section class="wrapper">
         <form name="Form" class="form-panel" ng-submit="package.saveOrUpdate()">
@@ -83,7 +96,7 @@
         </form>
 
         <div class="row" ng-show="package.properties.isAdded">
-            <div class="col-md-8 col-sm-12">
+            <div class="col-md-10 col-sm-12">
                 <form name="Form" class="form-panel" style="text-align: center">
                     <div class="table-responsive" id="table">
                         <table class="table table-hover c_table theme-color">
@@ -99,9 +112,9 @@
                             <tbody>
                                 <tr ng-repeat="item in package.properties.tempList track by $index">
                                     <td style="text-align: center">{{item.version}}</td>
-                                    <td style="text-align: center">{{item.subPackages}}</td>
-                                    <td style="text-align: center">{{item.duration}}</td>
-                                    <td style="text-align: center">{{item.price}}</td>
+                                    <td style="text-align: center">{{item.subPackage}}</td>
+                                    <td style="text-align: center">{{item.duration}} Min</td>
+                                    <td style="text-align: center">£{{item.price}}</td>
                                     <td style="text-align: center"><button type="button"
                                             ng-click="package.removeRow($index)"
                                             class="btn btn-warning waves-effect m-t-20">Remove</button> </td>
@@ -112,7 +125,7 @@
                 </form>
             </div>
 
-            <div class="col-md-4 col-sm-12" ng-show="package.properties.isAdded">
+            <div class="col-md-2 col-sm-12" ng-show="package.properties.isAdded">
                 <form name="Form" class="form-panel" style="text-align: center">
                     <div class="table-responsive" id="table">
                         <table class="table table-hover c_table theme-color">
@@ -213,15 +226,22 @@
 
                         <div class="col-md-6 col-sm-12" style="padding-top: 10px">
                             <label>Price(£)</label>
-                            <input type="number" min="1" ng-model="package.packageData.price" id="price"
+                            <input type="number" min="1" max="100000" ng-model="package.packageData.price" id="price"
                                 data-placeholder="Price" required class="form-control text-center"
                                 ng-disabled="package.properties.isPrice">
                         </div>
                         <div class="col-md-6 col-sm-12" style="padding-top: 10px">
                             <label>Duration(Minutes)</label>
-                            <input type="text" ng-model="package.packageData.duration"
-                                ng-disabled="package.properties.isDuration" id="duration" data-placeholder="Duration"
-                                required class="form-control text-center">
+                            <select class="form-control show-tick ms select2" ng-model="package.packageData.duration"
+                                ng-disabled="package.properties.isDuration" id="duration" data-placeholder="Duration">
+                                <option ng-value="none">Choose</option>
+                                <option ng-value="30">30 Min.</option>
+                                <option ng-value="45">45 Min.</option>
+                                <option ng-value="60">60 Min.</option>
+                                <option ng-value="75">75 Min.</option>
+                                <option ng-value="90">90 Min.</option>
+                                <option ng-value="120">120 Min.</option>
+                            </select>
                         </div>
 
                         <div class="col-md-12 col-sm-12" style="padding-top: 10px">
