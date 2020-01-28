@@ -3,10 +3,18 @@ var CoreService = angular.module('CoreService', []);
 CoreService.service('Core', function ($http, CrudData, $q) {
     let coreService = {};
 
+    coreService.calculateDuration = function (list) {
+        let duration = 0;
+        angular.forEach(list, (record) => {
+            duration = duration + record.duration;
+        });
+        return duration;
+    }
+    // -------------------------------------------------------------
     coreService.createNewVersion = function (collection, model, methodName, callback) {
         var version = (model.version + 1);
         let control = false;
-        // check situation -------------------------------------
+        // check situation --------------------------------------------
         angular.forEach(collection, (item) => {
             if (item.version === version) {
                 control = true;
@@ -118,19 +126,21 @@ CoreService.service('Core', function ($http, CrudData, $q) {
     }
     // ---------------------------------------------------------------------------------------------
     coreService.findHierarchy = function (collection) {
-        let levels = []
+        let items = []
+
         for (let i = 0; i < collection.length; i++) {
             if (collection[i].rootLevel === true) {
-                let level = { rootLevel: true, root: collection[i], levels: [] };
+                let level = { rootLevel: true, documentId: collection[i].documentId, level: collection[i].level, levels: [] };
+                level.levels.push(collection[i]);
                 for (let k = 0; k < collection.length; k++) {
-                    if (collection[k].rootLevel === false && collection[k].levelId === level.root.documentId) {
+                    if (collection[k].rootLevel === false && collection[k].levelId === collection[i].documentId) {
                         level.levels.push(collection[k]);
                     }
                 }
-                levels.push(level);
+                items.push(level);
             }
         }
-        return levels;
+        return items;
     }
     // ---------------------------------------------------------------------------------------------
     coreService.getExtension = function (type) {

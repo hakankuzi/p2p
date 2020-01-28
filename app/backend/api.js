@@ -454,17 +454,18 @@ router.post('/createSession', (req, res) => {
 
 
 // CRUD PROGRESSING -----------------------------------------------------------
+
+
+
 router.post('/getLevelsByDepartmentId', (req, res) => {
     let item = req.body.item;
-    getCollectionByDocumentId(collections.levels, item, res);
+    getCollectionByParameterId(collections.levels, item, res);
 });
 // ----------------------------------------------------------------------------
-router.post('/getLessonsByLevelId', (req, res) => {
+router.post('/getLessonsByLevelIdAndVersion', (req, res) => {
     let item = req.body.item;
-
-
     console.log(item);
-    getCollectionByDocumentId(collections.lessons, item, res);
+    getCollectionByMultipleParameterIds(collections.lessons, item, res);
 });
 // ----------------------------------------------------------------------------
 router.post('/getDepartments', (req, res) => {
@@ -500,6 +501,19 @@ router.post('/addLesson', (req, res) => {
     addRecord(collections.lessons, payload, res);
 });
 // ----------------------------------------------------------------------------
+
+router.post('/updateLesson', (req, res) => {
+    let item = req.body.item;
+    let documentId = item.documentId;
+    let payload = {
+        topic: item.topic,
+        description: item.description,
+        duration: item.duration,
+    }
+    updateRecord(collections.lessons, documentId, payload, res);
+});
+
+
 router.post('/updateLevel', (req, res) => {
     let item = req.body.item;
     let documentId = item.documentId;
@@ -532,33 +546,9 @@ router.post('/updateDepartment', (req, res) => {
 // ----------------------------------------------------------------------------
 router.post('/getPaymentsByUid', (req, res) => {
     let item = req.body.item;
-    getCollectionsByUid(collections.payments, item.uid, res);
+    getCollectionByParameterId(collections.payments, item, res)
+
 });
-// ----------------------------------------------------------------------------
-function getCollectionsByUid(collectionName, uid, res) {
-    dbstore.collection('payments').where('uid', '==', uid).get().then(snapshot => {
-        if (snapshot.docs.length !== 0) {
-            let list = toList(snapshot);
-            res.json({
-                status: '200',
-                message: 'success list',
-                list: list
-            });
-        } else {
-            res.json({
-                status: '409',
-                message: 'no list',
-                list: null
-            });
-        }
-    }).catch(err => {
-        res.json({
-            status: '409',
-            message: err.message,
-            list: null
-        });
-    });
-}
 // ----------------------------------------------------------------------------
 function updateRecord(collectionName, documentId, payload, res) {
     dbstore.collection(collectionName).doc(documentId).update(payload).then(function () {
@@ -575,7 +565,34 @@ function updateRecord(collectionName, documentId, payload, res) {
     });
 }
 // ----------------------------------------------------------------------------
-function getCollectionByDocumentId(collectionName, item, res) {
+function getCollectionByMultipleParameterIds(collectionName, item, res) {
+    dbstore.collection(collectionName)
+        .where(item.parameterOneId, '==', item.parameterOneValue)
+        .where(item.parameterTwoId, '==', item.parameterTwoValue).get().then(snapshot => {
+            if (snapshot.docs.length !== 0) {
+                let list = toList(snapshot);
+                res.json({
+                    status: '200',
+                    message: 'success list',
+                    list: list
+                });
+            } else {
+                res.json({
+                    status: '409',
+                    message: 'no record',
+                    list: null
+                });
+            }
+        }).catch(err => {
+            res.json({
+                status: '409',
+                message: err,
+                list: null
+            });
+        });
+}
+// ----------------------------------------------------------------------------
+function getCollectionByParameterId(collectionName, item, res) {
     dbstore.collection(collectionName).where(item.parameter, '==', item.documentId).get().then(snapshot => {
         if (snapshot.docs.length !== 0) {
             let list = toList(snapshot);

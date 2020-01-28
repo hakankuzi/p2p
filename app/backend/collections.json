@@ -3,5 +3,6 @@
     "courses": "courses",
     "payments": "payments",
     "levels": "levels",
-    "lessons" : "lessons"
+    "lessons": "lessons",
+    "packages": "packages"
 }

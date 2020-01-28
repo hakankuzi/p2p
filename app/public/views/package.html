@@ -1,0 +1,262 @@
+<section id="main-content">
+    <section class="wrapper">
+        <form name="Form" class="form-panel" ng-submit="package.saveOrUpdate()">
+            <h4>Academy Package</h4>
+            <div class="row">
+
+                <div class="col-md-3 col-sm-12">
+                    <label>Department</label>
+                    <select ng-disabled="disabled" class="form-control show-tick ms select2"
+                        ng-model="package.packageData.departmentId" id="department" data-placeholder="Department"
+                        required>
+                        <option ng-value="none">Choose</option>
+                        <option ng-repeat="item in package.departments track by $index" ng-value="item.documentId">
+                            {{item.department}} </option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 col-sm-12">
+                    <div class="form-group">
+                        <label>Special Name</label>
+                        <input type="text" class="form-control" placeholder="Special Name" id="special" name="Special"
+                            ng-model="package.packageData.special" required />
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-sm-12">
+                    <label>Add Feature </label>
+                    <div class="btn-group btn-group-justified">
+
+                        <div class="btn-group">
+                            <button type="button" data-toggle="modal" ng-disabled="disabled"
+                                ng-click="package.addLevel()" class="btn btn-danger">Add Level</button>
+                        </div>
+
+                        <div class="btn-group">
+                            <button type="button" ng-disabled="disabled" ng-click="package.addGroup()"
+                                class="btn btn-theme02">Add
+                                Group</button>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" ng-disabled="disabled" ng-click="package.addVideo()"
+                                class="btn btn-warning">Add
+                                Video</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="padding-top: 10px">
+                <div class="col-md-4 col-sm-12">
+                    <div class="form-group">
+                        <label>Package Name</label>
+                        <input type="text" class="form-control" placeholder="Package Name" id="package" name="Package"
+                            ng-model="package.packageData.package" required />
+                    </div>
+                </div>
+                <div class="col-md-8 col-sm-12">
+                    <div class="form-group">
+                        <label>Description</label>
+                        <input type="text" class="form-control" placeholder="Description" required id="Description"
+                            name="Description" ng-model="package.packageData.description" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label>Agrement</label>
+                        <input type="text" class="form-control" placeholder="Agrement" required id="Agrement"
+                            name="Agrement" ng-model="package.packageData.agrement" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <button type="submit" style="float: right"
+                        class="btn btn-info waves-effect m-t-20">{{package.action}}</button>
+                    <button type="button" style="float: right;margin-right: 5px" ng-if="selectedPackage"
+                        ng-click="package.cancel()" class="btn btn-warning waves-effect m-t-20">CANCEL</button>
+                </div>
+            </div>
+        </form>
+
+        <div class="row" ng-show=package.isAdded>
+            <div class="col-md-8 col-sm-12">
+                <form name="Form" class="form-panel" style="text-align: center">
+                    <div class="table-responsive" id="table">
+                        <table class="table table-hover c_table theme-color">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">Version</th>
+                                    <th style="text-align: center">SubPackage</th>
+                                    <th style="text-align: center">Duration</th>
+                                    <th style="text-align: center">Price</th>
+                                    <th style="text-align: center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in package.tempList track by $index">
+                                    <td style="text-align: center">{{item.version}}</td>
+                                    <td style="text-align: center">{{item.subPackages}}</td>
+                                    <td style="text-align: center">{{item.duration}}</td>
+                                    <td style="text-align: center">{{item.price}}</td>
+                                    <td style="text-align: center"><button type="button"
+                                            ng-click="package.removeRow($index)"
+                                            class="btn btn-warning waves-effect m-t-20">Remove</button> </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-md-4 col-sm-12" ng-show="package.isAdded">
+                <form name="Form" class="form-panel" style="text-align: center">
+                    <div class="table-responsive" id="table">
+                        <table class="table table-hover c_table theme-color">
+                            <thead>
+                                <tr>
+                                    <th style="text-align: center">Price</th>
+                                    <th style="text-align: center">Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <td style="text-align: center">
+                                    {{price}} £
+                                </td>
+                                <td style="text-align: center">{{duration}} Minutes </td>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+
+
+
+        <form name="Form" class="form-panel" style="text-align: center">
+            <div class="alert alert-info" ng-show="visible">
+                <b>{{message}}</b>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover c_table theme-color">
+                    <thead>
+                        <tr>
+                            <th>Package</th>
+                            <th>Package Type</th>
+                            <th>Total Duration</th>
+                            <th>Total Price</th>
+                            <th>Date</th>
+                            <th>Situation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in packages track by $index">
+                            <td>{{item.package}}</td>
+                            <td>{{item.packageType}}</td>
+                            <td>{{item.duration}} Minutes</td>
+                            <td>{{item.price}} £</td>
+                            <td>{{item.registeredDate | date:"MM/dd/yyyy 'at' h:mma"}}</td>
+                            <td>
+                                <button ng-if="item.situation" type="button"
+                                    ng-click="package.changeSituation(item.documentId)"
+                                    class="btn btn-success waves-effect m-t-20">Active</button>
+
+                                <button ng-if="!item.situation" type="button"
+                                    ng-click="package.changeSituation(item.documentId)"
+                                    class="btn btn-pink waves-effect m-t-20">Passive</button>
+                            </td>
+
+                            <td> <button type="button" ng-click="package.choosePackage(item.documentId)"
+                                    class="btn btn-warning waves-effect m-t-20">Choose</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </section>
+</section>
+
+<!-- Modal -->
+<div>
+    <div class="modal fade" id="minemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+        style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">ADD FEATURE</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-8 col-sm-12" ng-show="package.isLevel">
+                            <label>Level</label>
+                            <select class="form-control show-tick ms select2" ng-change="package.changeLevel()"
+                                ng-model="package.packageData.levelId" id="level" data-placeholder="Level">
+                                <option ng-value="none">Choose</option>
+                                <option ng-repeat="item in package.levels track by $index" ng-value="item.documentId">
+                                    {{item.level}} </option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 col-sm-12" ng-show="package.isLevel">
+                            <label>Version</label>
+                            <select class="form-control show-tick ms select2" ng-change="package.changeVersion()"
+                                ng-model="package.packageData.version" id="level" data-placeholder="Version">
+                                <option ng-repeat="item in package.versions track by $index" ng-value="item.version">
+                                    Version-{{item.version}} </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 col-sm-12" style="padding-top: 10px">
+                            <label>Price(£)</label>
+                            <input type="number" ng-model="package.packageData.price" id="price"
+                                data-placeholder="Price" required class="form-control text-center"
+                                ng-disabled="IsPrice">
+                        </div>
+                        <div class="col-md-6 col-sm-12" style="padding-top: 10px">
+                            <label>Duration(Minutes)</label>
+                            <input type="text" ng-model="package.packageData.duration" ng-disabled="package.isDuration"
+                                id="duration" data-placeholder="Duration" required class="form-control text-center">
+                        </div>
+
+                        <div class="col-md-12 col-sm-12" style="padding-top: 10px">
+                            <label>Topic</label>
+                            <input type="text" ng-model="package.packageData.topic" ng-show="package.isTopic"
+                                id="topic" data-placeholder="Topic" required class="form-control">
+                        </div>
+                        <div class="col-md-12 col-sm-12" ng-show="package.isLesson">
+                            <hr />
+                            <div class="table-responsive">
+                                <table class="table table-hover c_table theme-color">
+                                    <thead>
+                                        <tr>
+                                            <th>Topic</th>
+                                            <th>Lesson</th>
+                                            <th>Duration</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="item in package.lessons track by $index">
+                                            <td>{{item.topic}}</td>
+                                            <td>Lesson-{{item.no+1}}</td>
+                                            <td>{{item.duration}} Min.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" ng-click="package.close()">Close</button>
+                    <button type="button" class="btn btn-primary"
+                        ng-click="package.doAction()">{{package.modalAction}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -27,7 +27,7 @@ globe.messages = {
 
 
 globe.isNone = function (variable) {
-    if (variable === 'none' || variable === undefined) {
+    if (variable === 'none' || variable === undefined || variable === null) {
         return true;
     } else {
         return false;

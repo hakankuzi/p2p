@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute', 'TestCtrl', 'LessonCtrl', 'LevelCtrl', 'DepartmentCtrl', 'CourseCtrl', 'DashboardCtrl', 'SignupCtrl', 'LoginCtrl', 'SubscriberCtrl', 'PublisherCtrl', 'ProfileCtrl', 'IndexCtrl', 'TokboxDataService', 'CrudDataService', 'MockDataService', , 'CoreService', 'AuthDataService']);
+var app = angular.module('app', ['ngRoute', 'TestCtrl', 'LessonCtrl', 'PackageCtrl', 'LevelCtrl', 'DepartmentCtrl', 'CourseCtrl', 'DashboardCtrl', 'SignupCtrl', 'LoginCtrl', 'SubscriberCtrl', 'PublisherCtrl', 'ProfileCtrl', 'IndexCtrl', 'TokboxDataService', 'CrudDataService', 'MockDataService', , 'CoreService', 'AuthDataService']);
 
 // Environments -----------------------------------------
 app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken, AuthWrapper) {
@@ -11,6 +11,7 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
     $rootScope.apis.menus = '/api/getMenusByRoles';
     $rootScope.apis.createUser = '/api/createUser';
     $rootScope.apis.updateUser = '/api/updateUser';
+    $rootScope.apis.updateLesson = '/api/updateLesson';
     $rootScope.apis.updateLevel = '/api/updateLevel';
     $rootScope.apis.deleteUser = '/api/deleteUser';
     $rootScope.apis.getUser = '/api/getUser';
@@ -25,7 +26,7 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
     $rootScope.apis.token = '/api/token';
     $rootScope.apis.getLevelsByDepartmentId = '/api/getLevelsByDepartmentId';
     $rootScope.apis.getLessonsByDepartmentId = '/api/getLessonsByDepartmentId';
-    $rootScope.apis.getLessonsByLevelId = '/api/getLessonsByLevelId';
+    $rootScope.apis.getLessonsByLevelIdAndVersion = '/api/getLessonsByLevelIdAndVersion';
     $rootScope.apis.getPaymentByUid = '/api/getPaymentsByUid';
     $rootScope.apis.getUserWithEmailAndPassword = '/api/getUserWithEmailAndPassword';
     $rootScope.apis.listAllUsers = '/api/listAllUsers';
@@ -80,6 +81,12 @@ app.config(function ($routeProvider, $locationProvider, $httpProvider) {
             controllerAs: 'dashboard',
             authenticated: true
         })
+        .when('/package', {
+            templateUrl: '../views/package.html',
+            controller: 'PackageController',
+            controllerAs: 'package',
+            authenticated: true
+        })
         .when('/lesson', {
             templateUrl: '../views/lesson.html',
             controller: 'LessonController',
@@ -99,7 +106,7 @@ app.config(function ($routeProvider, $locationProvider, $httpProvider) {
             authenticated: true
         })
         .when('/course', {
-            templateUrl: '../views/courses.html',
+            templateUrl: '../views/course.html',
             controller: 'CourseController',
             controllerAs: 'course',
             authenticated: true

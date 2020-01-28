@@ -62,6 +62,19 @@
             "super-admin"
         ]
     },
+
+    {
+        "name": "Packages",
+        "icon": "fa fa-shower",
+        "href": "/package",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "admin",
+            "super-admin"
+        ]
+    },
+
     {
         "name": "Courses",
         "icon": "fa fa-hand-spock-o",
