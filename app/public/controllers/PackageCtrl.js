@@ -101,7 +101,6 @@ PackageCtrl.controller('PackageController', function ($scope, Core, $rootScope, 
     // ------------------------------------------------------------------
     vm.addGroup = function () {
         vm.modalAction = 'Add Group';
-
         vm.isDuration = false;
         vm.isPrice = true;
         vm.isLevel = false;
@@ -129,9 +128,6 @@ PackageCtrl.controller('PackageController', function ($scope, Core, $rootScope, 
     vm.doAction = function () {
         vm.tempList.push(vm.packageData);
         globe.hideModal('minemodal');
-
-        console.log(vm.tempList);
-
     }
     // ------------------------------------------------------------------
     vm.removeRow = function (index) {
