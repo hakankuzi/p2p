@@ -40,31 +40,20 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
         }
     });
     // --------------------------------------------------------------------
-    AuthWrapper.service({}, $rootScope.apis.me, (response) => {
-        if (response.data.status === '200') {
-            $rootScope.menus = response.data.user.menus;
-            $rootScope.user = response.data.user;
-        }
-    });
+
 
     // ----------------------------------------------------------------
     // Change Route and Check Authorize --------------------------------
     $rootScope.$on('$routeChangeStart', function (event, next, current) {
         var authenticated = next.$$route.authenticated;
-
-        if ($rootScope.user === null) {
-            AuthToken.setToken();
-            $location.path('/login');
-            $location.replace();
+        if (authenticated) {
+            let token = AuthToken.getToken();
+            if (token === null || token === undefined) {
+                $location.path('/login');
+            }
         } else {
             if ($rootScope.loggedIn) {
-                if (!authenticated) {
-                    $location.path('/dashboard');
-                }
-            } else {
-                if (authenticated) {
-                    $location.path('/login');
-                }
+                $location.path('/login');
             }
         }
     });

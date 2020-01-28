@@ -3,6 +3,7 @@ var CoreService = angular.module('CoreService', []);
 CoreService.service('Core', function ($http, CrudData, $q) {
     let coreService = {};
 
+    // ---------------------------------------------------------------
     coreService.calculateDuration = function (list) {
         let duration = 0;
         angular.forEach(list, (record) => {
@@ -10,7 +11,15 @@ CoreService.service('Core', function ($http, CrudData, $q) {
         });
         return duration;
     }
-    // -------------------------------------------------------------
+    // ---------------------------------------------------------------
+    coreService.calculatePrice = function (list) {
+        let price = 0;
+        angular.forEach(list, (record) => {
+            price = price + record.price;
+        });
+        return price;
+    }
+    // ---------------------------------------------------------------
     coreService.createNewVersion = function (collection, model, methodName, callback) {
         var version = (model.version + 1);
         let control = false;
@@ -127,7 +136,6 @@ CoreService.service('Core', function ($http, CrudData, $q) {
     // ---------------------------------------------------------------------------------------------
     coreService.findHierarchy = function (collection) {
         let items = []
-
         for (let i = 0; i < collection.length; i++) {
             if (collection[i].rootLevel === true) {
                 let level = { rootLevel: true, documentId: collection[i].documentId, level: collection[i].level, levels: [] };

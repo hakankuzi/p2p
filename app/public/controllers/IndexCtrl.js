@@ -8,6 +8,19 @@ IndexCtrl.controller('IndexController', function ($scope, $rootScope, $window, M
     vm.header.title = "Management";
 
 
+
+
+    AuthWrapper.service({}, $rootScope.apis.me, (response) => {
+        if (response.data.status === '200') {
+            $rootScope.menus = response.data.user.menus;
+            $rootScope.user = response.data.user;
+        } else {
+            $location.path('/login');
+        }
+    });
+
+    
+
     vm.change = function (menu) {
         if (menu === "/exit") {
             AuthWrapper.logout();

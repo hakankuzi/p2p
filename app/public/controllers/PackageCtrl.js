@@ -3,42 +3,29 @@ var PackageCtrl = angular.module('PackageCtrl', []);
 PackageCtrl.controller('PackageController', function ($scope, Core, $rootScope, CrudData, $location) {
     var vm = this;
     vm.packageData = models.package;
-    vm.departments = [];
-    vm.levels = [];
-    vm.versions = [];
-    vm.lessons = [];
-    vm.isAdded = false;
-    vm.isDuration = true;
-    vm.isPrice = false;
-    vm.isLevel = true;
-    vm.isLesson = false;
-    vm.isTopic = false;
-    vm.action = 'Save';
-    vm.tempList = [];
-    vm.modalAction = 'Add Level';
-
+    vm.properties = models.package.properties;
 
     // get Departments --------------------------------------------------
     CrudData.service({}, $rootScope.apis.getDepartments, (response) => {
         if (response.data.status = globe.config.status_ok) {
-            vm.departments = response.data.list;
+            vm.properties.departments = response.data.list;
             vm.packageData.departmentId = 'none';
         }
     });
-    // ------------------------------------------------------------------
+    // ------------------------------------------------------------------  
     vm.changeLevel = function () {
         let isNone = globe.isNone(vm.packageData.levelId);
         if (!isNone) {
-            vm.versions = [];
-            angular.forEach(vm.levels, (record) => {
+            vm.properties.versions = [];
+            angular.forEach(vm.properties.levels, (record) => {
                 angular.forEach(record.levels, (item) => {
                     if (item.rootLevel) {
                         if (item.documentId === vm.packageData.levelId) {
-                            vm.versions.push(item);
+                            vm.properties.versions.push(item);
                         }
                     } else {
                         if (item.levelId === vm.packageData.levelId) {
-                            vm.versions.push(item);
+                            vm.properties.versions.push(item);
                         }
                     }
                 });
@@ -54,13 +41,13 @@ PackageCtrl.controller('PackageController', function ($scope, Core, $rootScope, 
         };
         CrudData.service(item, $rootScope.apis.getLessonsByLevelIdAndVersion, (response) => {
             if (response.data.status === globe.config.status_ok) {
-                vm.lessons = response.data.list;
-                vm.isLesson = true;
-                let total = Core.calculateDuration(vm.lessons);
+                vm.properties.lessons = response.data.list;
+                vm.properties.isLesson = true;
+                let total = Core.calculateDuration(vm.properties.lessons);
                 vm.packageData.duration = total;
             } else {
-                vm.lessons = [];
-                vm.isLesson = false;
+                vm.properties.lessons = [];
+                vm.properties.isLesson = false;
                 vm.packageData.duration = 0;
                 alert(response.data.message);
             }
@@ -72,21 +59,20 @@ PackageCtrl.controller('PackageController', function ($scope, Core, $rootScope, 
         if (isNone) {
             alert('Please choose department')
         } else {
-            let item = { parameter: 'departmentId', documentId: vm.packageData.departmentId };
-            CrudData.service(item, $rootScope.apis.getLevelsByDepartmentId, (response) => {
-                if (response.data.status === globe.config.status_ok) {
-                    vm.levels = Core.findHierarchy(response.data.list);
+            vm.getLevelsByDepartmentsId(response => {
+                if (response === globe.config.status_ok) {
                     vm.packageData.duration = 0;
                     vm.packageData.price = 0;
                     vm.packageData.levelId = 'none';
                     vm.packageData.version = 'none';
-                    vm.tempList = [];
-                    vm.modalAction = 'Add Level';
-                    vm.isDuration = true;
-                    vm.isPrice = true;
-                    vm.isLevel = true;
-                    vm.isAdded = true;
                     vm.packageData.subPackages = globe.config.sub_package_level;
+                    vm.properties.lessons = [];
+                    vm.properties.modalAction = 'Add Level';
+                    vm.properties.isDuration = true;
+                    vm.properties.isPrice = false;
+                    vm.properties.isLevel = true;
+                    vm.properties.isAdded = false;
+                    vm.properties.isTable = true;
                     globe.popModal('minemodal');
                 } else {
                     alert(response.data.message);
@@ -96,53 +82,102 @@ PackageCtrl.controller('PackageController', function ($scope, Core, $rootScope, 
     }
     // ------------------------------------------------------------------
     vm.addVideo = function () {
-        console.log('add video');
+        let isNone = globe.isNone(vm.packageData.departmentId);
+        if (isNone) {
+            alert('Please choose department')
+        } else {
+            vm.getLevelsByDepartmentsId(response => {
+                if (response === globe.config.status_ok) {
+                    vm.packageData.subPackages = globe.config.sub_package_video;
+                    vm.packageData.duration = 0;
+                    vm.packageData.price = 0;
+                    vm.packageData.levelId = 'none';
+                    vm.packageData.version = 'none';
+                    vm.properties.modalAction = 'Add Video';
+                    vm.properties.isTopic = true;
+                    vm.properties.isTable = true;
+                    vm.properties.isDuration = true;
+                    vm.properties.isLevel = true;
+                    vm.properties.lessons = [];
+                    globe.popModal('minemodal');
+                }
+            });
+        }
     }
     // ------------------------------------------------------------------
     vm.addGroup = function () {
-        vm.modalAction = 'Add Group';
-        vm.isDuration = false;
-        vm.isPrice = true;
-        vm.isLevel = false;
-        vm.isTopic = true;
-        vm.packageData.packageType = globe.config.package_academy;
-        vm.packageData.subPackages = globe.config.sub_package_group;
-        vm.packageData.level = 'Group';
-        vm.packageData.version = '-';
-        globe.popModal('minemodal');
+        let isNone = globe.isNone(vm.packageData.departmentId);
+        if (isNone) {
+            alert('Please choose department')
+        } else {
+            vm.properties.modalAction = 'Add Group';
+            vm.properties.isDuration = false;
+            vm.properties.isPrice = false;
+            vm.properties.isLevel = false;
+            vm.properties.isTopic = true;
+            vm.properties.lessons = [];
+            vm.properties.isTable = false;
+            vm.packageData.duration = 0;
+            vm.packageData.price = 0;
+            vm.packageData.packageType = globe.config.package_academy;
+            vm.packageData.subPackages = globe.config.sub_package_group;
+            vm.packageData.level = globe.config.sub_package_group;
+            vm.packageData.version = '-';
+            globe.popModal('minemodal');
+        }
     }
     // ------------------------------------------------------------------
     vm.close = function () {
-        vm.packageData.duration = 0;
-        vm.packageData.price = 0;
-        vm.packageData.version = 'none'
-        vm.packageData.levelId = 'none';
-        vm.isDuration = false;
-        vm.isPrice = false;
-        vm.isLevel = false;
-        vm.isTopic = false;
-        vm.packageData.subPackages = '';
         globe.hideModal('minemodal');
     }
     // ------------------------------------------------------------------
     vm.doAction = function () {
-        vm.tempList.push(vm.packageData);
+        let temp = {
+            departmentId: vm.packageData.departmentId,
+            levelId: vm.packageData.levelId,
+            documentId: vm.packageData.documentId,
+            situation: vm.packageData.situation,
+            packageType: vm.packageData.packageType,
+            subPackages: vm.packageData.subPackages,
+            registeredDate: vm.packageData.registeredDate,
+            special: vm.packageData.special,
+            duration: vm.packageData.duration,
+            version: vm.packageData.version,
+            price: vm.packageData.price,
+            agrement: vm.packageData.agrement,
+            description: vm.packageData.description,
+            isFree: vm.packageData.isFree
+        }
+        vm.properties.tempList.push(temp);
+        if (vm.properties.tempList.length !== 0) {
+            vm.properties.price = Core.calculatePrice(vm.properties.tempList);
+            vm.properties.isAdded = true;
+        }
+        console.log(vm.properties.tempList);
         globe.hideModal('minemodal');
     }
     // ------------------------------------------------------------------
     vm.removeRow = function (index) {
-        vm.tempList.splice(index, 1);
-        let duration = 0;
-        let price = 0;
-        if (vm.tempList.length != 0) {
-            angular.forEach(vm.tempList, (item) => {
-                duration = duration + item.duration;
-                price = price + item.price;
-            });
-            vm.isAdded = true;
+        vm.properties.tempList.splice(index, 1);
+        if (vm.properties.tempList.length != 0) {
+            vm.properties.price = Core.calculatePrice(vm.properties.tempList);
+            vm.properties.isAdded = true;
         } else {
-            vm.isAdded = false;
+            vm.properties.isAdded = false;
         }
+    }
+    // ------------------------------------------------------------------
+    vm.getLevelsByDepartmentsId = function (callback) {
+        let item = { parameter: 'departmentId', documentId: vm.packageData.departmentId };
+        CrudData.service(item, $rootScope.apis.getLevelsByDepartmentId, (response) => {
+            if (response.data.status === globe.config.status_ok) {
+                vm.properties.levels = Core.findHierarchy(response.data.list);
+                callback(globe.config.status_ok);
+            } else {
+                alert(response.data.message);
+            }
+        });
+
     }
     // ------------------------------------------------------------------
 });

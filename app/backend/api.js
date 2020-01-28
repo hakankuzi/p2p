@@ -454,9 +454,6 @@ router.post('/createSession', (req, res) => {
 
 
 // CRUD PROGRESSING -----------------------------------------------------------
-
-
-
 router.post('/getLevelsByDepartmentId', (req, res) => {
     let item = req.body.item;
     getCollectionByParameterId(collections.levels, item, res);
@@ -547,7 +544,6 @@ router.post('/updateDepartment', (req, res) => {
 router.post('/getPaymentsByUid', (req, res) => {
     let item = req.body.item;
     getCollectionByParameterId(collections.payments, item, res)
-
 });
 // ----------------------------------------------------------------------------
 function updateRecord(collectionName, documentId, payload, res) {
