@@ -129,6 +129,7 @@ models.createVideoObj = function () {
 
 models.createPackageProperties = function () {
     models.package.properties = new Object();
+    models.package.properties.disabled = false;
     models.package.properties.price = 0;
     models.package.properties.duration = 0;
     models.package.properties.visible = false;

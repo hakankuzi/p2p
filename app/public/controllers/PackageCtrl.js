@@ -4,15 +4,59 @@ PackageCtrl.controller('PackageController', function ($scope, Core, $rootScope, 
     var vm = this;
     vm.packageData = models.createPackageObj();
     vm.properties = models.createPackageProperties();
-    
-    // get Departments --------------------------------------------------
-    CrudData.service({}, $rootScope.apis.getDepartments, (response) => {
-        if (response.data.status = globe.config.status_ok) {
+
+
+    // get departments ---------------------------------------------
+    getDepartments(response => {
+        if (response.data.status === globe.config.status_ok) {
             vm.properties.departments = response.data.list;
             vm.packageData.departmentId = 'none';
         }
     });
-    // ------------------------------------------------------------------  
+    // ----------------------------------------------------------------
+    vm.cancel = function () {
+        vm.packageData = models.createPackageObj();
+        vm.properties = models.createPackageProperties();
+
+        CrudData.service({}, $rootScope.apis.getDepartments, (response) => {
+            if (response.data.status = globe.config.status_ok) {
+                vm.properties.departments = response.data.list;
+                vm.packageData.departmentId = 'none';
+            }
+        });
+    }
+    // ----------------------------------------------------------------
+    vm.choosePackage = function (documentId) {
+        let isNone = globe.isNone(documentId);
+        if (!isNone) {
+            CrudData.service({ documentId: documentId }, $rootScope.apis.getPackageByDocumentId, (response) => {
+                if (response.data.status === globe.config.status_ok) {
+                    vm.properties.disabled = true;
+                    vm.properties.selectedPackage = true;
+                    vm.properties.isSave = false;
+                    vm.properties.action = 'Update';
+                    vm.packageData = response.data.list[0];
+                } else {
+                    alert(response.data.message);
+                }
+            });
+        }
+    }
+    // ----------------------------------------------------------------
+    vm.changeDepartment = function () {
+        let isNone = globe.isNone(vm.packageData.departmentId);
+        if (!isNone) {
+            getPackagesByDepartmentId(response => {
+                if (response.status === globe.config.status_ok) {
+                    vm.properties.packages = response.list;
+                }
+            });
+        } else {
+            vm.properties.packages = [];
+        }
+    }
+    // ----------------------------------------------------------------
+
     vm.changeLevel = function () {
         let isNone = globe.isNone(vm.packageData.levelId);
         if (!isNone) {
@@ -51,7 +95,6 @@ PackageCtrl.controller('PackageController', function ($scope, Core, $rootScope, 
                 vm.properties.lessons = [];
                 vm.properties.isLesson = false;
                 vm.packageData.duration = 0;
-                alert(response.data.message);
             }
         });
     }
@@ -213,8 +256,6 @@ PackageCtrl.controller('PackageController', function ($scope, Core, $rootScope, 
             globe.hideModal('minemodal');
         }
     }
-
-
     // ------------------------------------------------------------------
     vm.removeRow = function (index) {
         vm.properties.tempList.splice(index, 1);
@@ -276,27 +317,47 @@ PackageCtrl.controller('PackageController', function ($scope, Core, $rootScope, 
                 }
             });
             // ----------------------------------------------------------------------------
-
             // CREATE OR UPDATE
             // ----------------------------------------------------------------------------
             if (vm.properties.isSave) {
                 CrudData.service(item, $rootScope.apis.addPackage, (response) => {
                     if (response.data.status === globe.config.status_ok) {
-                        getPackagesByDepartmentId(response => {
-                            if (response === globe.config.status_ok) {
+                        // get departments ---------------------------------------------
+                        getDepartments(response => {
+                            if (response.data.status === globe.config.status_ok) {
                                 vm.packageData = models.createPackageObj();
                                 vm.properties = models.createPackageProperties();
-                                console.log(vm.properties);
-                                console.log(vm.packageData);
-                            } else {
-                                alert('getting problem');
+                                vm.properties.departments = response.data.list;
+                                vm.packageData.departmentId = 'none';
                             }
                         });
                     }
                 });
             } else {
-                // update progressing .....
+                let item = {
+                    documentId: vm.packageData.documentId,
+                    special: vm.packageData.special,
+                    package: vm.packageData.package,
+                    description: vm.packageData.description,
+                    agrement: vm.packageData.agrement
+                }
+                CrudData.service(item, $rootScope.apis.updatePackage, (response) => {
+                    if (response.data.status === globe.config.status_ok) {
+                        // get departments ---------------------------------------------
+                        getDepartments(response => {
+                            if (response.data.status === globe.config.status_ok) {
+                                vm.packageData = models.createPackageObj();
+                                vm.properties = models.createPackageProperties();
+                                vm.properties.departments = response.data.list;
+                                vm.packageData.departmentId = 'none';
+                            }
+                        });
+                    } else {
+                        alert(response.data.message);
+                    }
+                });
             }
+            // ----------------------------------------------------------------------------
         }
     }
     // ----------------------------------------------------------------------------
@@ -304,10 +365,20 @@ PackageCtrl.controller('PackageController', function ($scope, Core, $rootScope, 
         let item = { parameter: 'departmentId', documentId: vm.packageData.departmentId };
         CrudData.service(item, $rootScope.apis.getPackagesByDepartmentId, (response) => {
             if (response.data.status === globe.config.status_ok) {
-                vm.properties.packages = response.data.list;
-                callback(globe.config.status_ok);
+                callback({ status: globe.config.status_ok, list: response.data.list });
             }
         });
     }
     // ----------------------------------------------------------------------------
+
+    function getDepartments(callback) {
+        // get Departments --------------------------------------------------
+        CrudData.service({}, $rootScope.apis.getDepartments, (response) => {
+            if (response.data.status = globe.config.status_ok) {
+                callback(response);
+            }
+        });
+        // ------------------------------------------------------------------ 
+
+    }
 });

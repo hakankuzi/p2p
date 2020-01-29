@@ -12,6 +12,7 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
     $rootScope.apis.createUser = '/api/createUser';
     $rootScope.apis.updateUser = '/api/updateUser';
     $rootScope.apis.updateLesson = '/api/updateLesson';
+    $rootScope.apis.updatePackage = '/api/updatePackage';
     $rootScope.apis.updateLevel = '/api/updateLevel';
     $rootScope.apis.deleteUser = '/api/deleteUser';
     $rootScope.apis.getUser = '/api/getUser';
@@ -26,6 +27,7 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
     $rootScope.apis.getFirebaseConfig = '/api//getFirebaseConfig';
     $rootScope.apis.me = '/api/me';
     $rootScope.apis.token = '/api/token';
+    $rootScope.apis.getPackageByDocumentId = '/api/getPackageByDocumentId';
     $rootScope.apis.getLevelsByDepartmentId = '/api/getLevelsByDepartmentId';
     $rootScope.apis.getPackagesByDepartmentId = '/api/getPackagesByDepartmentId';
     $rootScope.apis.getLessonsByDepartmentId = '/api/getLessonsByDepartmentId';

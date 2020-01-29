@@ -458,6 +458,12 @@ router.post('/getLevelsByDepartmentId', (req, res) => {
     let item = req.body.item;
     getCollectionByParameterId(collections.levels, item, res);
 });
+
+router.post('/getPackageByDocumentId', (req, res) => {
+    let item = req.body.item;
+    getCollectionByDocumentId(collections.packages, item, res);
+
+});
 // ----------------------------------------------------------------------------
 router.post('/getLessonsByLevelIdAndVersion', (req, res) => {
     let item = req.body.item;
@@ -501,6 +507,18 @@ router.post('/addLesson', (req, res) => {
     let item = req.body.item;
     let payload = item;
     addRecord(collections.lessons, payload, res);
+});
+// ----------------------------------------------------------------------------
+router.post('/updatePackage', (req, res) => {
+    let item = req.body.item;
+    let documentId = item.documentId;
+    let payload = {
+        special: item.special,
+        package: item.package,
+        description: item.description,
+        agrement: item.agrement
+    };
+    updateRecord(collections.packages, documentId, payload, res);
 });
 // ----------------------------------------------------------------------------
 router.post('/updateLesson', (req, res) => {
@@ -606,6 +624,34 @@ function getCollectionByMultipleParameterIds(collectionName, item, res) {
                 list: null
             });
         });
+}
+// ----------------------------------------------------------------------------
+function getCollectionByDocumentId(collectionName, item, res) {
+    dbstore.collection(collectionName).doc(item.documentId).get().then(snapshot => {
+        if (snapshot.exists) {
+            let document = snapshot.data();
+            document.documentId = snapshot.id;
+            let list = [];
+            list.push(document);
+            res.json({
+                status: '200',
+                message: 'success list',
+                list: list
+            });
+        } else {
+            res.json({
+                status: '409',
+                message: 'no record',
+                list: null
+            });
+        }
+    }).catch(err => {
+        res.json({
+            status: '409',
+            message: err,
+            list: null
+        });
+    });
 }
 // ----------------------------------------------------------------------------
 function getCollectionByParameterId(collectionName, item, res) {

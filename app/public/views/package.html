@@ -6,8 +6,6 @@
             event.preventDefault();
         }
     });
-
-
 </script>
 
 
@@ -16,12 +14,11 @@
         <form name="Form" class="form-panel" ng-submit="package.saveOrUpdate()">
             <h4>Academy Package</h4>
             <div class="row">
-
                 <div class="col-md-3 col-sm-12">
                     <label>Department</label>
-                    <select ng-disabled="disabled" class="form-control show-tick ms select2"
-                        ng-model="package.packageData.departmentId" id="department" data-placeholder="Department"
-                        required>
+                    <select class="form-control show-tick ms select2" ng-disabled="package.properties.disabled"
+                        ng-change="package.changeDepartment()" ng-model="package.packageData.departmentId"
+                        id="department" data-placeholder="Department" required>
                         <option ng-value="none">Choose</option>
                         <option ng-repeat="item in package.properties.departments track by $index"
                             ng-value="item.documentId">
@@ -158,6 +155,7 @@
                             <th>Total Price</th>
                             <th>Date</th>
                             <th>Situation</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
