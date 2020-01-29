@@ -8,10 +8,22 @@ CandidateCtrl.controller('CandidateController', function ($rootScope, $scope, Cr
     // Get Departments ----------------------------------------------------
     CrudData.service({}, $rootScope.apis.getDepartments, (response) => {
         if (response.data.status === globe.config.status_ok) {
-            vm.departments = response.data.list;
-            console.log(vm.departments);
+            vm.properties.departments = response.data.list;
         }
     });
+    // ------------------------------------------------------------------
+    vm.changeDepartment = function () {
+        CrudData.service({ parameter: 'departmentId', documentId: vm.candidateData.departmentId }, $rootScope.apis.getPackagesByDepartmentId, (response) => {
+            if (response.data.status = globe.config.status_ok) {
+                vm.properties.packages = response.data.list;
+            } else {
+                vm.properties.packages = [];
+                alert('no package');
+            }
+        });
+    }
+    // ------------------------------------------------------------------
+
 
 
 

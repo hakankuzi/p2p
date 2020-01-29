@@ -10,6 +10,7 @@
                     <select class="form-control show-tick ms select2" ng-model="candidate.candidateData.departmentId"
                         ng-disabled="candidate.properties.isDepartment" ng-change="candidate.changeDepartment()"
                         id="department" data-placeholder="Department" required>
+                        <option ng-value="none">Choose Package</option>
                         <option ng-repeat="item in candidate.properties.departments track by $index"
                             ng-value="item.documentId">
                             {{item.department}} </option>

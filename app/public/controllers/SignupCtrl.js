@@ -4,11 +4,13 @@ SignupCtrl.controller('SignupController', function ($timeout, $window, $scope, $
     var vm = this;
 
     vm.signupData = models.createSignupObj();
-  
+    console.log(vm.signupData);
 
     vm.doSignup = function () {
+        console.log(vm.signupData);
         AuthWrapper.service(vm.signupData, $rootScope.apis.createUser, (response) => {
-            if (response.data.status === '200') {
+            console.log(response.data);
+            if (response.data.status === globe.config.status_ok) {
                 $rootScope.menus = response.data.user.menus;
                 $window.location.href = "/dashboard";
             } else {

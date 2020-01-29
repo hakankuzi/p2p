@@ -58,9 +58,13 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
                 $location.path('/login');
             }
         } else {
-            if ($rootScope.loggedIn) {
-                $location.path('/login');
-            }
+            AuthWrapper.service({}, $rootScope.apis.me, (response) => {
+                if (response.data.status === globe.config.status_409) {
+                    AuthToken.setToken();
+                    $rootScope.loggedIn = false;
+                    $location.path('/login');
+                }
+            });
         }
     });
     // -----------------------------------------------------------------

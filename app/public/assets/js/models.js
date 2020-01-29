@@ -76,22 +76,19 @@ models.createScheduleObj = function () {
     return models.schedule;
 }
 
-
-
-
 models.createSignupObj = function () {
     models.signup = new Object();
     models.signup.uid = 'none';
     models.signup.photoURL = globe.config.default_profile_image_path;
-    models.signup.username = '';
-    models.signup.biography = '';
-    models.signup.phoneNumber = '';
-    models.signup.email = '';
-    models.signup.password = '';
+    models.signup.username = "";
+    models.signup.biography = "";
+    models.signup.phoneNumber = "";
+    models.signup.email = "";
+    models.signup.password = "";
     models.signup.roles = [globe.config.package_p2p, globe.config.package_group];
     models.signup.status = globe.config.student;
     models.signup.situation = true;
-    models.signup.displayName = '';
+    models.signup.displayName = "";
     models.signup.registeredDate = models.getNewDate();
     models.signup.courses = [];
     return models.signup;

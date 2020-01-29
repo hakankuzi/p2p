@@ -129,10 +129,15 @@ router.post('/getUserWithEmailAndPassword', (req, res) => {
 // ----------------------------------------------------
 router.post('/createUser', (req, res) => {
     let item = req.body.item;
+
+    console.log(item);
+
     auth.createUser({
         email: item.email,
         password: item.password,
     }).then(userRecord => {
+
+
         passwordHash = encrypt(item.password);
         dbstore.collection('users').add({
             uid: userRecord.uid,
