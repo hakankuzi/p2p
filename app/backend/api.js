@@ -465,6 +465,12 @@ router.post('/getPackageByDocumentId', (req, res) => {
 
 });
 // ----------------------------------------------------------------------------
+router.post('/getSchedulesByCourseId', (req,res)=>{
+    let item = req.body.item;
+    getCollectionByDocumentId(collections.schedules, item, res);
+
+});
+// ----------------------------------------------------------------------------
 router.post('/getLessonsByLevelIdAndVersion', (req, res) => {
     let item = req.body.item;
     console.log(item);

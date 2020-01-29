@@ -62,7 +62,6 @@
             "super-admin"
         ]
     },
-
     {
         "name": "Packages",
         "icon": "fa fa-shower",
@@ -74,7 +73,6 @@
             "super-admin"
         ]
     },
-
     {
         "name": "Courses",
         "icon": "fa fa-hand-spock-o",
@@ -112,7 +110,6 @@
             "academy"
         ]
     },
-   
     {
         "name": "Schedules",
         "icon": "fa fa-chain-broken",
@@ -150,7 +147,7 @@
     {
         "name": "Candidates",
         "icon": "fa fa-book",
-        "href": "/teacher",
+        "href": "/candidate",
         "class": "sub-menu",
         "module": true,
         "roles": [
@@ -198,7 +195,6 @@
             "super-admin"
         ]
     },
- 
     {
         "name": "Questions",
         "icon": "fa fa-umbrella",

@@ -6,6 +6,9 @@ globe.config = {
     default_profile_image_path: "assets/img/avatar.jpg",
     default_storage_path: "/Images/",
     status_ok: '200',
+    previous: 'previous',
+    today: 'today',
+    next: 'next',
     status_409: '409',
     statust_401: '401',
     sub_package_level: "level",
@@ -32,6 +35,20 @@ globe.isNone = function (variable) {
     } else {
         return false;
     }
+}
+
+globe.findSelectedDateSituation = function (date) {
+    let situation = 'none';
+    let selectedLocalDate = new Date(date).toLocaleDateString();
+    let today = new Date().toLocaleDateString();
+    if (selectedLocalDate === today) {
+        situation = 'today';
+    } else if (selectedLocalDate < today) {
+        situation = 'previous'
+    } else if (selectedLocalDate > today) {
+        situation = 'next';
+    }
+    return situation;
 }
 
 globe.isValidate = function (list) {

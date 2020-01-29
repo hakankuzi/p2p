@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute', 'TestCtrl', 'LessonCtrl', 'PackageCtrl', 'LevelCtrl', 'DepartmentCtrl', 'CourseCtrl', 'DashboardCtrl', 'SignupCtrl', 'LoginCtrl', 'SubscriberCtrl', 'PublisherCtrl', 'ProfileCtrl', 'IndexCtrl', 'TokboxDataService', 'CrudDataService', 'MockDataService', , 'CoreService', 'AuthDataService']);
+var app = angular.module('app', ['ngRoute', 'TestCtrl', 'CandidateCtrl', 'ScheduleCtrl', 'LessonCtrl', 'PackageCtrl', 'LevelCtrl', 'DepartmentCtrl', 'CourseCtrl', 'DashboardCtrl', 'SignupCtrl', 'LoginCtrl', 'SubscriberCtrl', 'PublisherCtrl', 'ProfileCtrl', 'IndexCtrl', 'TokboxDataService', 'CrudDataService', 'MockDataService', , 'CoreService', 'AuthDataService']);
 
 // Environments -----------------------------------------
 app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken, AuthWrapper) {
@@ -27,6 +27,7 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
     $rootScope.apis.getFirebaseConfig = '/api//getFirebaseConfig';
     $rootScope.apis.me = '/api/me';
     $rootScope.apis.token = '/api/token';
+    $rootScope.apis.getSchedulesByCourseId = '/api/getSchedulesByCourseId';
     $rootScope.apis.getPackageByDocumentId = '/api/getPackageByDocumentId';
     $rootScope.apis.getLevelsByDepartmentId = '/api/getLevelsByDepartmentId';
     $rootScope.apis.getPackagesByDepartmentId = '/api/getPackagesByDepartmentId';
@@ -75,10 +76,22 @@ app.config(function ($routeProvider, $locationProvider, $httpProvider) {
             controllerAs: 'dashboard',
             authenticated: true
         })
+        .when('/candidate', {
+            templateUrl: '../views/candidate.html',
+            controller: 'CandidateController',
+            controllerAs: 'candidate',
+            authenticated: true
+        })
         .when('/package', {
             templateUrl: '../views/package.html',
             controller: 'PackageController',
             controllerAs: 'package',
+            authenticated: true
+        })
+        .when('/schedule', {
+            templateUrl: '../views/schedule.html',
+            controller: 'ScheduleController',
+            controllerAs: 'schedule',
             authenticated: true
         })
         .when('/lesson', {

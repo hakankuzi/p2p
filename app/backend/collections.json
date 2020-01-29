@@ -4,5 +4,6 @@
     "payments": "payments",
     "levels": "levels",
     "lessons": "lessons",
-    "packages": "packages"
+    "packages": "packages",
+    "schedules": "schedules"
 }

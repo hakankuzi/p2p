@@ -5,6 +5,80 @@ models.getNewDate = function () {
     return new Date();
 }
 
+
+models.createSchedulePropertiesObj = function () {
+    models.schedule.properties = new Object();
+    models.schedule.properties.courseId = 'none';
+    models.schedule.properties.selectedSchedule = false;
+    models.schedule.properties.doAction = 'ADD SCHEDULE';
+    models.schedule.properties.selectedType = 'none';
+    models.schedule.properties.isType = false;
+    models.schedule.properties.isDuration = false;
+    models.schedule.properties.isTopic = false;
+    models.schedule.properties.isAcademy = false;
+    models.schedule.properties.showCourse = false;
+    models.schedule.properties.showTime = false;
+    models.schedule.properties.selectedScheduleId = 'none';
+    models.schedule.properties.selectedDate = 'none';
+    models.schedule.properties.selectedInfoStr = 'none';
+    models.schedule.properties.clickInfo = 'none';
+    models.schedule.properties.courses = [];
+    models.schedule.properties.levels = [];
+    models.schedule.properties.lessons = [];
+    models.schedule.properties.packages = [];
+    models.schedule.properties.schedules = [];
+    return models.schedule.properties;
+}
+
+models.createCandidatePropertiesObj = function () {
+    models.candidate.properties = new Object();
+    models.candidate.properties.isDepartment = false;
+    models.candidate.properties.departments = [];
+    models.candidate.properties.isPackage = false;
+    models.candidate.properties.packages = [];
+    models.candidate.properties.action = 'No Action';
+    models.candidate.properties.selectedCandidate = false;
+    models.candidate.properties.visible = false;
+    models.candidate.properties.candidates = [];
+    return models.candidate.properties;
+}
+
+models.createCandidateObj = function () {
+    models.candidate = new Object();
+    models.candidate.documentId = 'none';
+    models.candidate.departmentId = 'none';
+    models.candidate.packageId = 'none';
+    models.candidate.email = '';
+    models.candidate.displayName = '';
+    models.candidate.username = '';
+    return models.candidate;
+}
+
+models.createScheduleObj = function () {
+    models.schedule = new Object();
+    models.schedule.courseId = 'none';
+    models.schedule.photoURL = '';
+    models.schedule.departmentId = 'none';
+    models.schedule.duration = 0;
+    models.schedule.price = 0;
+    models.schedule.isScheduled = false;
+    models.schedule.lessonId = 'none';
+    models.schedule.levelId = 'none';
+    models.schedule.liveSituation = 'soon';
+    models.schedule.liveDuration = 0;
+    models.schedule.situation = true;
+    models.schedule.packageId = 'none';
+    models.schedule.packageType = '';
+    models.schedule.students = [];
+    models.schedule.topic = '';
+    models.schedule.version = 0;
+    models.schedule.userId = 'none';
+    return models.schedule;
+}
+
+
+
+
 models.createSignupObj = function () {
     models.signup = new Object();
     models.signup.uid = 'none';

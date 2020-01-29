@@ -1,0 +1,110 @@
+<section id="main-content">
+    <section class="wrapper">
+        <form name="Form" class="form-panel" ng-submit="candidate.saveOrUpdate()">
+            <h4>Candidates</h4>
+
+            <div class="row">
+
+                <div class="col-md-4 col-sm-12">
+                    <label>Department</label>
+                    <select class="form-control show-tick ms select2" ng-model="candidate.candidateData.departmentId"
+                        ng-disabled="candidate.properties.isDepartment" ng-change="candidate.changeDepartment()"
+                        id="department" data-placeholder="Department" required>
+                        <option ng-repeat="item in candidate.properties.departments track by $index"
+                            ng-value="item.documentId">
+                            {{item.department}} </option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 col-sm-12">
+                    <label>Package</label>
+                    <select class="form-control show-tick ms select2" ng-model="candidate.candidateData.packageId"
+                        id="package" ng-disabled="candidate.properties.isPackage" data-placeholder="Package" required>
+                        <option ng-value="none">Choose Package</option>
+                        <option ng-repeat="item in candidate.properties.packages track by $index"
+                            ng-value="item.documentId">
+                            {{item.package}}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="col-md-4 col-sm-12">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="text" class="form-control" placeholder="Email" id="email" disabled name="Email"
+                            ng-model="candidate.candidateData.email" required />
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-4 col-sm-12">
+                    <div class="form-group">
+                        <label>Display Name</label>
+                        <input type="text" class="form-control" placeholder="DisplayName" disabled id="displayName"
+                            name="DisplayName" ng-model="candidate.candidateData.displayName" required />
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-12">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" class="form-control" placeholder="UserName" id="UserName" disabled
+                            name="UserName" ng-model="candidate.candidateData.username" required />
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <button type="submit" style="float: right"
+                        class="btn btn-info waves-effect m-t-20">{{candidate.properties.action}}</button>
+                    <button type="button" style="float: right; margin-right: 5px"
+                        ng-if="candidate.properties.selectedCandidate" ng-click="candidate.cancel()"
+                        class="btn btn-warning waves-effect m-t-20">CANCEL</button>
+                </div>
+            </div>
+        </form>
+
+
+        <form name="Form" class="form-panel" style="text-align: center">
+            <div class="alert alert-info" ng-show="candidate.properties.visible">
+                <b>{{message}}</b>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover c_table theme-color">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                            <th>Situation</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in candidate.properties.candidates track by $index">
+                            <th> {{item.username}} </th>
+                            <th> {{item.email}} </th>
+                            <th>{{item.status}}</th>
+                            <td>
+                                <button ng-if="item.situation" type="button" ng-click="candidate.changeSituation(item)"
+                                    class="btn btn-success waves-effect m-t-20">Active</button>
+
+                                <button ng-if="!item.situation" type="button" ng-click="candidate.changeSituation(item)"
+                                    class="btn btn-primary waves-effect m-t-20">Passive</button>
+                            </td>
+                            <td> <button type="button" ng-click="candidate.chooseCandidate(item)"
+                                    class="btn btn-warning waves-effect m-t-20">Choose</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </section>
+</section>

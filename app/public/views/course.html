@@ -1,0 +1,126 @@
+<section id="main-content">
+    <section class="wrapper">
+        <form name="Form" class="form-panel" ng-submit="course.saveOrUpdate()" ng-if="user.status == 'tutor'">
+            <h4>Courses</h4>
+            <div class="row clearfix">
+                <div class="col-md-4 col-sm-12">
+                    <div class="form-group">
+                        <label>Department</label>
+                        <select class="form-control show-tick ms select2" ng-disabled="course.properties.isDepartment"
+                            ng-model="course.courseData.departmentId" id="department"
+                            ng-change="course.changeDepartment()" data-placeholder="Department" required>
+                            <option ng-repeat="item in course.properties.departments track by $index"
+                                ng-value="item.documentId">
+                                {{item.department}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-12">
+                    <div class="form-group">
+                        <label>Package</label>
+                        <select class="form-control show-tick ms select2" ng-model="course.courseData.packageId"
+                            ng-disabled="course.properties.isPackage" id="packagetype" data-placeholder="Package"
+                            required ng-change="course.changePackage()">
+                            <option ng-repeat="item in course.properties.packages track by $index"
+                                ng-value="item.documentId">
+                                {{item.package}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+
+                <div class="col-md-4 col-sm-12">
+                    <div class="form-group">
+                        <label>Course Name</label>
+                        <input type="text" class="form-control" placeholder="Course Name" id="course" name="Course"
+                            ng-model="course.courseData.course" required />
+                    </div>
+                </div>
+
+
+                <div class="col-md-6 col-sm-12">
+                    <label>Price(£)</label>
+                    <input type="number" min="1" ng-model="course.courseData.price" id="price"
+                        ng-disabled="course.properties.isPrice" data-placeholder="Price"
+                        class="form-control text-center" required>
+                </div>
+
+                <div class="col-md-6 col-sm-12">
+                    <label>Duration(Minutes)</label>
+                    <input type="number" min="1" ng-model="course.courseData.duration"
+                        ng-disabled="course.properties.isDuration" id="duration" data-placeholder="Duration"
+                        class="form-control text-center" required>
+                </div>
+
+                <div class="col-md-12 col-sm-12" style="padding-top: 20px;">
+                    <div class="fileupload fileupload-exists" data-provides="fileupload"><input type="hidden" value=""
+                            name="">
+                        <span class="btn btn-theme02 btn-file">
+                            <input type="file" class="default" name="" id="DepartmentPicFile"
+                                oninput="angular.element(this).scope().choosePicPath(this)">
+                            <span class="fileupload-exists"><i class="fa fa-undo"></i> Choose Course Picture</span>
+
+                        </span>
+                        <span>{{ course.properties.coursePicName}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row clearfix">
+                <div class="col-md-12 col-sm-12">
+                    <button type="submit" style="float: right"
+                        class="btn btn-info waves-effect m-t-20">{{ course.properties.action}}</button>
+                    <button type="button" style="float: right;margin-right: 5px"
+                        ng-if="course.properties.selectedCourse" ng-click="course.cancel()"
+                        class="btn btn-warning waves-effect m-t-20">CANCEL</button>
+                </div>
+            </div>
+        </form>
+
+
+
+        <form name="Form" class="form-panel" style="text-align: center">
+            <div class="alert alert-info" ng-show="course.properties.visible">
+                <b>{{message}}</b>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover c_table theme-color">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center">Course</th>
+                            <th style="text-align: center">Package Type</th>
+                            <th style="text-align: center">Price</th>
+                            <th style="text-align: center">Duration</th>
+                            <th style="text-align: center">Saved Date</th>
+                            <th ng-if="user.Status == 'Tutor'" style="text-align: center">Select</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in course.properties.courses track by $index">
+                            <td style="text-align: center">{{item.course}}</td>
+                            <td style="text-align: center">{{item.packageType.toUpperCase()}}</td>
+                            <td style="text-align: center">{{item.price}}.00 £</td>
+                            <td style="text-align: center">{{item.duration}} Minutes</td>
+                            <td style="text-align: center">{{item.registeredDate | date:"MM/dd/yyyy 'at' h:mma" }}</td>
+                            <td ng-if="user.status == 'tutor'" style="text-align: center"> <button type="button"
+                                    ng-click="course.chooseCourse(item)"
+                                    class="btn btn-warning waves-effect m-t-20">Choose</button> </td>
+                            <!--<td>
+                                <button ng-if="item.TeacherCheck" type="button"
+                                    ng-click="course.ChangeSituation(item.CourseId)"
+                                    class="btn btn-success waves-effect m-t-20">Completed</button>
+                                <button ng-if="!item.TeacherCheck" type="button"
+                                    ng-click="course.ChangeSituation(item.CourseId)"
+                                    class="btn btn-pink waves-effect m-t-20">UnCompleted</button>
+                            </td>-->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </section>
+</section>
