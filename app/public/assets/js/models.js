@@ -6,6 +6,45 @@ models.getNewDate = function () {
 }
 
 
+models.createCourseObj = function () {
+    models.course = new Object();
+    models.course.departmentId = 'none';
+    models.course.packageId = 'none';
+    models.course.course = '';
+    models.course.photoURL = '';
+    models.course.situation = true;
+    models.course.levels = [];
+    models.course.groups = [];
+    models.course.videos = [];
+    models.course.subPackages = [];
+    models.course.packageType = 'none';
+    models.course.registeredDate = models.getNewDate();
+    models.course.duration = 0;
+    models.course.price = 0;
+    models.course.userId = 'none';
+    return models.course;
+}
+
+models.createCoursePropertiesObj = function () {
+    models.course.properties = new Object();
+    models.course.properties.isDepartment = false;
+    models.course.properties.departments = [];
+    models.course.properties.isPackage = true;
+    models.course.properties.packages = [];
+    models.course.properties.isPrice = true;
+    models.course.properties.isDuration = true;
+    models.course.properties.isCourse = true;
+    models.course.properties.coursePicName = '';
+    models.course.properties.action = 'ADD COURSE';
+    models.course.properties.selectedCourse = false;
+    models.course.properties.visible = false;
+    models.course.properties.courses = [];
+    models.course.properties.package = {};
+    models.course.properties.image = {};
+    models.course.properties.isSave = true;
+    return models.course.properties;
+}
+
 models.createSchedulePropertiesObj = function () {
     models.schedule.properties = new Object();
     models.schedule.properties.courseId = 'none';
@@ -80,15 +119,15 @@ models.createSignupObj = function () {
     models.signup = new Object();
     models.signup.uid = 'none';
     models.signup.photoURL = globe.config.default_profile_image_path;
-    models.signup.username = "";
-    models.signup.biography = "";
-    models.signup.phoneNumber = "";
-    models.signup.email = "";
-    models.signup.password = "";
+    models.signup.username = ''
+    models.signup.biography = '';
+    models.signup.phoneNumber = '';
+    models.signup.email = '';
+    models.signup.password = '';
     models.signup.roles = [globe.config.package_p2p, globe.config.package_group];
     models.signup.status = globe.config.student;
     models.signup.situation = true;
-    models.signup.displayName = "";
+    models.signup.displayName = '';
     models.signup.registeredDate = models.getNewDate();
     models.signup.courses = [];
     return models.signup;

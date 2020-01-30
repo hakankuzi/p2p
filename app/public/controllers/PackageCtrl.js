@@ -5,6 +5,8 @@ PackageCtrl.controller('PackageController', function ($scope, Core, $rootScope, 
     vm.packageData = models.createPackageObj();
     vm.properties = models.createPackageProperties();
 
+    console.log(vm.packageData);
+
 
     // get departments ---------------------------------------------
     getDepartments(response => {
@@ -379,6 +381,5 @@ PackageCtrl.controller('PackageController', function ($scope, Core, $rootScope, 
             }
         });
         // ------------------------------------------------------------------ 
-
     }
 });

@@ -3,12 +3,14 @@
         <form name="Form" class="form-panel" ng-submit="course.saveOrUpdate()" ng-if="user.status == 'tutor'">
             <h4>Courses</h4>
             <div class="row clearfix">
+
                 <div class="col-md-4 col-sm-12">
                     <div class="form-group">
                         <label>Department</label>
                         <select class="form-control show-tick ms select2" ng-disabled="course.properties.isDepartment"
                             ng-model="course.courseData.departmentId" id="department"
                             ng-change="course.changeDepartment()" data-placeholder="Department" required>
+                            <option ng-value="none">Choose</option>
                             <option ng-repeat="item in course.properties.departments track by $index"
                                 ng-value="item.documentId">
                                 {{item.department}}
@@ -23,6 +25,7 @@
                         <select class="form-control show-tick ms select2" ng-model="course.courseData.packageId"
                             ng-disabled="course.properties.isPackage" id="packagetype" data-placeholder="Package"
                             required ng-change="course.changePackage()">
+                            <option ng-value="none">Choose</option>
                             <option ng-repeat="item in course.properties.packages track by $index"
                                 ng-value="item.documentId">
                                 {{item.package}}
@@ -35,8 +38,9 @@
                 <div class="col-md-4 col-sm-12">
                     <div class="form-group">
                         <label>Course Name</label>
-                        <input type="text" class="form-control" placeholder="Course Name" id="course" name="Course"
-                            ng-model="course.courseData.course" required />
+                        <input type="text" class="form-control" ng-disabled="course.properties.isCourse"
+                            placeholder="Course Name" id="course" name="Course" ng-model="course.courseData.course"
+                            required />
                     </div>
                 </div>
 
@@ -96,7 +100,7 @@
                             <th style="text-align: center">Price</th>
                             <th style="text-align: center">Duration</th>
                             <th style="text-align: center">Saved Date</th>
-                            <th ng-if="user.Status == 'Tutor'" style="text-align: center">Select</th>
+                            <th ng-if="user.status == 'tutor'" style="text-align: center">Select</th>
                         </tr>
                     </thead>
                     <tbody>

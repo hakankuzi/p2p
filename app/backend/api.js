@@ -129,15 +129,10 @@ router.post('/getUserWithEmailAndPassword', (req, res) => {
 // ----------------------------------------------------
 router.post('/createUser', (req, res) => {
     let item = req.body.item;
-
-    console.log(item);
-
     auth.createUser({
         email: item.email,
         password: item.password,
     }).then(userRecord => {
-
-
         passwordHash = encrypt(item.password);
         dbstore.collection('users').add({
             uid: userRecord.uid,
@@ -149,15 +144,17 @@ router.post('/createUser', (req, res) => {
             roles: item.roles,
             status: item.status,
             phoneNumber: item.phoneNumber,
-            userSituation: item.userSituation,
+            situation: item.situation,
             displayName: item.displayName,
             registeredDate: item.registeredDate,
             passwordHash: passwordHash,
         }).then((doc) => {
             item.documentId = doc.id;
+            let user = {};
             user.uid = userRecord.uid;
             let token = createUserToken(item);
-            let user = { item, token };
+            user.item = item;
+            user.token = token;
             res.json({
                 status: '200',
                 message: 'created new user',
@@ -223,24 +220,35 @@ router.post('/getFirebaseConfig', (req, res) => {
 // ------------------------------------------------------------
 router.post('/me', (req, res) => {
     let token = req.body.token || req.body.query || req.headers['x-access-token'];
-    jwt.verify(token, secretKey, (err, decoded) => {
-        if (err) {
-            res.json({
-                status: '409',
-                message: 'invalid token',
-                user: null
-            });
-        } else {
-            let menus = getMenusByRoles(decoded.roles);
-            user = decoded;
-            user.menus = menus;
-            res.json({
-                status: '200',
-                message: 'me',
-                user: user
-            });
-        }
-    });
+
+    if (token !== null && token !== undefined) {
+        jwt.verify(token, secretKey, (err, decoded) => {
+            if (err) {
+                res.json({
+                    status: '409',
+                    message: 'invalid token',
+                    user: null
+                });
+            } else {
+                let menus = getMenusByRoles(decoded.roles);
+                user = decoded;
+                user.menus = menus;
+                res.json({
+                    status: '200',
+                    message: 'me',
+                    user: user
+                });
+            }
+        });
+    } else {
+        res.json({
+            status: '409',
+            message: 'invalid token',
+            user: null
+        });
+    }
+
+
 });
 // ------------------------------------------------------------
 
@@ -470,7 +478,7 @@ router.post('/getPackageByDocumentId', (req, res) => {
 
 });
 // ----------------------------------------------------------------------------
-router.post('/getSchedulesByCourseId', (req,res)=>{
+router.post('/getSchedulesByCourseId', (req, res) => {
     let item = req.body.item;
     getCollectionByDocumentId(collections.schedules, item, res);
 

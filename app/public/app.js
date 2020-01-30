@@ -52,19 +52,21 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
     // Change Route and Check Authorize --------------------------------
     $rootScope.$on('$routeChangeStart', function (event, next, current) {
         var authenticated = next.$$route.authenticated;
+        let token = AuthToken.getToken();
         if (authenticated) {
-            let token = AuthToken.getToken();
             if (token === null || token === undefined) {
                 $location.path('/login');
             }
         } else {
-            AuthWrapper.service({}, $rootScope.apis.me, (response) => {
-                if (response.data.status === globe.config.status_409) {
-                    AuthToken.setToken();
-                    $rootScope.loggedIn = false;
-                    $location.path('/login');
-                }
-            });
+            if (token !== null && token !== undefined) {
+                AuthWrapper.service({}, $rootScope.apis.me, (response) => {
+                    if (response.data.status === globe.config.status_409) {
+                        AuthToken.setToken();
+                        $rootScope.loggedIn = false;
+                        $location.path('/login');
+                    }
+                });
+            }
         }
     });
     // -----------------------------------------------------------------

@@ -1,5 +1,10 @@
 const globe = {}
 
+
+globe.defaultP2P = { package: 'P2P Package', documentId: 'p2p_in', packageType: 'p2p' };
+globe.defaultGROUP = { package: 'Group Package', documentId: 'group_in', packageType: 'group' };
+
+
 globe.config = {
     image_width: 4096,
     image_height: 4096,
@@ -55,7 +60,7 @@ globe.isValidate = function (list) {
     let result = true;
     for (let i = 0; i < list.length; i++) {
         let variable = list[i];
-        if (variable === 'none' || variable === undefined || variable === null || variable === 0 || variable === '0' || variable === '') {
+        if (variable === 'none' || variable === undefined || variable === null || variable === 0 || variable === '0' || variable === '' || variable === "") {
             result = false;
         }
     }

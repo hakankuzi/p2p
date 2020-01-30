@@ -16,7 +16,6 @@ ProfileCtrl.controller('ProfileController', function ($timeout, Core, $scope, Cr
     vm.profileData.email = $rootScope.user.email;
     vm.profileData.biography = $rootScope.user.biography;
 
-
     vm.updateProfile = function () {
         let methodName = $rootScope.apis.updateUser;
         Core.saveOrUpdateWithPhoto($rootScope.storage, vm.profileData, methodName, vm.image, vm.isSave, (response) => {
