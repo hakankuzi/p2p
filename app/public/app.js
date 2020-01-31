@@ -20,13 +20,17 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
     $rootScope.apis.addLevel = '/api/addLevel';
     $rootScope.apis.addPackage = '/api/addPackage';
     $rootScope.apis.updatePackage = '/api/updatePackage';
+    $rootScope.apis.updateCourse = '/api/updateCourse';
     $rootScope.apis.addLesson = '/api/addLesson';
     $rootScope.apis.addDepartment = '/api/addDepartment';
     $rootScope.apis.updateDepartment = '/api/updateDepartment';
     $rootScope.apis.getCourses = '/api/getCourses';
     $rootScope.apis.getFirebaseConfig = '/api//getFirebaseConfig';
     $rootScope.apis.me = '/api/me';
+    $rootScope.apis.addCourse = '/api/addCourse';
+    $rootScope.apis.getCoursesByDepartmentId = '/api/getCoursesByDepartmentId';
     $rootScope.apis.token = '/api/token';
+    $rootScope.apis.getCoursesByUserId = '/api/getCoursesByUserId';
     $rootScope.apis.getSchedulesByCourseId = '/api/getSchedulesByCourseId';
     $rootScope.apis.getPackageByDocumentId = '/api/getPackageByDocumentId';
     $rootScope.apis.getLevelsByDepartmentId = '/api/getLevelsByDepartmentId';

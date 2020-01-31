@@ -15,21 +15,22 @@
                             name="Description" ng-model="department.departmentData.description" required />
                     </div>
                 </div>
+
                 <div class="col-md-12 col-sm-12">
+
                     <div class="fileupload fileupload-exists" style="float: right;" data-provides="fileupload"><input
                             type="hidden" value="" name="">
                         <span class="btn btn-theme02 btn-file">
                             <input type="file" class="default" name="" id="DepartmentPicFile"
                                 oninput="angular.element(this).scope().choosePicPath(this)">
                             <span class="fileupload-exists"><i class="fa fa-undo"></i> Choose Course Picture</span>
-
                         </span>
-                        <span>{{departmentPicName}}</span>
+                        <span>{{department.picName}}</span>
                     </div>
                 </div>
                 <div class="col-md-12 col-sm-12">
                     <button type="submit" style="float: right"
-                        class="btn btn-info waves-effect m-t-20">{{ department.action}}</button>
+                        class="btn btn-info waves-effect m-t-20">{{department.action}}</button>
                     <button type="button" style="float: right; margin-right: 5px" ng-if="selected"
                         ng-click="department.cancel()" class="btn btn-warning waves-effect m-t-20">CANCEL</button>
                 </div>

@@ -471,11 +471,21 @@ router.post('/getLevelsByDepartmentId', (req, res) => {
     let item = req.body.item;
     getCollectionByParameterId(collections.levels, item, res);
 });
-
+// ----------------------------------------------------------------------------
+router.post('/getCoursesByDepartmentId', (req, res) => {
+    let item = req.body.item;
+    getCollectionByParameterId(collections.courses, item, res);
+});
+// ----------------------------------------------------------------------------
 router.post('/getPackageByDocumentId', (req, res) => {
     let item = req.body.item;
     getCollectionByDocumentId(collections.packages, item, res);
 
+});
+// ----------------------------------------------------------------------------
+router.post('/getCoursesByUserId', (req, res) => {
+    let item = req.body.item;
+    getCollectionByParameterId(collections.courses, item, res)
 });
 // ----------------------------------------------------------------------------
 router.post('/getSchedulesByCourseId', (req, res) => {
@@ -503,6 +513,11 @@ router.post('/addPackage', (req, res) => {
     addRecord(collections.packages, item, res);
 });
 // ----------------------------------------------------------------------------
+router.post('/addCourse', (req, res) => {
+    let item = req.body.item;
+    addRecord(collections.courses, item, res);
+});
+// ----------------------------------------------------------------------------
 router.post('/addDepartment', (req, res) => {
     let item = req.body.item;
     let payload = {
@@ -526,6 +541,13 @@ router.post('/addLesson', (req, res) => {
     let item = req.body.item;
     let payload = item;
     addRecord(collections.lessons, payload, res);
+});
+// ----------------------------------------------------------------------------
+router.post('/updateCourse', (req, res) => {
+    let item = req.body.item;
+    let documentId = item.documentId;
+    let payload = item;
+    updateRecord(collections.courses, documentId, payload, res);
 });
 // ----------------------------------------------------------------------------
 router.post('/updatePackage', (req, res) => {

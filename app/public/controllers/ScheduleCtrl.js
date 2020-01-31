@@ -1,6 +1,16 @@
 var ScheduleCtrl = angular.module('ScheduleCtrl', []);
 
-ScheduleCtrl.controller('ScheduleController', function ($rootScope, $scope, CrudData, $location) {
+ScheduleCtrl.controller('ScheduleController', function ($rootScope, Core, $scope, CrudData, $location) {
+
+    var vm = this;
+    vm.scheduleData = models.createScheduleObj();
+    vm.properties = models.createSchedulePropertiesObj();
+    // -------------------------------------------------------------------------------------------
+    getCourseByUserId(response => {
+        if (response.data.status === globe.config.status_ok) {
+            vm.properties.courses = response.data.list;
+        }
+    });
     // -------------------------------------------------------------------------------------------
     $("#time").datetimepicker({
         autoclose: true,
@@ -33,19 +43,19 @@ ScheduleCtrl.controller('ScheduleController', function ($rootScope, $scope, Crud
     calendar.on('dateClick', function (info) {
         // chech selected Date ----------------------------------------------------------------------------
         if ($rootScope.user.status === globe.config.tutor || $rootScope.user.status === globe.config.admin) {
-            vm.scheduleData = models.createScheduleObj();
-            vm.properties = models.createSchedulePropertiesObj();
             vm.properties.selectedInfoStr = info.dateStr;
             let situation = globe.findSelectedDateSituation(info.dateStr);
             if (situation === globe.config.previous) {
                 alert('You cant select previous date')
             } else if (situation === globe.config.today || situation === globe.config.next) {
+                vm.properties.showCourse = true;
+                vm.properties.showTime = true;
                 vm.popModal('minemodal');
+                $rootScope.$apply();
             }
         }
         // -----------------------------------------------------------------------------------------------  
     });
-
     // -----------------------------------------------------------------------------------------------  
     calendar.on('eventClick', (element) => {
         if ($rootScope.user.status = globe.config.tutor) {
@@ -65,38 +75,18 @@ ScheduleCtrl.controller('ScheduleController', function ($rootScope, $scope, Crud
         }
     });
     // -----------------------------------------------------------------------------------------------  
-
-
-
-
-
-
     calendar.render();
-
     // --------------------------------------------------------------------------------
-    var vm = this;
-    vm.scheduleData = models.createScheduleObj();
-    vm.properties = models.createSchedulePropertiesObj();
+
 
 
 
 
     // --------------------------------------------------------------------------------
     vm.changeCourse = function () {
-
-
-    }
-    // --------------------------------------------------------------------------------
-    vm.changeType = function () {
-
-    }
-    // --------------------------------------------------------------------------------
-    vm.changeLevel = function () {
-
-    }
-    // --------------------------------------------------------------------------------
-    vm.changeLesson = function () {
-
+        let item = Core.findRecordById(vm.properties.courses, vm.scheduleData.courseId);
+        vm.scheduleData.price = item.price;
+        vm.scheduleData.duration = item.duration;
     }
     // --------------------------------------------------------------------------------
     vm.saveOrUpdate = function () {
@@ -108,8 +98,27 @@ ScheduleCtrl.controller('ScheduleController', function ($rootScope, $scope, Crud
     }
     // --------------------------------------------------------------------------------
     vm.hideModal = function () {
+        vm.scheduleData.courseId = 'none';
+        vm.scheduleData.price = 0;
+        vm.scheduleData.duration = 0;
+        vm.properties.selectedDate = 'none';
+        document.getElementById('time').value = '';
         globe.hideModal('minemodal');
     }
+
+
+    // --------------------------------------------------------------------------------
+    function getCourseByUserId(callback) {
+        CrudData.service({ parameter: 'userId', documentId: $rootScope.user.documentId }, $rootScope.apis.getCoursesByUserId, (response) => {
+            if (response.data.status = globe.config.status_ok) {
+                callback(response);
+            } else {
+                console.log(response.data);
+            }
+        });
+
+    }
+    // --------------------------------------------------------------------------------
 
 
 

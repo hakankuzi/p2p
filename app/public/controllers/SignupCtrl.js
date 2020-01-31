@@ -12,6 +12,8 @@ SignupCtrl.controller('SignupController', function ($timeout, $window, $scope, $
             } else {
                 if (response.data.code === 'auth/invalid-password') {
                     alert(response.data.message);
+                } else {
+                    alert(response.data.message);
                 }
             }
         });

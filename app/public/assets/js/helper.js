@@ -46,11 +46,12 @@ globe.findSelectedDateSituation = function (date) {
     let situation = 'none';
     let selectedLocalDate = new Date(date).toLocaleDateString();
     let today = new Date().toLocaleDateString();
+
     if (selectedLocalDate === today) {
         situation = 'today';
-    } else if (selectedLocalDate < today) {
-        situation = 'previous'
-    } else if (selectedLocalDate > today) {
+    } else if (new Date(date) < new Date()) {
+        situation = 'previous';
+    } else {
         situation = 'next';
     }
     return situation;

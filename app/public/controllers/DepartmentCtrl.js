@@ -4,18 +4,11 @@ DepartmentCtrl.controller('DepartmentController', function ($rootScope, Core, Cr
     var vm = this;
     vm.action = 'Save';
     vm.isSave = true;
+    vm.picName = '';
     vm.departments = [];
-    $scope.storage = null;
     vm.image = {};
     vm.departmentData = models.createDepartmentObj();
-
-    // Get Departments ----------------------------------------------------
-    CrudData.service({}, $rootScope.apis.getDepartments, (response) => {
-        if (response.data.status === globe.config.status_ok) {
-            vm.departments = response.data.list;
-            console.log(vm.departments);
-        }
-    });
+    getDepartments();
     // --------------------------------------------------------------------
     vm.saveOrUpdateWithPhoto = function () {
         let methodName = null;
@@ -25,7 +18,15 @@ DepartmentCtrl.controller('DepartmentController', function ($rootScope, Core, Cr
             methodName = $rootScope.apis.updateDepartment;
         }
         Core.saveOrUpdateWithPhoto($rootScope.storage, vm.departmentData, methodName, vm.image, vm.isSave, (response) => {
-            console.log(response.status);
+            if (response.status === globe.config.status_ok) {
+                if (vm.isSave) {
+                    alert('added');
+                } else {
+                    alert('updated');
+                }
+            }
+            vm.departmentData = models.createDepartmentObj();
+            getDepartments();
         });
     };
     // --------------------------------------------------------------------
@@ -50,8 +51,21 @@ DepartmentCtrl.controller('DepartmentController', function ($rootScope, Core, Cr
     $scope.choosePicPath = function (element) {
         Core.previewPhoto(element, vm.departmentData.photoURL, (response) => {
             vm.image = response;
+            vm.picName = vm.image.item.name;
+
         });
     };
+    // --------------------------------------------------------------------
+
+    // --------------------------------------------------------------------
+    function getDepartments() {
+        // Get Departments ----------------------------------------------------
+        CrudData.service({}, $rootScope.apis.getDepartments, (response) => {
+            if (response.data.status === globe.config.status_ok) {
+                vm.departments = response.data.list;
+            }
+        });
+    }
     // --------------------------------------------------------------------
 
 });

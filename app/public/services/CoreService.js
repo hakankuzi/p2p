@@ -2,7 +2,7 @@
 var CoreService = angular.module('CoreService', []);
 CoreService.service('Core', function ($http, CrudData, $q) {
     let coreService = {};
-
+    
     // ---------------------------------------------------------------
     coreService.calculateDuration = function (list) {
         let duration = 0;
@@ -58,6 +58,8 @@ CoreService.service('Core', function ($http, CrudData, $q) {
                         });
                     }
                 });
+            } else {
+                alert('You need to choose picture!!!')
             }
         } else {
             if (isEmpty !== true

@@ -42,28 +42,25 @@
 </section>
 <!----------------------------------------->
 
-
 <!-- Modal -------------------------------->
 <div>
     <div class="modal fade" id="minemodal" tabindex="-1" data-backdrop="static" role="dialog"
         aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
             <div class="modal-content">
-
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <h4 class="modal-title" id="myModalLabel">Schedule</h4>
                 </div>
-
                 <div class="modal-body">
                     <div class="row">
-                     
-                        <div class="col-md-6 col-sm-12" ng-show="package.properties.showCourse">
+
+                        <div class="col-md-6 col-sm-12" ng-show="schedule.properties.showCourse">
                             <div class="form-group">
                                 <label>Choose Course</label>
-                                <select class="form-control show-tick ms select2" ng-disabled="isCourse"
-                                    ng-model="schedule.scheduleData.courseId" id="course"
-                                    ng-change="schedule.changeCourse()" data-placeholder="Course">
+                                <select class="form-control show-tick ms select2"
+                                    ng-disabled="schedule.properties.isCourse" ng-model="schedule.scheduleData.courseId"
+                                    id="course" ng-change="schedule.changeCourse()" data-placeholder="Course">
                                     <option ng-value="none">Choose...</option>
                                     <option ng-repeat="item in schedule.properties.courses track by $index"
                                         ng-value="item.documentId">
@@ -73,22 +70,39 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6" ng-show="DisplayTime">
+                        <div class="col-md-6" ng-show="schedule.properties.showTime">
                             <label>Select Time</label>
-                            <div class="input-group date form_time col-md-12" data-date="{{schedule.properties.selectedDate}}"
-                                data-date-format="hh:ii" data-link-field="dtp_input3" data-link-format="hh:ii">
+                            <div class="input-group date form_time col-md-12"
+                                data-date="{{schedule.properties.selectedDate}}" data-date-format="hh:ii"
+                                data-link-field="dtp_input3" data-link-format="hh:ii">
                                 <input id="time" class="form-control" size="16" type="text" readonly="">
                                 <span class="input-group-addon"><span class="fa fa-calendar"></span></span>
                             </div>
                         </div>
-                        
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Price(£)</label>
+                            <input type="text" class="form-control" placeholder="Price" required id="pricex"
+                                name="Price" ng-model="schedule.scheduleData.price"
+                                ng-disabled="schedule.properties.isPrice" />
+                        </div>
+
+                        <div class="col-md-6 ">
+                            <label>Duration(Min)</label>
+                            <input type="text" ng-disabled="schedule.properties.isDuration" class="form-control"
+                                placeholder="" required id="durationx" name="Duration"
+                                ng-model="schedule.scheduleData.duration" />
+                        </div>
+
+                    </div>
                     <div class="row">
                         <div class="col-md-12 col-sm-12" ng-show="IsType">
                             <div class="form-group">
                                 <label>Choose Type</label>
-                                <select class="form-control show-tick ms select2" ng-model="schedule.properties.selectedType" id="type"
+                                <select class="form-control show-tick ms select2"
+                                    ng-model="schedule.properties.selectedType" id="type"
                                     ng-change="schedule.changeType()" data-placeholder="Type">
                                     <option value="group">Group Lesson</option>
                                     <option value="level">Level Lesson</option>
@@ -97,26 +111,24 @@
                         </div>
                     </div>
 
-                    <div class="row" ng-show="IsTopic">
+                    <div class="row" ng-show="schedule.properties.isTopic">
                         <div class="col-md-6 col-sm-12">
                             <label>Topic</label>
                             <input type="text" class="form-control" placeholder="Topic" required id="topic" name="Topic"
                                 ng-model="schedule.scheduleData.topic" />
 
                         </div>
-
                         <div class="col-md-6 col-sm-12">
-                            <label>Total Price(£)</label>
+                            <label>Price(£)</label>
                             <input type="text" ng-disabled="true" class="form-control" placeholder="" required
                                 id="price" name="Price" ng-model="schedule.scheduleData.price" />
                         </div>
                     </div>
 
-
                     <div class="row" style="margin-top: 10px">
                         <div class="col-md-12 col-sm-12" ng-show="isDuration">
                             <div class="form-group">
-                                <label>Choose Duration</label>
+                                <label>Duration</label>
                                 <select class="form-control show-tick ms select2"
                                     ng-model="schedule.scheduleData.duration" id="duration" data-placeholder="Duration">
                                     <option value="15">15 Minutes</option>
@@ -131,7 +143,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="row" ng-show="isAcademy">
                         <div class="col-md-6 col-sm-12">
                             <label>Level</label>
@@ -143,7 +154,6 @@
                                 </option>
                             </select>
                         </div>
-
                         <div class="col-md-6 col-sm-12">
                             <label>Lesson</label>
                             <select class="form-control show-tick ms select2" ng-change="schedule.changeLesson()"
@@ -159,7 +169,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" ng-click="schedule.hideModal()">Close</button>
                     <button type="button" class="btn btn-primary"
-                        ng-click="schedule.saveOrUpdate()">{{doAction}}</button>
+                        ng-click="schedule.saveOrUpdate()">{{schedule.properties.doAction}}</button>
                 </div>
             </div>
         </div>

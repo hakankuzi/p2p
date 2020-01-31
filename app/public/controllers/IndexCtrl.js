@@ -7,6 +7,7 @@ IndexCtrl.controller('IndexController', function ($scope, $rootScope, $window, M
     vm.header.brand = "OWLEGE";
     vm.header.title = "Management";
 
+    // api me ----------------------------------------------------
     AuthWrapper.service({}, $rootScope.apis.me, (response) => {
         if (response.data.status === '200') {
             $rootScope.menus = response.data.user.menus;
@@ -15,9 +16,11 @@ IndexCtrl.controller('IndexController', function ($scope, $rootScope, $window, M
             $location.path('/login');
         }
     });
+    // -----------------------------------------------------------
 
-    
 
+
+    // -----------------------------------------------------------
     vm.change = function (menu) {
         if (menu === "/exit") {
             AuthWrapper.logout();
@@ -26,6 +29,7 @@ IndexCtrl.controller('IndexController', function ($scope, $rootScope, $window, M
             $location.path(menu);
         }
     }
+    // -----------------------------------------------------------
 
 
 
@@ -38,8 +42,6 @@ IndexCtrl.controller('IndexController', function ($scope, $rootScope, $window, M
         }
     });
     */
-
-
 
     vm.signupData = {
         email: '',
@@ -94,10 +96,11 @@ IndexCtrl.controller('IndexController', function ($scope, $rootScope, $window, M
 
     }
 
-
+    // -----------------------------------------------
     vm.logout = function () {
         $rootScope.auth.signOut().then(() => {
             console.log('user sign out')
         });
+        // -------------------------------------------
     }
 });

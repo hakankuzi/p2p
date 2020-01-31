@@ -5,9 +5,9 @@ models.getNewDate = function () {
     return new Date();
 }
 
-
 models.createCourseObj = function () {
     models.course = new Object();
+    models.course.documentId = 'none';
     models.course.departmentId = 'none';
     models.course.packageId = 'none';
     models.course.course = '';
@@ -26,23 +26,23 @@ models.createCourseObj = function () {
 }
 
 models.createCoursePropertiesObj = function () {
-    models.course.properties = new Object();
-    models.course.properties.isDepartment = false;
-    models.course.properties.departments = [];
-    models.course.properties.isPackage = true;
-    models.course.properties.packages = [];
-    models.course.properties.isPrice = true;
-    models.course.properties.isDuration = true;
-    models.course.properties.isCourse = true;
-    models.course.properties.coursePicName = '';
-    models.course.properties.action = 'ADD COURSE';
-    models.course.properties.selectedCourse = false;
-    models.course.properties.visible = false;
-    models.course.properties.courses = [];
-    models.course.properties.package = {};
-    models.course.properties.image = {};
-    models.course.properties.isSave = true;
-    return models.course.properties;
+    let properties = new Object();
+    properties.isDepartment = false;
+    properties.departments = [];
+    properties.isPackage = true;
+    properties.packages = [];
+    properties.isPrice = true;
+    properties.isDuration = true;
+    properties.isCourse = true;
+    properties.coursePicName = '';
+    properties.action = 'ADD COURSE';
+    properties.selectedCourse = false;
+    properties.visible = false;
+    properties.courses = [];
+    properties.package = {};
+    properties.image = {};
+    properties.isSave = true;
+    return properties;
 }
 
 models.createSchedulePropertiesObj = function () {
@@ -52,7 +52,8 @@ models.createSchedulePropertiesObj = function () {
     models.schedule.properties.doAction = 'ADD SCHEDULE';
     models.schedule.properties.selectedType = 'none';
     models.schedule.properties.isType = false;
-    models.schedule.properties.isDuration = false;
+    models.schedule.properties.isDuration = true;
+    models.schedule.properties.isPrice = true;
     models.schedule.properties.isTopic = false;
     models.schedule.properties.isAcademy = false;
     models.schedule.properties.showCourse = false;
@@ -112,6 +113,9 @@ models.createScheduleObj = function () {
     models.schedule.topic = '';
     models.schedule.version = 0;
     models.schedule.userId = 'none';
+    models.schedule.startDate = '';
+    models.schedule.endDate = '';
+    
     return models.schedule;
 }
 
@@ -125,7 +129,7 @@ models.createSignupObj = function () {
     models.signup.email = '';
     models.signup.password = '';
     models.signup.roles = [globe.config.package_p2p, globe.config.package_group];
-    models.signup.status = globe.config.student;
+    models.signup.status = globe.config.tutor;
     models.signup.situation = true;
     models.signup.displayName = '';
     models.signup.registeredDate = models.getNewDate();
