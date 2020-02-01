@@ -25,20 +25,21 @@
                                 oninput="angular.element(this).scope().choosePicPath(this)">
                             <span class="fileupload-exists"><i class="fa fa-undo"></i> Choose Course Picture</span>
                         </span>
-                        <span>{{department.picName}}</span>
+                        <span>{{department.properties.picName}}</span>
                     </div>
                 </div>
                 <div class="col-md-12 col-sm-12">
                     <button type="submit" style="float: right"
-                        class="btn btn-info waves-effect m-t-20">{{department.action}}</button>
-                    <button type="button" style="float: right; margin-right: 5px" ng-if="selected"
-                        ng-click="department.cancel()" class="btn btn-warning waves-effect m-t-20">CANCEL</button>
+                        class="btn btn-info waves-effect m-t-20">{{department.properties.action}}</button>
+                    <button type="button" style="float: right; margin-right: 5px"
+                        ng-if="department.properties.selectedDepartment" ng-click="department.cancel()"
+                        class="btn btn-warning waves-effect m-t-20">CANCEL</button>
                 </div>
             </div>
         </form>
         <form name="Form" class="form-panel" style="text-align: center">
             <div class="alert alert-info" ng-show="visible">
-                <b>{{message}}</b>
+                <b>{{department.properties.message}}</b>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover c_table theme-color">
@@ -51,7 +52,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="item in department.departments track by $index">
+                        <tr ng-repeat="item in department.properties.departments track by $index">
                             <td>{{item.department}}</td>
                             <td>{{item.registeredDate | date:"MM/dd/yyyy 'at' h:mma" }}</td>
                             <td>

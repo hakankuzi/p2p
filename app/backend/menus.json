@@ -88,29 +88,6 @@
         ]
     },
     {
-        "name": "P2P Lesson",
-        "icon": "fa fa-superscript",
-        "href": "/peertopeer",
-        "class": "sub-menu",
-        "module": true,
-        "roles": [
-            "p2p",
-            "super-admin"
-        ]
-    },
-    {
-        "name": "Group Lesson",
-        "icon": "fa fa-user-md",
-        "href": "/online-class",
-        "class": "sub-menu",
-        "module": true,
-        "roles": [
-            "group",
-            "super-admin",
-            "academy"
-        ]
-    },
-    {
         "name": "Schedules",
         "icon": "fa fa-chain-broken",
         "href": "/schedule",
@@ -125,9 +102,32 @@
         ]
     },
     {
-        "name": "Video Customize",
+        "name": "P2P Session",
+        "icon": "fa fa-superscript",
+        "href": "/p2p-session",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "p2p",
+            "super-admin"
+        ]
+    },
+    {
+        "name": "Group Session",
+        "icon": "fa fa-user-md",
+        "href": "/group-session",
+        "class": "sub-menu",
+        "module": true,
+        "roles": [
+            "group",
+            "super-admin",
+            "academy"
+        ]
+    },
+    {
+        "name": "Video Courses",
         "icon": "fa fa-book",
-        "href": "/video-lesson",
+        "href": "/video-course",
         "class": "sub-menu",
         "module": true,
         "roles": [
@@ -179,16 +179,6 @@
         "name": "Reports",
         "icon": "fa fa-book",
         "href": "/report",
-        "class": "sub-menu",
-        "module": true,
-        "roles": [
-            "super-admin"
-        ]
-    },
-    {
-        "name": "Abilities",
-        "icon": "fa fa-umbrella",
-        "href": "/ability",
         "class": "sub-menu",
         "module": true,
         "roles": [

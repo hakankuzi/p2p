@@ -2,32 +2,35 @@ var DepartmentCtrl = angular.module('DepartmentCtrl', []);
 
 DepartmentCtrl.controller('DepartmentController', function ($rootScope, Core, CrudData, $scope, $location) {
     var vm = this;
-    vm.action = 'Save';
-    vm.isSave = true;
-    vm.picName = '';
-    vm.departments = [];
-    vm.image = {};
     vm.departmentData = models.createDepartmentObj();
+    vm.properties = models.createDepartmentPropertiesObj();
+
     getDepartments();
     // --------------------------------------------------------------------
     vm.saveOrUpdateWithPhoto = function () {
-        let methodName = null;
-        if (vm.isSave) {
-            methodName = $rootScope.apis.addDepartment;
+        let isNone = globe.isNone(vm.departmentData.photoURL);
+        if (isNone) {
+            alert('You have to choose picture for department !!!');
         } else {
-            methodName = $rootScope.apis.updateDepartment;
-        }
-        Core.saveOrUpdateWithPhoto($rootScope.storage, vm.departmentData, methodName, vm.image, vm.isSave, (response) => {
-            if (response.status === globe.config.status_ok) {
-                if (vm.isSave) {
-                    alert('added');
-                } else {
-                    alert('updated');
-                }
+            let methodName = null;
+            if (vm.properties.isSave) {
+                methodName = $rootScope.apis.addDepartment;
+            } else {
+                methodName = $rootScope.apis.updateDepartment;
             }
-            vm.departmentData = models.createDepartmentObj();
-            getDepartments();
-        });
+            Core.saveOrUpdateWithPhoto($rootScope.storage, vm.departmentData, methodName, vm.properties.image, vm.properties.isSave, (response) => {
+                if (response.status === globe.config.status_ok) {
+                    if (vm.properties.isSave) {
+                        alert('added');
+                    } else {
+                        alert('updated');
+                    }
+                }
+                vm.departmentData = models.createDepartmentObj();
+                vm.properties = models.createDepartmentPropertiesObj();
+                getDepartments();
+            });
+        }
     };
     // --------------------------------------------------------------------
     vm.changeSituation = function () {
@@ -35,37 +38,38 @@ DepartmentCtrl.controller('DepartmentController', function ($rootScope, Core, Cr
     }
     // --------------------------------------------------------------------
     vm.choose = function (documentId) {
-        let record = Core.findRecordById(vm.departments, documentId);
+        let record = Core.findRecordById(vm.properties.departments, documentId);
         if (record !== null) {
             vm.departmentData = record;
-            vm.isSave = false;
-            vm.action = 'Update';
+            vm.properties.isSave = false;
+            vm.properties.action = 'Update';
+            vm.properties.selectedDepartment = true;
+            vm.properties.photoURL = record.photoURL;
         }
     }
     vm.cancel = function () {
         vm.departmentData = models.createDepartmentObj();
-        vm.isSave = true;
-        vm.action = 'Save';
+        vm.properties.isSave = true;
+        vm.properties.action = 'Save';
+        vm.properties.selectedDepartment = false;
+        vm.properties.photoURL = 'none';
     }
-    // --------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     $scope.choosePicPath = function (element) {
         Core.previewPhoto(element, vm.departmentData.photoURL, (response) => {
-            vm.image = response;
-            vm.picName = vm.image.item.name;
-
+            vm.properties.image = response;
+            vm.properties.picName = vm.properties.image.item.name;
         });
     };
-    // --------------------------------------------------------------------
-
-    // --------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     function getDepartments() {
         // Get Departments ----------------------------------------------------
         CrudData.service({}, $rootScope.apis.getDepartments, (response) => {
             if (response.data.status === globe.config.status_ok) {
-                vm.departments = response.data.list;
+                vm.properties.departments = response.data.list;
             }
         });
     }
-    // --------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
 });

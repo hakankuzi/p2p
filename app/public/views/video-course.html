@@ -1,0 +1,116 @@
+<section id="main-content">
+    <section class="wrapper">
+        <form name="Form" class="form-panel" ng-submit="video.saveOrUpdate()">
+            <h4>Video Courses</h4>
+            <div class="row">
+
+                <div class="col-md-3 col-sm-12">
+                    <label>Department</label>
+                    <select class="form-control show-tick ms select2" ng-model="video.videoData.departmentId"
+                        ng-disabled="video.properties.isDepartment" ng-change="video.changeDepartment()" id="department"
+                        data-placeholder="Department">
+                        <option ng-value="none">Choose</option>
+                        <option ng-repeat="item in  video.properties.departments track by $index"
+                            ng-value="item.documentId">
+                            {{item.department}} </option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 col-sm-12">
+                    <label>Level</label>
+                    <select ng-change="video.changeLevel()" class="form-control show-tick ms select2"
+                        ng-disabled="video.properties.isLevel" ng-model="video.videoData.levelId" id="level"
+                        data-placeholder="Level">
+                        <option ng-repeat="item in video.properties.levels track by $index" ng-value="item.documentId">
+                            {{item.level}} </option>
+                    </select>
+                </div>
+
+                <div class="col-md-3 col-sm-12">
+                    <label>Version</label>
+                    <select ng-change="video.changeVersion()" class="form-control show-tick ms select2"
+                        ng-disabled="video.properties.isVersion" ng-model="video.videoData.version" id="version"
+                        data-placeholder="Version">
+                        <option ng-repeat="item in video.properties.versions track by $index" ng-value="item.version">
+                            Version-{{item.version+1}} </option>
+                    </select>
+                </div>
+
+
+
+                <div class="col-md-3 col-sm-12">
+                    <label>Lesson</label>
+                    <select class="form-control show-tick ms select2" ng-model="video.videoData.lessonId" id="lesson"
+                        ng-disabled="video.properties.isLesson" data-placeholder="Lesson">
+                        <option ng-value="none">Choose</option>
+                        <option ng-repeat="item in video.properties.lessons track by $index" ng-value="item.documentId">
+                            Lesson-{{item.no}} ({{item.topic}}) </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row" style="padding-top: 10px">
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label>Video Link</label>
+                        <input type="text" class="form-control" placeholder="Link" id="link" name="Link"
+                            ng-model="video.videoData.link" required />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <button type="submit" style="float: right"
+                        class="btn btn-info waves-effect m-t-20">{{video.properties.action}}</button>
+                    <button type="button" style="float: right;margin-right: 5px" ng-if="video.properties.selectedVideo"
+                        ng-click="video.cancel()" class="btn btn-black waves-effect m-t-20">CANCEL</button>
+                </div>
+            </div>
+        </form>
+
+        <form name="Form" class="form-panel" style="text-align: center">
+            <div class="alert alert-info" ng-show="visible">
+                <b>{{message}}</b>
+            </div>
+
+
+
+            <div class="table-responsive">
+                <table class="table table-hover c_table theme-color">
+                    <thead>
+                        <tr>
+                            <th>Lesson</th>
+                            <th>Link</th>
+                            <th>Date</th>
+                            <th>Situation</th>
+                            <th>Choose</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in video.properties.videos track by $index">
+                            <td>Lesson-{{item.no}}</td>
+                            <td>{{item.link}}</td>
+                            <td>{{item.registeredDate}}</td>
+                            <td>
+                                <button ng-if="item.situation" type="button" ng-click="package.changeSituation(item)"
+                                    class="btn btn-success waves-effect m-t-20">Confirmed</button>
+
+                                <button ng-if="!item.situation" type="button" ng-click="package.changeSituation(item)"
+                                    class="btn btn-pink waves-effect m-t-20">Pending</button>
+                            </td>
+                            <td> <button type="button" ng-click="video.chooseVideo(item)"
+                                    class="btn btn-warning waves-effect m-t-20">Choose</button>
+                            </td>
+
+                            <td> <button type="button" ng-click="video.deleteVideo(item)"
+                                    class="btn btn-danger waves-effect m-t-20">DELETE</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </section>
+</section>

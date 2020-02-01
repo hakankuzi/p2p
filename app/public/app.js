@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngRoute', 'TestCtrl', 'CandidateCtrl', 'ScheduleCtrl', 'LessonCtrl', 'PackageCtrl', 'LevelCtrl', 'DepartmentCtrl', 'CourseCtrl', 'DashboardCtrl', 'SignupCtrl', 'LoginCtrl', 'SubscriberCtrl', 'PublisherCtrl', 'ProfileCtrl', 'IndexCtrl', 'TokboxDataService', 'CrudDataService', 'MockDataService', , 'CoreService', 'AuthDataService']);
+var app = angular.module('app', ['ngRoute', 'TestCtrl', 'P2PSessionCtrl', 'GroupSessionCtrl', 'CandidateCtrl', 'VideoCourseCtrl', 'ScheduleCtrl', 'LessonCtrl', 'PackageCtrl', 'LevelCtrl', 'DepartmentCtrl', 'CourseCtrl', 'DashboardCtrl', 'SignupCtrl', 'LoginCtrl', 'SubscriberCtrl', 'PublisherCtrl', 'ProfileCtrl', 'IndexCtrl', 'TokboxDataService', 'CrudDataService', 'MockDataService', , 'CoreService', 'AuthDataService']);
 
 // Environments -----------------------------------------
 app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken, AuthWrapper) {
@@ -30,7 +30,11 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
     $rootScope.apis.addCourse = '/api/addCourse';
     $rootScope.apis.getCoursesByDepartmentId = '/api/getCoursesByDepartmentId';
     $rootScope.apis.token = '/api/token';
+    $rootScope.apis.addSchedule = '/api/addSchedule';
+    $rootScope.apis.deleteSchedule = '/api/deleteSchedule';
+    $rootScope.apis.updateSchedule = '/api/updateSchedule';
     $rootScope.apis.getCoursesByUserId = '/api/getCoursesByUserId';
+    $rootScope.apis.getSchedulesByUserId = '/api/getSchedulesByUserId';
     $rootScope.apis.getSchedulesByCourseId = '/api/getSchedulesByCourseId';
     $rootScope.apis.getPackageByDocumentId = '/api/getPackageByDocumentId';
     $rootScope.apis.getLevelsByDepartmentId = '/api/getLevelsByDepartmentId';
@@ -59,6 +63,7 @@ app.run(function ($rootScope, $location, $window, CrudData, MockData, AuthToken,
         let token = AuthToken.getToken();
         if (authenticated) {
             if (token === null || token === undefined) {
+                $rootScope.loggedIn = false;
                 $location.path('/login');
             }
         } else {
@@ -84,6 +89,24 @@ app.config(function ($routeProvider, $locationProvider, $httpProvider) {
             templateUrl: '../views/dashboard.html',
             controller: 'DashboardController',
             controllerAs: 'dashboard',
+            authenticated: true
+        })
+        .when('/group-session', {
+            templateUrl: '../views/group-session.html',
+            controller: 'GroupSessionController',
+            controllerAs: 'group',
+            authenticated: true
+        })
+        .when('/p2p-session', {
+            templateUrl: '../views/p2p-session.html',
+            controller: 'P2PSessionController',
+            controllerAs: 'peer',
+            authenticated: true
+        })
+        .when('/video-course', {
+            templateUrl: '../views/video-course.html',
+            controller: 'VideoCourseController',
+            controllerAs: 'video',
             authenticated: true
         })
         .when('/candidate', {

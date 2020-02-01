@@ -8,10 +8,11 @@
                     <div class="form-group">
                         <label>Choose Department</label>
                         <select class="form-control show-tick ms select2" ng-model="lesson.lessonData.departmentId"
-                            ng-change="lesson.changeDepartment()" ng-disabled="lesson.selectedLesson" id="department"
-                            data-placeholder="Department" required>
+                            ng-change="lesson.changeDepartment()" ng-disabled="lesson.properties.selectedLesson"
+                            id="department" data-placeholder="Department" required>
                             <option ng-value="none">Choose</option>
-                            <option ng-repeat="item in lesson.departments track by $index" ng-value="item.documentId">
+                            <option ng-repeat="item in lesson.properties.departments track by $index"
+                                ng-value="item.documentId">
                                 {{item.department}} </option>
                         </select>
                     </div>
@@ -19,11 +20,12 @@
                 <div class="col-md-3 col-sm-12">
                     <div class="form-group">
                         <label>Choose Level</label>
-                        <select class="form-control show-tick ms select2" ng-disabled="lesson.selectedLesson"
+                        <select class="form-control show-tick ms select2" ng-disabled="lesson.properties.selectedLesson"
                             ng-change="lesson.changeLevel()" ng-model="lesson.lessonData.levelId"
                             data-placeholder="Level">
                             <option ng-value="none">Choose</option>
-                            <option ng-repeat="item in lesson.levels track by $index" ng-value="item.documentId">
+                            <option ng-repeat="item in lesson.properties.levels track by $index"
+                                ng-value="item.documentId">
                                 {{item.level}}</option>
                         </select>
                     </div>
@@ -31,11 +33,12 @@
                 <div class="col-md-2 col-sm-12">
                     <div class="form-group">
                         <label>version</label>
-                        <select class="form-control show-tick ms select2" ng-disabled="lesson.selectedLesson"
+                        <select class="form-control show-tick ms select2" ng-disabled="lesson.properties.selectedLesson"
                             ng-model="lesson.lessonData.version" ng-change="lesson.changeVersion()" id="version"
                             data-placeholder="Version" required>
                             <option ng-value="none">Choose</option>
-                            <option ng-repeat="item in lesson.versions track by $index" ng-value="item.version">
+                            <option ng-repeat="item in lesson.properties.versions track by $index"
+                                ng-value="item.version">
                                 Version-{{item.version}} </option>
                         </select>
                     </div>
@@ -44,10 +47,10 @@
                 <div class="col-md-3 col-sm-12">
                     <div class="form-group">
                         <label>Lesson No</label>
-                        <select class="form-control show-tick ms select2" ng-disabled="lesson.selectedLesson"
+                        <select class="form-control show-tick ms select2" ng-disabled="lesson.properties.selectedLesson"
                             ng-model="lesson.lessonData.no" id="level" data-placeholder="Lesson" required>
                             <option ng-value="none">Choose</option>
-                            <option ng-repeat="item in lesson.numbers track by $index" ng-value="item.no">
+                            <option ng-repeat="item in lesson.properties.numbers track by $index" ng-value="item.no">
                                 Lesson-{{item.no + 1 }}</option>
                         </select>
                     </div>
@@ -79,6 +82,16 @@
                 </div>
             </div>
             <div class="row">
+
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group" style="padding-top: 10px">
+                        <label>Lesson Video Link</label>
+                        <input type="text" class="form-control" placeholder="Link" required id="Link" name="Link"
+                            ng-model="lesson.lessonData.videoLink" />
+                    </div>
+                </div>
+
+
                 <div class="col-md-12 col-sm-12">
                     <div class="form-group" style="padding-top: 10px">
                         <label>Lesson Description</label>
@@ -91,9 +104,10 @@
             <div class="row">
                 <div class="col-md-12 col-sm-12">
                     <button type="submit" style="float: right"
-                        class="btn btn-info waves-effect m-t-20">{{lesson.action}}</button>
-                    <button type="button" style="float: right;margin-right: 5px" ng-show="lesson.selectedLesson"
-                        ng-click="lesson.cancel()" class="btn btn-warning waves-effect m-t-20">CANCEL</button>
+                        class="btn btn-info waves-effect m-t-20">{{lesson.properties.action}}</button>
+                    <button type="button" style="float: right;margin-right: 5px"
+                        ng-show="lesson.properties.selectedLesson" ng-click="lesson.cancel()"
+                        class="btn btn-warning waves-effect m-t-20">CANCEL</button>
 
                     <!--<button type="button" style="float: right;margin-right: 5px" ng-if="selectedLesson"
                         ng-click="lesson.OpenModal()" class="btn btn-danger waves-effect m-t-20">CREATE NEW
@@ -104,7 +118,7 @@
 
         <form name="Form" class="form-panel" style="text-align: center">
             <div class="alert alert-info" ng-show="visible">
-                <b>{{message}}</b>
+                <b>{{lesson.properties.message}}</b>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover c_table theme-color">
@@ -120,7 +134,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-repeat="item in lesson.lessons track by $index">
+                        <tr ng-repeat="item in lesson.properties.lessons track by $index">
                             <td>Version-{{item.version}}</td>
                             <td>{{item.level}}</td>
                             <td>Lesson-{{item.no +1 }}</td>
@@ -182,7 +196,7 @@
                                 ng-model="lesson.tempData.departmentId" id="modalDepartment"
                                 data-placeholder="Department">
                                 <option ng-value="none">Choose Department</option>
-                                <option ng-repeat="item in  lesson.departments track by $index"
+                                <option ng-repeat="item in  lesson.properties.departments track by $index"
                                     ng-value="item.documentId">
                                     {{item.department}} </option>
                             </select>
@@ -194,7 +208,8 @@
                                 <select class="form-control show-tick ms select2" required ng-disabled="true"
                                     ng-model="lesson.tempData.levelId" id="modalLevel" data-placeholder="Level">
                                     <option ng-value='none'>Choose</option>
-                                    <option ng-repeat="item in levels track by $index" ng-value="item.levelId">
+                                    <option ng-repeat="item in lesson.properties.levels track by $index"
+                                        ng-value="item.levelId">
                                         {{item.level}}</option>
                                 </select>
                             </div>
@@ -205,7 +220,8 @@
                                 <label>Lesson No</label>
                                 <select class="form-control show-tick ms select2" ng-disabled="true" required
                                     ng-model="lesson.tempData.no" id="modalNo" data-placeholder="Lesson">
-                                    <option ng-repeat="item in lesson.numbers track by $index" ng-value="item.no">
+                                    <option ng-repeat="item in lesson.properties.numbers track by $index"
+                                        ng-value="item.no">
                                         {{item.name}}</option>
                                 </select>
                             </div>
@@ -233,6 +249,7 @@
                                 </select>
                             </div>
                         </div>
+
 
                         <div class="col-md-12 col-sm-12">
                             <div class="form-group">

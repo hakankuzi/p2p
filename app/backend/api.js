@@ -494,6 +494,11 @@ router.post('/getSchedulesByCourseId', (req, res) => {
 
 });
 // ----------------------------------------------------------------------------
+router.post('/getSchedulesByUserId', (req, res) => {
+    let item = req.body.item;
+    getCollectionByParameterId(collections.schedules, item, res)
+});
+// ----------------------------------------------------------------------------
 router.post('/getLessonsByLevelIdAndVersion', (req, res) => {
     let item = req.body.item;
     console.log(item);
@@ -513,9 +518,19 @@ router.post('/addPackage', (req, res) => {
     addRecord(collections.packages, item, res);
 });
 // ----------------------------------------------------------------------------
+router.post('/addSchedule', (req, res) => {
+    let item = req.body.item;
+    addRecord(collections.schedules, item, res);
+});
+// ----------------------------------------------------------------------------
 router.post('/addCourse', (req, res) => {
     let item = req.body.item;
     addRecord(collections.courses, item, res);
+});
+// ----------------------------------------------------------------------------
+router.post('/deleteSchedule', (req, res) => {
+    let item = req.body.item;
+    deleteRecord(collections.schedules, item.documentId, res);
 });
 // ----------------------------------------------------------------------------
 router.post('/addDepartment', (req, res) => {
@@ -758,6 +773,20 @@ function addRecord(collectionName, payload, res) {
             message: err.message,
             code: err.code,
             document: null
+        });
+    });
+}
+// ----------------------------------------------------------------------------
+function deleteRecord(collectionName, documentId, res) {
+    dbstore.collection(collectionName).doc(documentId).delete().then(function () {
+        res.json({
+            status: '200',
+            message: 'deleted'
+        });
+    }).catch(function (error) {
+        res.json({
+            status: '409',
+            message: error
         });
     });
 }
