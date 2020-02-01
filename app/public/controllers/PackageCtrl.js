@@ -192,6 +192,9 @@ PackageCtrl.controller('PackageController', function ($scope, Core, $rootScope, 
             list.push(vm.packageData.version);
             list.push(vm.packageData.price);
             list.push(vm.packageData.duration);
+
+            console.log(list);
+
             isValidate = globe.isValidate(list);
             if (vm.properties.tempList.length !== 0) {
                 angular.forEach(vm.properties.tempList, (record) => {
@@ -228,6 +231,7 @@ PackageCtrl.controller('PackageController', function ($scope, Core, $rootScope, 
                 });
             }
         }
+
         if (!isValidate) {
             alert('Please check all inputs !!!');
         } else if (isExist) {

@@ -61,7 +61,7 @@ globe.isValidate = function (list) {
     let result = true;
     for (let i = 0; i < list.length; i++) {
         let variable = list[i];
-        if (variable === 'none' || variable === undefined || variable === null || variable === 0 || variable === '0' || variable === '' || variable === "") {
+        if (variable === 'none' || variable === undefined || variable === null || variable === '' || variable === "") {
             result = false;
         }
     }

@@ -141,7 +141,8 @@
         "class": "sub-menu",
         "module": true,
         "roles": [
-            "video"
+            "video",
+            "super-admin"
         ]
     },
     {

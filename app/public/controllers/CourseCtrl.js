@@ -70,9 +70,6 @@ CourseCtrl.controller('CourseController', function ($rootScope, $scope, Core, Cr
                 } else {
                     vm.courseData.videos = [];
                 }
-
-              
-              
                 let methodName = $rootScope.apis.addCourse;
                 Core.saveOrUpdateWithPhoto($rootScope.storage, vm.courseData, methodName, vm.properties.image, vm.properties.isSave, (response) => {
                     getCoursesByDepartmentId();
@@ -120,7 +117,15 @@ CourseCtrl.controller('CourseController', function ($rootScope, $scope, Core, Cr
     function getCoursesByDepartmentId() {
         CrudData.service({ parameter: 'departmentId', documentId: vm.courseData.departmentId }, $rootScope.apis.getCoursesByDepartmentId, (response) => {
             if (response.data.status === globe.config.status_ok) {
-                vm.properties.courses = response.data.list;
+                // temporary solution ----------------------------------------
+                let list = [];
+                angular.forEach(response.data.list, (record) => {
+                    if (record.packageType !== globe.config.package_academy) {
+                        list.push(record);
+                    }
+                });
+                // -----------------------------------------------------------
+                vm.properties.courses = list;
             } else {
                 vm.properties.courses = [];
             }
@@ -139,7 +144,15 @@ CourseCtrl.controller('CourseController', function ($rootScope, $scope, Core, Cr
         let isNone = globe.isNone(vm.courseData.departmentId);
         if (!isNone) {
             CrudData.service({ parameter: 'departmentId', documentId: vm.courseData.departmentId }, $rootScope.apis.getPackagesByDepartmentId, (response) => {
-                unFillByChangingDepartment(response.data.list, response.data.status);
+
+                // temporary solution take out academy package 
+                let list = [];
+                angular.forEach(response.data.list, (record) => {
+                    if (record.packageType !== globe.config.package_academy) {
+                        list.push(record);
+                    }
+                });
+                unFillByChangingDepartment(list, response.data.status);
                 getCoursesByDepartmentId();
             });
         } else {
@@ -183,8 +196,6 @@ CourseCtrl.controller('CourseController', function ($rootScope, $scope, Core, Cr
     // VALIDATIONS --------------------------------------------------------
     // --------------------------------------------------------------------
     function unFillByChangingDepartment(packages, status) {
-
-
 
         vm.courseData.levels = [];
         vm.courseData.groups = [];
